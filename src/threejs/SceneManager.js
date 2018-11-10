@@ -1,17 +1,18 @@
 import * as THREE from 'three';
 import { Cube } from './primitives';
+import OrbitControls from 'orbit-controls-es6';
 
 class SceneManager {
     constructor(canvas) {
         this._canvas = canvas;
         this._clock = new THREE.Clock();
-        this._screenDimensions = { 
+        this._screenDimensions = {
             width: canvas.width, 
             height: canvas.height
         };
         this._scene = buildScene();
         this._renderer = buildRender(canvas);
-        this._camera = buildCamera(this._screenDimensions);
+        this._camera = this.buildCamera(this._screenDimensions);
         this._sceneSubjects = createSceneSubjects(this._scene);
     }
     
@@ -36,6 +37,24 @@ class SceneManager {
         
         this._renderer.setSize(width, height);
     }
+
+    buildCamera = ({ width, height }) => {
+        const fieldOfView = 60;
+        const aspectRatio = width / height;
+        const nearPlane = 0.1;
+        const farPlane = 4000; 
+        const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
+        
+        camera.position.set(1, 2, 2);
+    
+        camera.rotateY((30 * Math.PI)/180);
+        camera.rotateX((-45 * Math.PI)/180);
+    
+        const controls = new OrbitControls(camera, this._renderer.domElement);
+        controls.enabled = true;
+    
+        return camera;
+    }
 }
 
 function buildScene() {
@@ -53,21 +72,6 @@ function buildRender(canvas) {
     renderer.setSize(canvas.width, canvas.height);
 
     return renderer;
-}
-
-function buildCamera({ width, height }) {
-    const fieldOfView = 60;
-    const aspectRatio = width / height;
-    const nearPlane = 0.1;
-    const farPlane = 4000; 
-    const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
-    
-    camera.position.set(1, 2, 2);
-
-    camera.rotateY((30 * Math.PI)/180);
-    camera.rotateX((-45 * Math.PI)/180);
-
-    return camera;
 }
 
 function createSceneSubjects(scene) {
