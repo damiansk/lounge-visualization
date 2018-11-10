@@ -44,7 +44,9 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         height: '100vh',
-        overflow: 'auto',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
     },
 });
 
@@ -90,8 +92,8 @@ class App extends React.Component {
                         ))}
                     </List>
                 </Drawer>
-                <div className={classes.appBarSpacer} />
                 <main className={classes.content}>
+                    <div className={classes.appBarSpacer} />
                     <ThreeContainer />
                 </main>
             </div>
