@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Cube } from './primitives';
+import { Cube, Room } from './primitives';
 import OrbitControls from 'orbit-controls-es6';
 
 class SceneManager {
@@ -45,10 +45,9 @@ class SceneManager {
         const farPlane = 4000; 
         const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
         
-        camera.position.set(1, 2, 2);
-    
-        camera.rotateY((30 * Math.PI)/180);
-        camera.rotateX((-45 * Math.PI)/180);
+        camera.position.set(-10, 10, 10);
+
+        camera.lookAt(0, 0, 0);
     
         const controls = new OrbitControls(camera, this._renderer.domElement);
         controls.enabled = true;
@@ -76,7 +75,8 @@ function buildRender(canvas) {
 
 function createSceneSubjects(scene) {
     const sceneSubjects = [
-        new Cube(scene),
+        // new Cube(scene),
+        new Room(scene),
     ];
 
     return sceneSubjects;

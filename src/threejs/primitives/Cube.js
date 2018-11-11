@@ -6,6 +6,7 @@ class Cube {
         const material = new THREE.MeshBasicMaterial({ color: 0x969696 });
         this.__mesh = new THREE.Mesh(geometry, material);
 
+        // Osie
         this.__mesh.add(new THREE.AxesHelper(5));
 
         const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
