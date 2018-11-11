@@ -44,9 +44,7 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         height: '100vh',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column'
+        overflow: 'auto',
     },
 });
 
@@ -74,7 +72,7 @@ class App extends React.Component {
                             className={classes.title}
                         >
                             Three.js PGS
-                    </Typography>
+                        </Typography>
                     </Toolbar>
                 </AppBar>
                 <Drawer
