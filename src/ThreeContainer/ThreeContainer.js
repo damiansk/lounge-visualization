@@ -12,6 +12,6 @@ export class ThreeContainer extends Component {
     }
 
     render() {
-        return <div style={{ flexGrow: 1 }} ref={this._containerRef}/>;
+        return <div style={{ flexGrow: 1, position: 'relative' }} ref={this._containerRef}/>;
     }
 }
