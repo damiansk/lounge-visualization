@@ -20,8 +20,8 @@ const threeEntryPoint = threeRootNode => {
         _canvas.style.width = '100%';
         _canvas.style.height = '100%';
 
-        _canvas.width = _canvas.offsetWidth;
-        _canvas.height = _canvas.offsetHeight;
+        _canvas.width = _canvas.parentElement.clientWidth;
+        _canvas.height = _canvas.parentElement.clientHeight;;
 
         _sceneManager.onWindowResize();
     }
