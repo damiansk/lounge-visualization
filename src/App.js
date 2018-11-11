@@ -10,6 +10,11 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
 import { ThreeContainer } from './ThreeContainer'
 
 const drawerWidth = 240;
@@ -17,53 +22,97 @@ const drawerWidth = 240;
 const styles = theme => ({
     root: {
         display: 'flex',
-    },
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
+        overflow: 'hidden'
     },
     appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
+        transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
-    title: {
-        flexGrow: 1,
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    appBarSpacer: theme.mixins.toolbar,
+    menuButton: {
+        marginLeft: 12,
+        marginRight: 20,
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
     content: {
         flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+        height: '100vh'
     },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+    },
+    appBarSpacer: theme.mixins.toolbar
 });
 
 class App extends React.Component {
     state = {
-        open: true,
+        open: false,
+    };
+
+    handleDrawerOpen = () => {
+        this.setState({ open: true });
+    };
+    
+    handleDrawerClose = () => {
+        this.setState({ open: false });
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, theme } = this.props;
+        const { open } = this.state;
 
         return (
             <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
                     position="fixed"
-                    className={classNames(classes.appBar)}
+                    className={classNames(classes.appBar, {
+                        [classes.appBarShift]: open,
+                      })}
                 >
                     <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            onClick={this.handleDrawerOpen}
+                            className={classNames(classes.menuButton, open && classes.hide)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
                         <Typography
                             component="h1"
                             variant="h6"
@@ -76,12 +125,20 @@ class App extends React.Component {
                     </Toolbar>
                 </AppBar>
                 <Drawer
-                    variant="permanent"
+                    className={classes.drawer}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
                     classes={{
-                        paper: classNames(classes.drawerPaper),
+                        paper: classes.drawerPaper,
                     }}
                 >
-                    <div className={classes.appBarSpacer} />
+                    <div className={classes.drawerHeader}>
+                        <IconButton onClick={this.handleDrawerClose}>
+                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </div>
+                    <Divider />
                     <List>
                         {['Inbox'].map((text, index) => (
                             <ListItem button key={text}>
@@ -90,7 +147,11 @@ class App extends React.Component {
                         ))}
                     </List>
                 </Drawer>
-                <main className={classes.content}>
+                <main 
+                    className={classNames(classes.content, {
+                        [classes.contentShift]: open,
+                    })}
+                >
                     <div className={classes.appBarSpacer} />
                     <ThreeContainer />
                 </main>
@@ -103,4 +164,4 @@ App.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(App);
+export default withStyles(styles, { withTheme: true })(App);
