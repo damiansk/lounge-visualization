@@ -6,7 +6,7 @@ const threeEntryPoint = threeRootNode => {
     const _canvas = createCanvas(document, threeRootNode);
     const _sceneManager = new SceneManager(_canvas);
     const _stats = initStatsPanel(_canvas);
-
+    _canvas.style.position = 'absolute';
     bindEventListeners();
     render();
 
@@ -20,9 +20,9 @@ const threeEntryPoint = threeRootNode => {
     function resizeCanvas() {
         _canvas.style.width = '100%';
         _canvas.style.height = '100%';
-
-        _canvas.width = _canvas.offsetWidth;
-        _canvas.height = _canvas.offsetHeight;
+        
+        _canvas.width = _canvas.parentElement.clientWidth;
+        _canvas.height = _canvas.parentElement.clientHeight;
 
         _sceneManager.onWindowResize();
     }
