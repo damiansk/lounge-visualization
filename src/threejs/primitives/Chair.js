@@ -12,6 +12,8 @@ class Chair {
             // this._boundingBox = new THREE.BoxHelper( mesh, 0xffff00 );
             // const meshHeight = Math.abs(this._boundingBox.max.y) + Math.abs(this._boundingBox.min.y);
             // mesh.position.y = meshHeight/2;
+            const boundingBox = new THREE.Box3().setFromObject(mesh);
+            mesh.position.y = Math.abs(boundingBox.min.y);
 
             scene.add(mesh);
 
