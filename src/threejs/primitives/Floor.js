@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RaycasterService } from '../services/RaycasterService';
 
 class Floor {
     constructor(scene) {
@@ -10,6 +11,8 @@ class Floor {
         this._mesh.rotateX((90 * Math.PI)/180);
 
         scene.add(this._mesh);
+
+        RaycasterService.register(this._mesh);
     }
 
     update(time) {}

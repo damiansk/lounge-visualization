@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RaycasterService } from '../services/RaycasterService';
 
 class Chair {
     constructor(scene) {
@@ -7,12 +8,14 @@ class Chair {
 
         loader.load('assets/chair.json', mesh => {
             this._mesh = mesh;
-            
-            const boundingBox = new THREE.Box3().setFromObject(mesh);
-            const meshHeight = Math.abs(boundingBox.max.y) + Math.abs(boundingBox.min.y);
-            mesh.position.y = meshHeight/2;
+
+            // this._boundingBox = new THREE.BoxHelper( mesh, 0xffff00 );
+            // const meshHeight = Math.abs(this._boundingBox.max.y) + Math.abs(this._boundingBox.min.y);
+            // mesh.position.y = meshHeight/2;
 
             scene.add(mesh);
+
+            // RaycasterService.register(this._boundingBox);
         });
     }
 

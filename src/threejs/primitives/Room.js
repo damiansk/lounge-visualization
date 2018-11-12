@@ -24,7 +24,9 @@ class Room {
         scene.add(this._mesh);
     }
 
-    update(time) {}
+    update(time) {
+        
+    }
 }
 
 export { Room };

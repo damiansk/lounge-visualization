@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Cube, Room } from './primitives';
+import { RaycasterService } from './services/RaycasterService';
 import OrbitControls from 'orbit-controls-es6';
 
 class SceneManager {
@@ -10,14 +11,19 @@ class SceneManager {
             width: canvas.width, 
             height: canvas.height
         };
+        this._mouse = new THREE.Vector2();
         this._scene = buildScene();
         this._renderer = buildRender(canvas);
         this._camera = this.buildCamera(this._screenDimensions);
         this._sceneSubjects = createSceneSubjects(this._scene);
+
+        this.onMouseMove = this.onMouseMove.bind(this);
     }
     
     update = () => {
         const elapsedTime = this._clock.getElapsedTime();
+
+        RaycasterService.scan(this._mouse, this._camera);
 
         for(let i=0; i < this._sceneSubjects.length; i++) {
             this._sceneSubjects[i].update(elapsedTime);
@@ -27,7 +33,7 @@ class SceneManager {
     }
 
     onWindowResize = () => {
-        const { width, height } = this._canvas;
+        const { width, height } = this._renderer.domElement;
 
         this._screenDimensions.width = width;
         this._screenDimensions.height = height;
@@ -53,6 +59,13 @@ class SceneManager {
         controls.enabled = true;
     
         return camera;
+    }
+
+    onMouseMove = (event) => {
+        const { height, width, top, left } = this._canvas.getBoundingClientRect();
+
+        this._mouse.x = ( (event.clientX - left) / width ) * 2 - 1;
+        this._mouse.y = - ( (event.clientY - top) / height ) * 2 + 1;
     }
 }
 

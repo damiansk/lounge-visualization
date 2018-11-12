@@ -12,6 +12,7 @@ const threeEntryPoint = threeRootNode => {
 
     function bindEventListeners() {
         window.onresize = resizeCanvas;
+        window.addEventListener('mousemove', _sceneManager.onMouseMove, false);
 
         resizeCanvas();
     }
