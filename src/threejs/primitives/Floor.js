@@ -13,7 +13,7 @@ class Floor {
 
         scene.add(this._mesh);
 
-        RaycasterService.register(this._mesh);
+        // RaycasterService.register(this._mesh);
 
         this.onMouseEnter = this.onMouseEnter.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);

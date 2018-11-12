@@ -12,13 +12,20 @@ class Chair {
             const boundingBox = new THREE.Box3().setFromObject(mesh);
             mesh.position.y = Math.abs(boundingBox.min.y);
 
-            // TODO Should replace by Box?
-            mesh.children[0].children[0].userData = { instance: this };
-            mesh.children[0].children[0].geometry.computeBoundingBox(); 
-            debugger;
+            mesh.traverse(child => {
+                if(child instanceof THREE.Mesh) {
+                    // TODO Should replace by Box?
+                    const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+
+                    child.material = basicMaterial;
+                    child.userData = { instance: this };
+                    child.geometry.computeBoundingBox(); 
+
+                    RaycasterService.register(child);
+                }
+            });
 
             scene.add(mesh);
-            // RaycasterService.register(mesh.children[0].children[0]);
         });
 
         this.onMouseEnter = this.onMouseEnter.bind(this);
@@ -27,11 +34,20 @@ class Chair {
     update(time) { }
 
     onMouseEnter() {
-        if(this._isHovered) {
-            this._isHovered = true;
-            // rest of the logic
-            // this._mesh.children[0].children[0].material.color.setHex(0xd3d3d3);
-        }
+        this._mesh.traverse(child => {
+            if(child instanceof THREE.Mesh) {
+                debugger;
+                child.material.color.setHex(0xd3d3d3);
+            }
+        });
+    }
+
+    onMouseLeave() {
+        this._mesh.traverse(child => {
+            if(child instanceof THREE.Mesh) {
+                child.material.color.setHex(0x000000);
+            }
+        });
     }
 }
 
