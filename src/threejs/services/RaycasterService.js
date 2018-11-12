@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 const raycaster = new THREE.Raycaster();
 const meshes = new Set();
+let prevIntersect = null;
 
 class RaycasterService {
     static register(mesh) {
@@ -14,14 +15,22 @@ class RaycasterService {
     }
 
     static scan(mouse, camera) {
-        // console.log(mouse);
-        // console.log(meshes);
         raycaster.setFromCamera(mouse, camera);
 
         const intersects = raycaster.intersectObjects(Array.from(meshes));
+        const intersect = intersects[0];
 
-        for ( var i = 0; i < intersects.length; i++ ) {
-            console.log(intersects[i]);
+        if(intersect && (intersect !== prevIntersect)) {
+            if(prevIntersect) {
+                prevIntersect.object.userData.instance.onMouseLeave();
+            }
+            prevIntersect = intersect;
+            prevIntersect.object.userData.instance.onMouseEnter();
+        } else if(!intersect) {
+            if(prevIntersect) {
+                prevIntersect.object.userData.instance.onMouseLeave();
+                prevIntersect = null;
+            }
         }
     }
 }

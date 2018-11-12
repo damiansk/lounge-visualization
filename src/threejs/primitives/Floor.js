@@ -9,13 +9,25 @@ class Floor {
 
         this._mesh = new THREE.Mesh(geometry, material);
         this._mesh.rotateX((90 * Math.PI)/180);
+        this._mesh.userData = { instance: this };
 
         scene.add(this._mesh);
 
         RaycasterService.register(this._mesh);
+
+        this.onMouseEnter = this.onMouseEnter.bind(this);
+        this.onMouseLeave = this.onMouseLeave.bind(this);
     }
 
     update(time) {}
+
+    onMouseEnter() {
+        this._mesh.material.color.setHex(0xd3d3d3);
+    }
+    
+    onMouseLeave() {
+        this._mesh.material.color.setHex(0xffff00);
+    }
 }
 
 export { Floor };
