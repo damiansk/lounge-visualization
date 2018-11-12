@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Cube, Room } from './primitives';
 import { RaycasterService } from './services/RaycasterService';
-import OrbitControls from 'orbit-controls-es6';
+import { ControlsService } from './services/ControlsService';
 
 class SceneManager {
     constructor(canvas) {
@@ -55,8 +55,7 @@ class SceneManager {
 
         camera.lookAt(0, 0, 0);
     
-        const controls = new OrbitControls(camera, this._renderer.domElement);
-        controls.enabled = true;
+        ControlsService.init(camera, this._renderer.domElement);
     
         return camera;
     }

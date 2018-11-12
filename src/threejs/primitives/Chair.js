@@ -1,5 +1,32 @@
 import * as THREE from 'three';
 import { RaycasterService } from '../services/RaycasterService';
+import { ControlsService } from '../services/ControlsService';
+
+const meshes = [];
+class InteractionService {
+
+    static register(mesh) {
+        RaycasterService.register(mesh);
+        meshes.push(mesh);
+    }
+
+    static onMouseDown(evt) {
+        console.log('down');
+        meshes.forEach(mesh => mesh.userData.instance.onMouseDown(evt));
+    }
+
+    static onMouseUp(evt) {
+        meshes.forEach(mesh => mesh.userData.instance.onMouseUp(evt));
+    }
+
+    static onMouseMove(evt) {
+        meshes.forEach(mesh => mesh.userData.instance.onMouseMove(evt));
+    }
+}
+
+window.addEventListener('mousedown', InteractionService.onMouseDown);
+window.addEventListener('mouseup', InteractionService.onMouseUp);
+window.addEventListener('mousemove', InteractionService.onMouseMove);
 
 class Chair {
     constructor(scene) {
@@ -21,7 +48,7 @@ class Chair {
                     child.userData = { instance: this };
                     child.geometry.computeBoundingBox(); 
 
-                    RaycasterService.register(child);
+                    InteractionService.register(child);
                 }
             });
 
@@ -33,21 +60,45 @@ class Chair {
 
     update(time) { }
 
-    onMouseEnter() {
+    setColor(hex) {
         this._mesh.traverse(child => {
             if(child instanceof THREE.Mesh) {
-                debugger;
-                child.material.color.setHex(0xd3d3d3);
+                child.material.color.setHex(hex);
             }
         });
     }
 
+    onMouseEnter() {
+        this._isHovered = true;
+        this.setColor(0xd3d3d3);
+    }
+
     onMouseLeave() {
-        this._mesh.traverse(child => {
-            if(child instanceof THREE.Mesh) {
-                child.material.color.setHex(0x000000);
-            }
-        });
+        this._isHovered = false;
+        this.setColor(0x000000);
+    }
+
+    onMouseDown() {
+        this._isSelected = this._isHovered;
+        if(this._isSelected) {
+            console.log('selected');
+            ControlsService.disable();
+        }
+    }
+
+    onMouseUp() {
+        if(this._isSelected) {
+            console.log('unselected');
+            ControlsService.enable();
+        }
+        this._isSelected = false;
+    }
+
+    onMouseMove() {
+        if(this._isSelected) {
+            console.log('moved');
+        }
+        // TODO calculate mouse position to new object position
     }
 }
 
