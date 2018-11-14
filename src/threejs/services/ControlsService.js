@@ -13,11 +13,11 @@ class ControlsService {
     static disable() {
         debugger;
         controls.enabled = false;
-        controls.saveState();
+        // controls.saveState();
     }
 
     static enable() {
-        controls.reset();
+        // controls.reset();
         controls.enabled = true;
     }
 }

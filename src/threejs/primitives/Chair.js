@@ -29,16 +29,20 @@ window.addEventListener('mouseup', InteractionService.onMouseUp);
 window.addEventListener('mousemove', InteractionService.onMouseMove);
 
 class Chair {
-    constructor(scene) {
+    constructor(scene, config) {
         // TODO create service for fetching models
         const loader = new THREE.ObjectLoader();
-
+        const { position } = config;
         loader.load('assets/chair.json', mesh => {
             this._mesh = mesh;
             
-            const boundingBox = new THREE.Box3().setFromObject(mesh);
-            mesh.position.y = Math.abs(boundingBox.min.y);
+            // Position
+            const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+            this._mesh.position.y = Math.abs(boundingBox.min.y);
+            this._mesh.position.x = position.x;
+            this._mesh.position.z = position.z;
 
+            // Color
             mesh.traverse(child => {
                 if(child instanceof THREE.Mesh) {
                     // TODO Should replace by Box?
@@ -71,6 +75,7 @@ class Chair {
     onMouseEnter() {
         this._isHovered = true;
         this.setColor(0xd3d3d3);
+        console.log(this._mesh);
     }
 
     onMouseLeave() {
