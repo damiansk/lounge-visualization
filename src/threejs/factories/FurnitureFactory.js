@@ -2,9 +2,11 @@ import { Chair } from '../primitives/Chair';
 
 class FurnitureFactory {
     static createObject(scene, order) {
-        if (order.type === 'chair') {
-            new Chair(scene, order.config);
-        }
+        order.objects.forEach(object => {
+            if (object.type === 'chair') {
+                new Chair(scene, object.config);
+            }
+        });
     }
 }
 

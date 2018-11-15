@@ -1,29 +1,7 @@
 import * as THREE from 'three';
 import { Floor } from './Floor';
 import { FurnitureFactory } from '../factories/FurnitureFactory';
-
-const example = {
-    "objects": [
-        {
-            "type": "chair",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -2
-                }
-            }
-        },
-        {
-            "type": "chair",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -1
-                }
-            }
-        }
-    ]
-}
+import map from '../../Config/roomMap';
 
 class Room {
     constructor(scene) {
@@ -33,9 +11,7 @@ class Room {
 
         new Floor(this._mesh);
 
-        example.objects.forEach(object => {
-            FurnitureFactory.createObject(this._mesh, object)
-        });
+        FurnitureFactory.createObject(this._mesh, map)
 
         // TODO Outline geometry should be the same like floor geometry
         const geometry = new THREE.BoxGeometry(8, 3, 20);
