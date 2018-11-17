@@ -17,6 +17,15 @@
                   "z": -1
               }
           }
+      },
+      {
+          "type": "barstool",
+          "config": {
+              "position":{
+                  "x": 2,
+                  "z":-3
+              }
+          }
       }
   ]
 }

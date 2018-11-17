@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Floor } from './Floor';
 import { FurnitureFactory } from '../factories/FurnitureFactory';
-import map from '../../Config/roomMap';
+import map from '../config/roomMap';
 
 class Room {
     constructor(scene) {
