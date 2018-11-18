@@ -35,6 +35,15 @@
                     "z": 0.5
                 }
             }
+        },
+        {
+            "type": "microwave",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 2
+                }
+            }
         }
     ]
 }

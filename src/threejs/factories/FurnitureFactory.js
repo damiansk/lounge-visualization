@@ -1,4 +1,4 @@
-import { Chair, Barstool, Table } from '../primitives/';
+import { Chair, Barstool, Table, Microwave } from '../primitives/';
 
 class FurnitureFactory {
     static createObject(scene, order) {
@@ -12,6 +12,9 @@ class FurnitureFactory {
                     break;
                 case 'table':
                     new Table(scene, object.config);
+                    break;
+                case 'microwave':
+                    new Microwave(scene, object.config);
                     break;
                 default:
                     break;
