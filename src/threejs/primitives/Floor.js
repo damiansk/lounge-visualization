@@ -1,19 +1,32 @@
 import * as THREE from 'three';
 import { RaycasterService } from '../services/RaycasterService';
 
+import { LoaderService } from '../services/LoaderService';
+
 class Floor {
     constructor(scene) {
-        const loader = new THREE.OBJLoader('/assets/kantyna.obj');
+        LoaderService.loadOBJ('/assets/kantyna.obj', mesh => {
+            mesh.traverse(child => {
+                if (child instanceof THREE.Mesh) {
+                  // TODO Should replace by Box?
+                  const basicMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 1, side: THREE.DoubleSide });
+        
+                  child.material = basicMaterial;
+                }
+              });
+              mesh.scale.set(3, 3, 3);
+              scene.add(mesh);
+        });
 
         // TODO Ogarnąć przekazywane atrybuty
-        const geometry = new THREE.PlaneGeometry(8, 20, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+        // const geometry = new THREE.PlaneGeometry(8, 20, 32);
+        // const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
 
-        this._mesh = new THREE.Mesh(geometry, material);
-        this._mesh.rotateX((90 * Math.PI)/180);
-        this._mesh.userData = { instance: this };
+        // this._mesh = new THREE.Mesh(geometry, material);
+        // this._mesh.rotateX((90 * Math.PI)/180);
+        // this._mesh.userData = { instance: this };
 
-        scene.add(this._mesh);
+        // scene.add(this._mesh);
 
         // RaycasterService.register(this._mesh);
 
