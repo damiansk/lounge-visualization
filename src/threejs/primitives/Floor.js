@@ -3,6 +3,8 @@ import { RaycasterService } from '../services/RaycasterService';
 
 class Floor {
     constructor(scene) {
+        const loader = new THREE.OBJLoader('/assets/kantyna.obj');
+
         // TODO Ogarnąć przekazywane atrybuty
         const geometry = new THREE.PlaneGeometry(8, 20, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
