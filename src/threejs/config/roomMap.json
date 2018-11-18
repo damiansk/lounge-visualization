@@ -1,22 +1,49 @@
 {
-  "objects": [
-      {
-          "type": "chair",
-          "config": {
-              "position": {
-                  "x": 2,
-                  "z": -2
-              }
-          }
-      },
-      {
-          "type": "chair",
-          "config": {
-              "position": {
-                  "x": 2,
-                  "z": -1
-              }
-          }
-      }
-  ]
+    "objects": [
+        {
+            "type": "chair",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -2
+                }
+            }
+        },
+        {
+            "type": "chair",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "type": "barstool",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -3
+                }
+            }
+        },
+        {
+            "type": "table",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 0.5
+                }
+            }
+        },
+        {
+            "type": "microwave",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 2
+                }
+            }
+        }
+    ]
 }
