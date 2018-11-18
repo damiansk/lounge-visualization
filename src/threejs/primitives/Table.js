@@ -2,21 +2,22 @@ import * as THREE from 'three';
 import OBJLoader  from 'three-obj-loader';
 OBJLoader(THREE);
 
-class Barstool {
+class Table {
   constructor(scene, config) {
     this.THREE = THREE;
     const loader = new this.THREE.OBJLoader();
     const { position } = config;
-    loader.load('assets/Bar_chair_2.obj', (mesh) => {
+    loader.load('assets/table.obj', (mesh) => {
       this._mesh = mesh;
 
-            this._mesh.scale.set(0.25, 0.25, 0.25)
+            this._mesh.scale.set(0.007, 0.007, 0.007);
 
             // Position
             const boundingBox = new THREE.Box3().setFromObject(this._mesh);
             this._mesh.position.y = Math.abs(boundingBox.min.y);
             this._mesh.position.x = position.x;
             this._mesh.position.z = position.z;
+
 
       mesh.traverse(child => {
         if(child instanceof THREE.Mesh) {
@@ -39,4 +40,4 @@ class Barstool {
   }
 }
 
-export { Barstool }
+export { Table }
