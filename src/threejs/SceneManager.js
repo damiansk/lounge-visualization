@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { Cube, Room } from './primitives';
+import { Room } from './primitives';
 import { RaycasterService } from './services/RaycasterService';
-import { ControlsService } from './services/ControlsService';
+import { ControlsService } from './services/CameraControlsService';
 
 class SceneManager {
     constructor(canvas) {

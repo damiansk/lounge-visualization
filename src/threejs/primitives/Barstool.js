@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { LoaderService } from '../services/LoaderService';
+import { LoaderService } from '../services/ObjectLoaderService';
 
 class Barstool {
   constructor(scene, config) {

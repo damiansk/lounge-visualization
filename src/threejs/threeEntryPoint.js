@@ -1,5 +1,4 @@
 import { SceneManager } from './SceneManager';
-import { MouseService } from './services/MouseService';
 import Stats from 'stats.js';
 
 
@@ -14,7 +13,6 @@ const threeEntryPoint = threeRootNode => {
     function bindEventListeners() {
         window.onresize = resizeCanvas;
         _canvas.addEventListener('mousemove', _sceneManager.onMouseMove);
-        // _canvas.addEventListener('mousemove', MouseService.onMouseMove);
 
         resizeCanvas();
     }

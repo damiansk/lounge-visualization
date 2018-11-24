@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RaycasterService } from '../services/RaycasterService';
-import { ControlsService } from '../services/ControlsService';
+import { ControlsService } from '../services/CameraControlsService';
 
 const meshes = [];
 class InteractionService {

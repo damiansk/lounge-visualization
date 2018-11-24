@@ -10,13 +10,13 @@ class Table {
     loader.load('assets/table.obj', (mesh) => {
       this._mesh = mesh;
 
-            this._mesh.scale.set(0.007, 0.007, 0.007);
+      this._mesh.scale.set(0.007, 0.007, 0.007);
 
-            // Position
-            const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-            this._mesh.position.y = Math.abs(boundingBox.min.y);
-            this._mesh.position.x = position.x;
-            this._mesh.position.z = position.z;
+      // Position
+      const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+      this._mesh.position.y = Math.abs(boundingBox.min.y);
+      this._mesh.position.x = position.x;
+      this._mesh.position.z = position.z;
 
 
       mesh.traverse(child => {
