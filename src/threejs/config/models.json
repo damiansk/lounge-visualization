@@ -1,0 +1,13 @@
+{
+    "objects": [
+        {
+            "type": "chair",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -2
+                }
+            }
+        }
+    ]
+}

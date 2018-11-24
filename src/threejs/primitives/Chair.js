@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { LoaderService } from '../services/ObjectLoaderService';
 import { RaycasterService } from '../services/RaycasterService';
 import { ControlsService } from '../services/CameraControlsService';
 
@@ -31,33 +32,34 @@ window.addEventListener('mousemove', InteractionService.onMouseMove);
 class Chair {
     constructor(scene, config) {
         // TODO create service for fetching models
-        const loader = new THREE.ObjectLoader();
         const { position } = config;
-        loader.load('assets/chair.json', mesh => {
-            this._mesh = mesh;
+
+        LoaderService.loadObject('chair')
+            .then(mesh => {
+                this._mesh = mesh;
             
-            // Position
-            const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-            this._mesh.position.y = Math.abs(boundingBox.min.y);
-            this._mesh.position.x = position.x;
-            this._mesh.position.z = position.z;
-
-            // Color
-            mesh.traverse(child => {
-                if(child instanceof THREE.Mesh) {
-                    // TODO Should replace by Box?
-                    const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
-
-                    child.material = basicMaterial;
-                    child.userData = { instance: this };
-                    child.geometry.computeBoundingBox(); 
-
-                    InteractionService.register(child);
-                }
+                // Position
+                const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+                this._mesh.position.y = Math.abs(boundingBox.min.y);
+                this._mesh.position.x = position.x;
+                this._mesh.position.z = position.z;
+    
+                // Color
+                mesh.traverse(child => {
+                    if(child instanceof THREE.Mesh) {
+                        // TODO Should replace by Box?
+                        const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+    
+                        child.material = basicMaterial;
+                        child.userData = { instance: this };
+                        child.geometry.computeBoundingBox(); 
+    
+                        InteractionService.register(child);
+                    }
+                });
+    
+                scene.add(mesh);
             });
-
-            scene.add(mesh);
-        });
 
         this.onMouseEnter = this.onMouseEnter.bind(this);
     }
