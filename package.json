@@ -12,7 +12,8 @@
     "stats.js": "^0.17.0",
     "three": "^0.97.0",
     "obj-loader": "file:./local_modules/obj-loader",
-    "mtl-loader": "file:./local_modules/mtl-loader"
+    "mtl-loader": "file:./local_modules/mtl-loader",
+    "three-dragcontrols": "file:./local_modules/three-dragcontrols"
   },
   "scripts": {
     "start": "react-scripts start",

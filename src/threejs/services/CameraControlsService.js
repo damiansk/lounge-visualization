@@ -11,7 +11,6 @@ class ControlsService {
     }
 
     static disable() {
-        debugger;
         controls.enabled = false;
         // controls.saveState();
     }

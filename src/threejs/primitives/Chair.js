@@ -1,33 +1,11 @@
 import * as THREE from 'three';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { RaycasterService } from '../services/RaycasterService';
 import { ControlsService } from '../services/CameraControlsService';
+import { InteractionService } from '../services/InteractionService';
 
-const meshes = [];
-class InteractionService {
-
-    static register(mesh) {
-        RaycasterService.register(mesh);
-        meshes.push(mesh);
-    }
-
-    static onMouseDown(evt) {
-        console.log('down');
-        meshes.forEach(mesh => mesh.userData.instance.onMouseDown(evt));
-    }
-
-    static onMouseUp(evt) {
-        meshes.forEach(mesh => mesh.userData.instance.onMouseUp(evt));
-    }
-
-    static onMouseMove(evt) {
-        meshes.forEach(mesh => mesh.userData.instance.onMouseMove(evt));
-    }
-}
-
-window.addEventListener('mousedown', InteractionService.onMouseDown);
-window.addEventListener('mouseup', InteractionService.onMouseUp);
-window.addEventListener('mousemove', InteractionService.onMouseMove);
+// window.addEventListener('mousedown', InteractionService.onMouseDown);
+// window.addEventListener('mouseup', InteractionService.onMouseUp);
+// window.addEventListener('mousemove', InteractionService.onMouseMove);
 
 class Chair {
     constructor(scene, config) {
@@ -36,29 +14,47 @@ class Chair {
 
         LoaderService.loadObject('chair')
             .then(mesh => {
-                this._mesh = mesh;
-            
                 // Position
-                const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-                this._mesh.position.y = Math.abs(boundingBox.min.y);
-                this._mesh.position.x = position.x;
-                this._mesh.position.z = position.z;
+                // const boundingBox = new THREE.Box3().setFromObject(mesh);
+                // mesh.position.y = Math.abs(boundingBox.min.y);
+                // mesh.position.x = position.x;
+                // mesh.position.z = position.z;
     
-                // Color
+                // scene.add(mesh);
+                // // Color
                 mesh.traverse(child => {
                     if(child instanceof THREE.Mesh) {
+                        this._mesh = child;
                         // TODO Should replace by Box?
-                        const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
-    
-                        child.material = basicMaterial;
+                        // const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+                        
+                        // child.material = basicMaterial;
                         child.userData = { instance: this };
                         child.geometry.computeBoundingBox(); 
-    
+                        
                         InteractionService.register(child);
+                        
+                        var axesHelper = new THREE.AxesHelper( 50 );
+                        child.add( axesHelper );
+                        child.scale.set(0.01, 0.01, 0.01);
+                        child.rotateX(-90 * THREE.Math.DEG2RAD);
+
+                        const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+                        this._mesh.position.y = Math.abs(boundingBox.min.y);
+                        // this._mesh.position.y = 10;
+                        this._mesh.position.x = position.x;
+                        this._mesh.position.z = position.z;
+                        debugger;
+                        
+                        // child.updateMatrixWorld();
+                        // child.updateMatrixWorld();
+                        scene.add(child);
+                        // child.updateMatrix(mesh.matrixWorld)
                     }
                 });
-    
-                scene.add(mesh);
+
+                
+
             });
 
         this.onMouseEnter = this.onMouseEnter.bind(this);

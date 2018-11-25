@@ -16,8 +16,9 @@ class Room {
 
         FurnitureFactory.createObject(this._mesh, map);
 
+        var axesHelper = new THREE.AxesHelper( 50 );
+        this._mesh.add( axesHelper );
         scene.add(this._mesh);
-       
     }
 
     update(time) {

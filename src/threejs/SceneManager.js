@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Room } from './primitives';
 import { RaycasterService } from './services/RaycasterService';
 import { ControlsService } from './services/CameraControlsService';
+import { InteractionService } from './services/InteractionService';
 
 class SceneManager {
     constructor(canvas) {
@@ -18,6 +19,8 @@ class SceneManager {
         this._sceneSubjects = createSceneSubjects(this._scene);
 
         this.onMouseMove = this.onMouseMove.bind(this);
+
+        InteractionService.init(this._camera, this._renderer);
     }
     
     update = () => {
