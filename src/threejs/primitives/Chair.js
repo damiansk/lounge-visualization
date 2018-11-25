@@ -86,6 +86,8 @@ class Chair {
     onMouseDown() {
         this._isSelected = this._isHovered;
         if(this._isSelected) {
+            const rotation = this._mesh.rotation.y;
+            this._mesh.rotation.y = (rotation - Math.PI/2);
             console.log('selected');
             ControlsService.disable();
         }

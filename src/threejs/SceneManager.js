@@ -16,7 +16,7 @@ class SceneManager {
         this._renderer = buildRender(canvas);
         this._camera = this.buildCamera(this._screenDimensions);
         this._sceneSubjects = createSceneSubjects(this._scene);
-
+        this._light = this.buildLight(this._scene);
         this.onMouseMove = this.onMouseMove.bind(this);
     }
     
@@ -58,6 +58,13 @@ class SceneManager {
         ControlsService.init(camera, this._renderer.domElement);
     
         return camera;
+    }
+
+    buildLight(scene) {
+        const light = new THREE.PointLight( 0xffffff, 1, 50);
+        light.position.set(-10, 10, 10);
+        scene.add(light);
+        return light;
     }
 
     onMouseMove = (event) => {
