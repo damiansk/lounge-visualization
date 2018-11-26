@@ -10,9 +10,9 @@ class FurnitureFactory {
                 case 'barstool':
                     new Barstool(scene, object.config);
                     break;
-                // case 'table':
-                //     new Table(scene, object.config);
-                //     break;
+                case 'table':
+                    new Table(scene, object.config);
+                    break;
                 case 'microwave':
                     new Microwave(scene, object.config);
                     break;

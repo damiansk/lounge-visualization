@@ -35,6 +35,24 @@
                     "z": 2
                 }
             }
+        },
+        {
+            "type": "table",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 3
+                }
+            }
+        },
+        {
+            "type": "billardTable",
+            "config": {
+                "position": {
+                    "x": 1,
+                    "z": -11
+                }
+            }
         }
     ]
 }
