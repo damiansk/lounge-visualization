@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { Room } from './primitives';
-import { RaycasterService } from './services/RaycasterService';
 import { ControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
 
@@ -12,21 +11,16 @@ class SceneManager {
             width: canvas.width, 
             height: canvas.height
         };
-        this._mouse = new THREE.Vector2();
         this._scene = buildScene();
         this._renderer = buildRender(canvas);
         this._camera = this.buildCamera(this._screenDimensions);
         this._sceneSubjects = createSceneSubjects(this._scene);
-
-        this.onMouseMove = this.onMouseMove.bind(this);
-
+        
         InteractionService.init(this._camera, this._renderer);
     }
     
     update = () => {
         const elapsedTime = this._clock.getElapsedTime();
-
-        RaycasterService.scan(this._mouse, this._camera);
 
         for(let i=0; i < this._sceneSubjects.length; i++) {
             this._sceneSubjects[i].update(elapsedTime);
@@ -62,13 +56,6 @@ class SceneManager {
     
         return camera;
     }
-
-    onMouseMove = (event) => {
-        const { height, width, top, left } = this._canvas.getBoundingClientRect();
-
-        this._mouse.x = ( (event.clientX - left) / width ) * 2 - 1;
-        this._mouse.y = - ( (event.clientY - top) / height ) * 2 + 1;
-    }
 }
 
 function buildScene() {
@@ -90,7 +77,6 @@ function buildRender(canvas) {
 
 function createSceneSubjects(scene) {
     const sceneSubjects = [
-        // new Cube(scene),
         new Room(scene),
     ];
 

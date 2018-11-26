@@ -1,33 +1,43 @@
 import * as THREE from 'three';
 import { LoaderService } from '../services/ObjectLoaderService';
+import { InteractionService } from '../services/InteractionService';
 
 class Barstool {
   constructor(scene, config) {
-    
     const { position } = config;
-    LoaderService.loadOBJ('assets/Bar_chair_2.obj', (mesh) => {
-      this._mesh = mesh;
 
-      this._mesh.scale.set(0.25, 0.25, 0.25)
+    LoaderService.loadOBJ('Bar_chair_2')
+      .then(model => {
+        model.traverse(child => {
+          if (child instanceof THREE.Mesh) {
+            this._mesh = child;
+            this._mesh.userData = { instance: this };
 
-      // Position
-      const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-      this._mesh.position.y = Math.abs(boundingBox.min.y);
-      this._mesh.position.x = position.x;
-      this._mesh.position.z = position.z;
+            this._mesh.scale.set(0.25, 0.25, 0.25)
 
-      mesh.traverse(child => {
-        if (child instanceof THREE.Mesh) {
-          // TODO Should replace by Box?
-          const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+            const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+            this._mesh.position.set(
+              position.x,
+              Math.abs(boundingBox.min.y),
+              position.z
+          );
 
-          child.material = basicMaterial;
-          child.userData = { instance: this };
-          child.geometry.computeBoundingBox();
-        }
+            scene.add(this._mesh);
+            InteractionService.register(this._mesh);
+          }
+        });
       });
-      scene.add(mesh);
-    });
+
+      this.hoverOnHandler = this.hoverOnHandler.bind(this);
+      this.hoverOffHandler = this.hoverOffHandler.bind(this);
+  }
+
+  hoverOnHandler() {
+    this._mesh.material.color.set(0x123123);
+  }
+
+  hoverOffHandler() {
+      this._mesh.material.color.set(0x987987);
   }
 }
 

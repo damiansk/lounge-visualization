@@ -1,43 +1,44 @@
 import * as THREE from 'three';
-import OBJLoader  from 'three-obj-loader';
-OBJLoader(THREE);
+import { LoaderService } from '../services/ObjectLoaderService';
+import { InteractionService } from '../services/InteractionService';
 
 class Microwave {
   constructor(scene, config) {
-    this.THREE = THREE;
-    const loader = new this.THREE.OBJLoader();
-
     const { position } = config;
 
-    loader.load('assets/Microwave_v1.obj', (mesh) => {
-      this._mesh = mesh;
-
+    LoaderService.loadOBJ('Microwave_v1')
+      .then(model => {
+        model.traverse(child => {
+          if(child instanceof THREE.Mesh) {
+            this._mesh = child;
+            this._mesh.userData = { instance: this };
+            
             this._mesh.scale.set(0.0125, 0.0125, 0.0125);
+            this._mesh.rotateX(-90 * THREE.Math.DEG2RAD);
 
-            // Position
             const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-            this._mesh.position.y = Math.abs(boundingBox.min.y);
-            this._mesh.position.x = position.x;
-            this._mesh.position.z = position.z;
+            this._mesh.position.set(
+              position.x,
+              Math.abs(boundingBox.min.y),
+              position.z
+            );
 
-      mesh.traverse(child => {
-        if(child instanceof THREE.Mesh) {
-            // TODO Should replace by Box?
-            const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
-
-            child.material = basicMaterial;
-            child.userData = { instance: this };
-            child.geometry.computeBoundingBox(); 
-        }
-      });
-      scene.add(mesh);
-    }, 
-    (xhr) => {
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    },
-    (error) => {
-      console.log( 'An error happened' );
+            scene.add(this._mesh);
+            InteractionService.register(this._mesh);
+          }
+        });
     });
+
+    this.hoverOnHandler = this.hoverOnHandler.bind(this);
+    this.hoverOffHandler = this.hoverOffHandler.bind(this);
+  }
+
+  hoverOnHandler() {
+    this._mesh.material.color.set(0x123123);
+  }
+
+  hoverOffHandler() {
+      this._mesh.material.color.set(0x987987);
   }
 }
 

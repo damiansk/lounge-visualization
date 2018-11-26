@@ -1,10 +1,8 @@
 import DragControls from 'three-dragcontrols';
 import { ControlsService } from '../services/CameraControlsService';
-import { RaycasterService } from '../services/RaycasterService';
 
-const meshes = [
-    
-];
+const meshes = [];
+
 class InteractionService {
 
     static init(camera, renderer) {
@@ -12,24 +10,20 @@ class InteractionService {
 
         dragControls.addEventListener('dragstart', () => ControlsService.disable());
         dragControls.addEventListener('dragend', () => ControlsService.enable());
+        dragControls.addEventListener('hoveron', this.hoverOnHandler);
+        dragControls.addEventListener('hoveroff', this.hoverOffHandler);
     }
 
     static register(mesh) {
-        // RaycasterService.register(mesh);
         meshes.push(mesh);
     }
 
-    static onMouseDown(evt) {
-        console.log('down');
-        meshes.forEach(mesh => mesh.userData.instance.onMouseDown(evt));
+    static hoverOnHandler({ object }) {
+        object.userData.instance.hoverOnHandler();
     }
-
-    static onMouseUp(evt) {
-        meshes.forEach(mesh => mesh.userData.instance.onMouseUp(evt));
-    }
-
-    static onMouseMove(evt) {
-        meshes.forEach(mesh => mesh.userData.instance.onMouseMove(evt));
+    
+    static hoverOffHandler({ object }) {
+        object.userData.instance.hoverOffHandler();
     }
 }
 

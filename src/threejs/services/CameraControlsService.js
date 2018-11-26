@@ -12,11 +12,9 @@ class ControlsService {
 
     static disable() {
         controls.enabled = false;
-        // controls.saveState();
     }
 
     static enable() {
-        // controls.reset();
         controls.enabled = true;
     }
 }

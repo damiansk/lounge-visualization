@@ -2,7 +2,7 @@ import {
     Chair,
     Barstool,
     // Table,
-    // Microwave
+    Microwave
 } from '../primitives/';
 
 class FurnitureFactory {
@@ -18,9 +18,9 @@ class FurnitureFactory {
                 // case 'table':
                 //     new Table(scene, object.config);
                 //     break;
-                // case 'microwave':
-                //     new Microwave(scene, object.config);
-                //     break;
+                case 'microwave':
+                    new Microwave(scene, object.config);
+                    break;
                 default:
                     break;
             }

@@ -8,6 +8,33 @@
                     "z": -2
                 }
             }
+        },
+        {
+            "type": "chair",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -1
+                }
+            }
+        },
+        {
+            "type": "barstool",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": -3
+                }
+            }
+        },
+        {
+            "type": "microwave",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 2
+                }
+            }
         }
     ]
 }
