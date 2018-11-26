@@ -1,0 +1,51 @@
+import * as THREE from 'three';
+// import OBJLoader  from 'three-obj-loader';
+import {MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
+// OBJLoader(THREE);
+
+class BillardTable {
+  constructor(scene, config) {
+    this.THREE = THREE;
+    const loader = new this.THREE.OBJLoader();
+
+    const { position } = config;
+
+    const mtlLoader = new this.THREE.MTLLoader();
+
+    mtlLoader.load('assets/pooltable/PoolTable.mtl', (materials) => {
+      materials.preload();
+      loader.setMaterials( materials )
+      loader.load('assets/pooltable/PoolTable.obj', (mesh) => {
+        this._mesh = mesh;
+        this._mesh.scale.set(0.0125, 0.0125, 0.0125);
+  
+        // Position
+        const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+        this._mesh.position.y = Math.abs(boundingBox.min.y);
+        this._mesh.position.x = position.x;
+        this._mesh.position.z = position.z;
+        this._mesh.rotation.x = -Math.PI/2;
+  
+        mesh.traverse(child => {
+          if(child instanceof THREE.Mesh) {
+              // TODO Should replace by Box?
+              const basicMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, opacity: 1 });
+  
+              child.material = basicMaterial;
+              child.userData = { instance: this };
+              child.geometry.computeBoundingBox(); 
+          }
+        });
+        scene.add(mesh);
+      }, 
+      (xhr) => {
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+      },
+      (error) => {
+        console.log( 'An error happened' );
+      });
+    })
+  }
+}
+
+export { BillardTable }
