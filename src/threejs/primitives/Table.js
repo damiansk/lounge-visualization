@@ -1,44 +1,35 @@
 import * as THREE from 'three';
-import OBJLoader  from 'three-obj-loader';
-OBJLoader(THREE);
+import {
+    LoaderService
+} from '../services/ObjectLoaderService';
 
 class Table {
-  constructor(scene, config) {
-    this.THREE = THREE;
-    const loader = new this.THREE.OBJLoader();
-    const { position } = config;
+    constructor(scene, config) {
+        const {
+            position
+        } = config;
 
-    loader.load('assets/table.obj', (mesh) => {
-      this._mesh = mesh;
+        LoaderService.loadOBJ('table')
+            .then(model => {
+                console.log(model);
+                this._mesh = model;
+                this._mesh.scale.set(0.007, 0.007, 0.007);
+                const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+                this._mesh.material = basicMaterial;
+                this._mesh.userData = {
+                    instance: this
+                };
 
-      this._mesh.scale.set(0.007, 0.007, 0.007);
+                const boundingBox = new THREE.Box3().setFromObject(this._mesh);
+                this._mesh.position.set(
+                    position.x,
+                    Math.abs(boundingBox.min.y),
+                    position.z
+                );
 
-      // Position
-      const boundingBox = new THREE.Box3().setFromObject(this._mesh);
-      this._mesh.position.y = Math.abs(boundingBox.min.y);
-      this._mesh.position.x = position.x;
-      this._mesh.position.z = position.z;
-
-
-      mesh.traverse(child => {
-        if(child instanceof THREE.Mesh) {
-            // TODO Should replace by Box?
-            const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
-
-            child.material = basicMaterial;
-            child.userData = { instance: this };
-            child.geometry.computeBoundingBox(); 
-        }
-      });
-      scene.add(mesh);
-    }, 
-    (xhr) => {
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    },
-    (error) => {
-      console.log( 'An error happened' );
-    });
-  }
+                scene.add(this._mesh);
+            });
+    }
 }
 
-export { Table }
+export { Table };

@@ -44,6 +44,15 @@
                     "z": 2
                 }
             }
+        },
+        {
+            "type": "billardTable",
+            "config": {
+                "position": {
+                    "x": 2,
+                    "z": 4
+                }
+            }
         }
     ]
 }
