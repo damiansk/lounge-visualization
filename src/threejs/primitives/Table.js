@@ -4,10 +4,7 @@ import {
 } from '../services/ObjectLoaderService';
 
 class Table {
-    constructor(scene, config) {
-        const {
-            position
-        } = config;
+    constructor(scene, position) {
 
         LoaderService.loadOBJ('table')
             .then(model => {

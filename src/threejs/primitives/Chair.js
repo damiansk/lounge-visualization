@@ -3,8 +3,7 @@ import { LoaderService } from '../services/ObjectLoaderService';
 import { InteractionService } from '../services/InteractionService';
 
 class Chair {
-    constructor(scene, config) {
-        const { position } = config;
+    constructor(scene, position) {
 
         LoaderService.loadObject('chair')
             .then(model => {

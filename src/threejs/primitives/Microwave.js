@@ -3,8 +3,7 @@ import { LoaderService } from '../services/ObjectLoaderService';
 import { InteractionService } from '../services/InteractionService';
 
 class Microwave {
-  constructor(scene, config) {
-    const { position } = config;
+  constructor(scene, position) {
 
     LoaderService.loadOBJ('Microwave_v1')
       .then(model => {

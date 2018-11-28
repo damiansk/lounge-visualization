@@ -2,9 +2,7 @@ import * as THREE from 'three';
 import { LoaderService } from '../services/ObjectLoaderService';
 
 class BillardTable {
-  constructor(scene, config) {
-
-    const { position } = config;
+  constructor(scene, position) {
 
     LoaderService.loadOBJ('10523_Pool_Table_v1_L3')
       .then(model => {

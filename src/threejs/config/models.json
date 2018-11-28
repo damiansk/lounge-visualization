@@ -3,55 +3,60 @@
         {
             "type": "chair",
             "config": {
-                "position": {
-                    "x": 2,
-                    "z": -2
-                }
-            }
-        },
-        {
-            "type": "chair",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -1
-                }
+                "positions": [
+                    {
+                        "x": 2,
+                        "z": -2
+                    },
+                    {
+                        "x": 2,
+                        "z": -1
+                    }
+                ]
             }
         },
         {
             "type": "barstool",
             "config": {
-                "position": {
-                    "x": 2,
-                    "z": -3
-                }
+                "positions": [
+                    {
+                        "x": 2,
+                        "z": -3
+                    }
+                ]
             }
         },
         {
             "type": "microwave",
             "config": {
-                "position": {
-                    "x": 2,
-                    "z": 2
-                }
+                "positions": [
+                    {
+                        "x": 2,
+                        "z": 2
+                    }
+                ]
             }
         },
         {
             "type": "table",
             "config": {
-                "position": {
-                    "x": 2,
-                    "z": 3
-                }
+                "positions": [
+                    {
+                        "x": 2,
+                        "z": 3
+                    }
+                ]
             }
         },
         {
             "type": "billardTable",
             "config": {
-                "position": {
-                    "x": 1,
-                    "z": -11
-                }
+                "positions": [
+                    {
+                        "x": 1,
+                        "z": -11
+                    }
+                ] 
             }
         }
     ]
