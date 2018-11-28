@@ -7,6 +7,7 @@ class Table {
     this.THREE = THREE;
     const loader = new this.THREE.OBJLoader();
     const { position } = config;
+
     loader.load('assets/table.obj', (mesh) => {
       this._mesh = mesh;
 
