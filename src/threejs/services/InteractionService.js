@@ -5,6 +5,22 @@ import { ControlsService } from '../services/CameraControlsService';
 const meshes = [];
 let dragStartPosition = null;
 
+function isCollideWithAnyMesh(object) {
+    const boundingBox = new THREE.Box3().setFromObject(object);
+
+    for(let mesh of meshes) {
+        const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
+        
+        const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
+
+        if(isIntersected && mesh !== object) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 class InteractionService {
 
     static init(camera, renderer) {
@@ -35,24 +51,18 @@ class InteractionService {
     static dragEndHandler({ object }) {
         object.material = object.userData.__interactionService.material;
 
-        const { x, y, z } = dragStartPosition;
-        object.position.set(x, y, z);
-        dragStartPosition = null;
+        if(isCollideWithAnyMesh(object)) {
+            const { x, y, z } = dragStartPosition;
+            object.position.set(x, y, z);
+            dragStartPosition = null;
+        }
     }
 
     static dragHandler({ object }) {
-        const bbox = new THREE.Box3().setFromObject(object);
-        
-        object.material.color.set(0x808080);
-        for(let mesh of meshes) {
-            const otherBBox = new THREE.Box3().setFromObject(mesh);
-            
-            const isIntersected = bbox.intersectsBox(otherBBox);
-
-            if(isIntersected && mesh !== object) {
-                object.material.color.set(0xff0000);
-                return;
-            }
+        if(isCollideWithAnyMesh(object)) {
+            object.material.color.set(0xff0000);
+        } else {
+            object.material.color.set(0x808080);
         }
     }
 }
