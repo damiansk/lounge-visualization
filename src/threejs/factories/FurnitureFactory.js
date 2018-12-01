@@ -5,28 +5,28 @@ class FurnitureFactory {
         order.objects.forEach(object => {
             switch(object.type) {
                 case 'chair':
-                    object.config.positions.forEach(pos => {
-                        new Chair(scene, pos);
+                    object.configs.forEach(config => {
+                        new Chair(scene, config);
                     })
                     break;
                 case 'barstool':
-                    object.config.positions.forEach(pos => {
-                        new Barstool(scene, pos);
+                    object.configs.forEach(config => {
+                        new Barstool(scene, config);
                     })
                     break;
                 case 'table':
-                    object.config.positions.forEach(pos => {
-                        new Table(scene, pos);
+                    object.configs.forEach(config => {
+                        new Table(scene, config);
                     })
                     break;
                 case 'microwave':
-                    object.config.positions.forEach(pos => {
-                        new Microwave(scene, pos);
+                    object.configs.forEach(config => {
+                        new Microwave(scene, config);
                     })
                     break;
                 case 'billardTable':
-                    object.config.positions.forEach(pos => {
-                        new BillardTable(scene, pos);
+                    object.configs.forEach(config => {
+                        new BillardTable(scene, config);
                     })
                     break;
                 default:
