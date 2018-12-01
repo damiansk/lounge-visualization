@@ -8,19 +8,6 @@ class Floor {
                 this._mesh = mesh;
                 scene.add(mesh);
             });
-
-        this.onMouseEnter = this.onMouseEnter.bind(this);
-        this.onMouseLeave = this.onMouseLeave.bind(this);
-    }
-
-    update(time) {}
-
-    onMouseEnter() {
-        this._mesh.material.color.setHex(0xd3d3d3);
-    }
-    
-    onMouseLeave() {
-        this._mesh.material.color.setHex(0xffff00);
     }
 }
 

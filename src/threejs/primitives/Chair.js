@@ -30,17 +30,6 @@ class Chair {
                     }
                 });
             });
-
-        this.hoverOnHandler = this.hoverOnHandler.bind(this);
-        this.hoverOffHandler = this.hoverOffHandler.bind(this);
-    }
-
-    hoverOnHandler() {
-        this._mesh.material.color.set(0x123123);
-    }
-
-    hoverOffHandler() {
-        this._mesh.material.color.set(0x987987);
     }
 }
 

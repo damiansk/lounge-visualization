@@ -31,7 +31,8 @@ import {
     var _intersection = new Vector3();
   
     var _selected = null,
-      _hovered = null;
+      _hovered = null,
+      _startPosition = null;
   
     //
   
@@ -102,9 +103,7 @@ import {
       if (intersects.length > 0) {
   
         var object = intersects[0].object;
-  
-        // Block on X and Z axies
-        // _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), object.position);
+        
         _plane.setFromNormalAndCoplanarPoint(new Vector3(0, 1, 0), object.position);
   
         if (_hovered !== object) {
@@ -148,6 +147,7 @@ import {
       if (intersects.length > 0) {
   
         _selected = intersects[0].object;
+        _startPosition = _selected.position.clone();
   
         if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
   
@@ -163,8 +163,6 @@ import {
         });
   
       }
-  
-  
     }
   
     function onDocumentMouseCancel(event) {

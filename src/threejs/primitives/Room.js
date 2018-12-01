@@ -8,16 +8,14 @@ class Room {
         this._mesh = new THREE.Object3D();
 
         // Temporary light
-        const light = new THREE.PointLight( 0xffffff, 1, 100 );
-        light.position.set( 0, 30, 0 );
-        this._mesh.add( light );
+        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight.position.set( 0, 90, -60 );
+        this._mesh.add( directionalLight );
 
         new Floor(this._mesh);
 
         FurnitureFactory.createObject(this._mesh, map);
 
-        var axesHelper = new THREE.AxesHelper( 50 );
-        this._mesh.add( axesHelper );
         scene.add(this._mesh);
     }
 
