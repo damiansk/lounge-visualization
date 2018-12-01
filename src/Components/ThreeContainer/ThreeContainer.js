@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { threeEntryPoint } from '../threejs/threeEntryPoint';
+import { threeEntryPoint } from '../../threejs/threeEntryPoint';
 
 
 export class ThreeContainer extends Component {

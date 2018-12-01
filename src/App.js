@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThreeContainer } from './ThreeContainer'
+import { ThreeContainer } from './Components/ThreeContainer'
 import { Header } from './Components/Header/'
 import { SidePanel } from './Components/SidePanel/'
 
