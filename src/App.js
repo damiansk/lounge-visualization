@@ -3,16 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Divider from '@material-ui/core/Divider';
 import { ThreeContainer } from './ThreeContainer'
-import Header from './Components/Header'
+import { Header } from './Components/Header/'
+import { SidePanel } from './Components/SidePanel/'
 
 const drawerWidth = 240;
 
@@ -75,29 +68,7 @@ class App extends React.Component {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header theme={theme} open={open} handleDrawerOpen={this.handleDrawerOpen}/>
-                <Drawer
-                    className={classes.drawer}
-                    variant="persistent"
-                    anchor="left"
-                    open={open}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={this.handleDrawerClose}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <List>
-                        {['Inbox'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                </Drawer>
+                <SidePanel handleDrawerClose={this.handleDrawerClose} open={open}/>
                 <main 
                     className={classNames(classes.content, {
                         [classes.contentShift]: open,
