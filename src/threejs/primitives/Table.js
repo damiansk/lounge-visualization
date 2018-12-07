@@ -5,26 +5,23 @@ import {
 
 class Table {
     constructor(scene, config) {
-        const {
-            position
-        } = config;
-
         LoaderService.loadOBJ('table')
             .then(model => {
-                console.log(model);
                 this.mesh = model;
                 this.mesh.scale.set(0.007, 0.007, 0.007);
-                const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
+                const basicMaterial =  new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 1 });
                 this.mesh.material = basicMaterial;
                 this.mesh.userData = {
                     instance: this
                 };
-
+                if (config.rotation) {
+                    this.mesh.rotateY(config.rotation * THREE.Math.DEG2RAD);
+                }
                 const boundingBox = new THREE.Box3().setFromObject(this.mesh);
                 this.mesh.position.set(
-                    position.x,
+                    config.position.x,
                     Math.abs(boundingBox.min.y),
-                    position.z
+                    config.position.z
                 );
 
                 scene.add(this.mesh);

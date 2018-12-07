@@ -1,10 +1,8 @@
 import * as THREE from 'three';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { InteractionService } from '../services/InteractionService';
 
 class Microwave {
   constructor(scene, config) {
-    const { position } = config;
 
     LoaderService.loadOBJ('Microwave_v1')
       .then(model => {
@@ -15,16 +13,17 @@ class Microwave {
             
             this.mesh.scale.set(0.0125, 0.0125, 0.0125);
             this.mesh.rotateX(-90 * THREE.Math.DEG2RAD);
-
+            if (config.rotation) {
+              this.mesh.rotateZ(config.rotation * THREE.Math.DEG2RAD);
+            }
             const boundingBox = new THREE.Box3().setFromObject(this.mesh);
             this.mesh.position.set(
-              position.x,
+              config.position.x,
               Math.abs(boundingBox.min.y),
-              position.z
+              config.position.z
             );
 
             scene.add(this.mesh);
-            InteractionService.register(this.mesh);
           }
         });
     });

@@ -33,7 +33,7 @@ const styles = theme => ({
   },
 });
 
-const Header = ({classes, open, handleDrawerOpen}) => {
+const Heading = ({classes, open, handleDrawerOpen}) => {
   return (
     <AppBar
         position="fixed"
@@ -64,4 +64,5 @@ const Header = ({classes, open, handleDrawerOpen}) => {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(Header);
+const Header = withStyles(styles, { withTheme: true })(Heading);
+export { Header };

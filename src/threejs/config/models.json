@@ -2,57 +2,86 @@
     "objects": [
         {
             "type": "chair",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -2
+            "configs": [
+                {
+                    "position": {
+                        "x": 2,
+                        "z": -2
+                    },
+                    "rotation": -90
+                },
+                {
+                    "position": {
+                        "x": 2,
+                        "z": -1
+                    },
+                    "rotation": -90
                 }
-            }
-        },
-        {
-            "type": "chair",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -1
-                }
-            }
+            ]
         },
         {
             "type": "barstool",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": -3
+            "configs": [
+                {
+                    "position": {
+                        "x": 3,
+                        "z": -3
+                    }
+                },
+                {
+                    "position": {
+                        "x": 3,
+                        "z": -1
+                    }
                 }
-            }
+            ]
         },
         {
             "type": "microwave",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": 2
+            "configs": [
+                {
+                    "position": {
+                        "x": 4,
+                        "z": -2
+                    }
+                },
+                {
+                    "position": {
+                        "x": 4,
+                        "z": -1
+                    }
                 }
-            }
+            ]
         },
         {
             "type": "table",
-            "config": {
-                "position": {
-                    "x": 2,
-                    "z": 3
+            "configs": [
+                {
+                    "position": {
+                        "x": 5,
+                        "z": -2
+                    },
+                    "rotation": -90
+                },
+                {
+                    "position": {
+                        "x": 5,
+                        "z": -1
+                    },
+                    "rotation": -90
                 }
-            }
+            ]
         },
         {
             "type": "billardTable",
-            "config": {
-                "position": {
-                    "x": 1,
-                    "z": -11
+            "configs": [
+                {
+                    "position": {
+                        "x": 1,
+                        "z": -11
+                    }
                 }
-            }
+            ]
         }
     ]
 }
