@@ -5,18 +5,18 @@ import map from '../config/models.json';
 
 class Room {
     constructor(scene) {
-        this._mesh = new THREE.Object3D();
+        this.mesh = new THREE.Object3D();
 
         // Temporary light
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
         directionalLight.position.set( 0, 90, -60 );
-        this._mesh.add( directionalLight );
+        this.mesh.add( directionalLight );
 
-        new Floor(this._mesh);
+        new Floor(this.mesh);
 
-        FurnitureFactory.createObject(this._mesh, map);
+        FurnitureFactory.createObject(this.mesh, map);
 
-        scene.add(this._mesh);
+        scene.add(this.mesh);
     }
 
     update(time) {

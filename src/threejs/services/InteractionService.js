@@ -38,7 +38,7 @@ class InteractionService {
     }
 
     static dragStartHandler({ object }) {
-        object.userData.__interactionService = {
+        object.userData.interactionService = {
             material: object.material.clone(),
         }
         object.material.color.set(0x808080);
@@ -49,7 +49,7 @@ class InteractionService {
     }
 
     static dragEndHandler({ object }) {
-        object.material = object.userData.__interactionService.material;
+        object.material = object.userData.interactionService.material;
 
         if(isCollideWithAnyMesh(object)) {
             const { x, y, z } = dragStartPosition;

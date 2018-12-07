@@ -3,10 +3,10 @@ import Stats from 'stats.js';
 
 
 const threeEntryPoint = threeRootNode => {
-    const _canvas = createCanvas(document, threeRootNode);
-    const _sceneManager = new SceneManager(_canvas);
-    const _stats = initStatsPanel(_canvas);
-    _canvas.style.position = 'absolute';
+    const canvas = createCanvas(document, threeRootNode);
+    const sceneManager = new SceneManager(canvas);
+    const stats = initStatsPanel(canvas);
+    canvas.style.position = 'absolute';
     bindEventListeners();
     render();
 
@@ -17,23 +17,20 @@ const threeEntryPoint = threeRootNode => {
     }
 
     function resizeCanvas() {
-        _canvas.style.width = '100%';
-        _canvas.style.height = '100%';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
         
-        _canvas.width = _canvas.parentElement.clientWidth;
-        _canvas.height = _canvas.parentElement.clientHeight;
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
 
-        _sceneManager.onWindowResize();
+        sceneManager.onWindowResize();
     }
 
     function render() {
-        setTimeout(() => {
-            window.requestAnimationFrame(render);
-        }, 1000/30);
-
-        _stats.begin();
-        _sceneManager.update();  
-        _stats.end();
+        stats.begin();
+        sceneManager.update();  
+        stats.end();
+        window.requestAnimationFrame(render);
     }
 }
 

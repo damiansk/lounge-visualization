@@ -5,40 +5,40 @@ import { InteractionService } from './services/InteractionService';
 
 class SceneManager {
     constructor(canvas) {
-        this._canvas = canvas;
-        this._clock = new THREE.Clock();
-        this._screenDimensions = {
+        this.canvas = canvas;
+        this.clock = new THREE.Clock();
+        this.screenDimensions = {
             width: canvas.width, 
             height: canvas.height
         };
-        this._scene = buildScene();
-        this._renderer = buildRender(canvas);
-        this._camera = this.buildCamera(this._screenDimensions);
-        this._sceneSubjects = createSceneSubjects(this._scene);
+        this.scene = buildScene();
+        this.renderer = buildRender(canvas);
+        this.camera = this.buildCamera(this.screenDimensions);
+        this.sceneSubjects = createSceneSubjects(this.scene);
         
-        InteractionService.init(this._camera, this._renderer);
+        InteractionService.init(this.camera, this.renderer);
     }
     
     update = () => {
-        const elapsedTime = this._clock.getElapsedTime();
+        const elapsedTime = this.clock.getElapsedTime();
 
-        for(let i=0; i < this._sceneSubjects.length; i++) {
-            this._sceneSubjects[i].update(elapsedTime);
+        for(let i=0; i < this.sceneSubjects.length; i++) {
+            this.sceneSubjects[i].update(elapsedTime);
         }
 
-        this._renderer.render(this._scene, this._camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
     onWindowResize = () => {
-        const { width, height } = this._renderer.domElement;
+        const { width, height } = this.renderer.domElement;
 
-        this._screenDimensions.width = width;
-        this._screenDimensions.height = height;
+        this.screenDimensions.width = width;
+        this.screenDimensions.height = height;
 
-        this._camera.aspect = width / height;
-        this._camera.updateProjectionMatrix();
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
         
-        this._renderer.setSize(width, height);
+        this.renderer.setSize(width, height);
     }
 
     buildCamera = ({ width, height }) => {
@@ -52,7 +52,7 @@ class SceneManager {
 
         camera.lookAt(0, 0, 0);
     
-        ControlsService.init(camera, this._renderer.domElement);
+        ControlsService.init(camera, this.renderer.domElement);
     
         return camera;
     }

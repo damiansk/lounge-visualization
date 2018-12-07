@@ -5,7 +5,7 @@ class Floor {
         LoaderService.loadOBJ('floor')
             .then(mesh => {
                 mesh.scale.set(3.5, 3.5, 3.5);
-                this._mesh = mesh;
+                this.mesh = mesh;
                 scene.add(mesh);
             });
     }
