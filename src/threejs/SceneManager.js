@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { Room } from './primitives';
+import { models as modelsConfig } from './config/models.json';
 import { ControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
+import { ModelsFactory } from './factories/ModelsFactory';
 
 class SceneManager {
     constructor(canvas) {
@@ -76,9 +77,16 @@ function buildRender(canvas) {
 }
 
 function createSceneSubjects(scene) {
-    const sceneSubjects = [
-        new Room(scene),
-    ];
+    const manager = new THREE.LoadingManager();
+    const factory = new ModelsFactory(manager);
+
+    factory.createModels(modelsConfig, scene);
+
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+    directionalLight.position.set( 0, 90, -60 );
+    scene.add(directionalLight);
+
+    const sceneSubjects = [];
 
     return sceneSubjects;
 }

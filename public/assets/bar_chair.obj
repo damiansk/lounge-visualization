@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib Bar_chair_2.mtl
+mtllib bar_chair.mtl
 o Bar_Chair_Cube.001
 v 0.624437 0.053632 -0.258650
 v 0.639997 0.053569 -0.217246

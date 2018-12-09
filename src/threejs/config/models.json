@@ -1,5 +1,5 @@
 {
-    "objects": [
+    "models": [
         {
             "type": "chair",
             "configs": [
@@ -16,23 +16,6 @@
                         "z": -1
                     },
                     "rotation": -90
-                }
-            ]
-        },
-        {
-            "type": "barstool",
-            "configs": [
-                {
-                    "position": {
-                        "x": 3,
-                        "z": -3
-                    }
-                },
-                {
-                    "position": {
-                        "x": 3,
-                        "z": -1
-                    }
                 }
             ]
         },
@@ -73,7 +56,24 @@
             ]
         },
         {
-            "type": "billardTable",
+            "type": "bar_chair",
+            "configs": [
+                {
+                    "position": {
+                        "x": 3,
+                        "z": -3
+                    }
+                },
+                {
+                    "position": {
+                        "x": 3,
+                        "z": -1
+                    }
+                }
+            ]
+        },
+        {
+            "type": "pool_table",
             "configs": [
                 {
                     "position": {
@@ -82,6 +82,9 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "floor"
         }
     ]
 }

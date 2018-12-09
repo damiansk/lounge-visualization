@@ -8,7 +8,7 @@
         "uuid": "F4A9A481-3E91-3A97-B193-8D453ABEB7A7",
         "minFilter": 1008,
         "image": "566ABFEE-4D3A-3A5D-AC27-8B1D99B789A8",
-        "name": "study_chair_cm_jpg"
+        "name": "chair_jpg"
     }],
     "geometries": [{
         "uuid": "FE3AC41F-5394-3BC7-8443-8AB48434C85A",
@@ -50,7 +50,7 @@
             "mapDiffuseAnisotropy": 1,
             "blending": "NormalBlending",
             "depthTest": true,
-            "mapDiffuse": "study_chair_cm.jpg",
+            "mapDiffuse": "chair.jpg",
             "colorAmbient": [0.8,0.8,0.8],
             "visible": true,
             "DbgColor": 15658734,
@@ -62,8 +62,8 @@
     }],
     "images": [{
         "uuid": "566ABFEE-4D3A-3A5D-AC27-8B1D99B789A8",
-        "url": "study_chair_cm.jpg",
-        "name": "study_chair_cm.jpg"
+        "url": "chair.jpg",
+        "name": "chair.jpg"
     }],
     "animations": [{
         "fps": 29,
