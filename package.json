@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "node_modules\\.bin\\eslint --fix src/*",
-    "format": "prettier --write --trailing-comma es5 --single-quote src/* !src/*.css"
+    "format": "prettier --write src/*.js src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
