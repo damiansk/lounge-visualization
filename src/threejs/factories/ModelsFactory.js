@@ -100,8 +100,8 @@ class ModelsFactory {
     createFloor(scene) {
         LoaderService.loadOBJ('floor')
             .then(model => {
-                setConfig(model);
                 const floor = new Floor(model);
+                setConfig(model);
                 scene.add(model);
             });
     }
