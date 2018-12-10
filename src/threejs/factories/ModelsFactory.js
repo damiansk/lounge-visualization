@@ -14,33 +14,33 @@ class ModelsFactory {
         this.loadingManager = loadingManager;
     }
 
-    createModels(modelsConfig, scene) {
+    createModels(modelsConfig, callback) {
         modelsConfig.forEach(model => {
             const { configs } = model;
 
             switch(model.type) {
                 case 'chair':
                     configs.forEach(config =>
-                        this.createChair(config, scene));
+                        this.createChair(config, callback));
                     break;
                 case 'microwave':
                     configs.forEach(config =>
-                        this.createMicrowave(config, scene));
+                        this.createMicrowave(config, callback));
                     break;
                 case 'table':
                     configs.forEach(config =>
-                        this.createTable(config, scene));
+                        this.createTable(config, callback));
                     break;
                 case 'bar_chair':
                     configs.forEach(config =>
-                        this.createBarChair(config, scene));
+                        this.createBarChair(config, callback));
                     break;
                 case 'pool_table':
                     configs.forEach(config =>
-                        this.createPoolTable(config, scene));
+                        this.createPoolTable(config, callback));
                     break;
                 case 'floor':
-                    this.createFloor(scene);
+                    this.createFloor(callback);
                     break;
                 default:
                     break;
@@ -48,61 +48,61 @@ class ModelsFactory {
         });
     }
 
-    createChair(config, scene) {
+    createChair(config, callback) {
         LoaderService.loadObject('chair')
             .then(model => {
                 const mesh = findMainMesh(model);
                 const chair = new Chair(mesh);
                 setConfig(mesh, config);
-                scene.add(mesh);
+                callback(chair);
             });
     }
 
-    createMicrowave(config, scene) {
+    createMicrowave(config, callback) {
         LoaderService.loadOBJ('microwave')
             .then(model => {
                 const mesh = findMainMesh(model);
                 const microwave = new Microwave(mesh);
                 setConfig(mesh, config);
-                scene.add(mesh);
+                callback(microwave);
             });
     }
 
-    createTable(config, scene) {
+    createTable(config, callback) {
         LoaderService.loadOBJ('table')
             .then(model => {
                 const table = new Table(model);
                 setConfig(model, config);
-                scene.add(model);
+                callback(table);
             });
     }
 
-    createBarChair(config, scene) {
+    createBarChair(config, callback) {
         LoaderService.loadOBJ('bar_chair')
             .then(model => {
                 const mesh = findMainMesh(model);
                 const barChair = new BarChair(mesh);
                 setConfig(mesh, config);
-                scene.add(mesh);
+                callback(barChair);
             });
     }
 
-    createPoolTable(config, scene) {
+    createPoolTable(config, callback) {
         LoaderService.loadOBJ('pool_table')
             .then(model => {
                 const mesh = findMainMesh(model);
                 const poolTable = new PoolTable(mesh);
                 setConfig(mesh, config);
-                scene.add(mesh);
+                callback(poolTable);
             });
     }
 
-    createFloor(scene) {
+    createFloor(callback) {
         LoaderService.loadOBJ('floor')
             .then(model => {
                 const floor = new Floor(model);
                 setConfig(model);
-                scene.add(model);
+                callback(floor);
             });
     }
 }

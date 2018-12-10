@@ -12,20 +12,21 @@ class SceneManager {
             width: canvas.width, 
             height: canvas.height
         };
+        this.sceneSubjects = [];
         this.scene = buildScene();
         this.renderer = buildRender(canvas);
         this.camera = this.buildCamera(this.screenDimensions);
-        this.sceneSubjects = createSceneSubjects(this.scene);
+        this.initSceneSubjects();
         
         InteractionService.init(this.camera, this.renderer);
     }
     
     update = () => {
-        const elapsedTime = this.clock.getElapsedTime();
+        // const elapsedTime = this.clock.getElapsedTime();
 
-        for(let i=0; i < this.sceneSubjects.length; i++) {
-            this.sceneSubjects[i].update(elapsedTime);
-        }
+        // for(let i=0; i < this.sceneSubjects.length; i++) {
+        //     this.sceneSubjects[i].update(elapsedTime);
+        // }
 
         this.renderer.render(this.scene, this.camera);
     }
@@ -57,6 +58,20 @@ class SceneManager {
     
         return camera;
     }
+
+    initSceneSubjects = () => {
+        const manager = new THREE.LoadingManager();
+        const factory = new ModelsFactory(manager);
+    
+        factory.createModels(modelsConfig, model => {
+            this.sceneSubjects.push(model);
+            this.scene.add(model.mesh);
+        });
+    
+        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight.position.set( 0, 90, -60 );
+        this.scene.add(directionalLight);
+    }
 }
 
 function buildScene() {
@@ -74,21 +89,6 @@ function buildRender(canvas) {
     renderer.setSize(canvas.width, canvas.height);
 
     return renderer;
-}
-
-function createSceneSubjects(scene) {
-    const manager = new THREE.LoadingManager();
-    const factory = new ModelsFactory(manager);
-
-    factory.createModels(modelsConfig, scene);
-
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    directionalLight.position.set( 0, 90, -60 );
-    scene.add(directionalLight);
-
-    const sceneSubjects = [];
-
-    return sceneSubjects;
 }
 
 export { SceneManager };
