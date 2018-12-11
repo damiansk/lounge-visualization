@@ -8,14 +8,6 @@ const threeEntryPoint = (threeRootNode) => {
   sceneManager.init();
   const stats = initStatsPanel(canvas);
   canvas.style.position = 'absolute';
-  bindEventListeners();
-  render();
-
-  function bindEventListeners() {
-    window.onresize = resizeCanvas;
-
-    resizeCanvas();
-  }
 
   function resizeCanvas() {
     canvas.style.width = '100%';
@@ -26,13 +18,20 @@ const threeEntryPoint = (threeRootNode) => {
 
     sceneManager.onWindowResize();
   }
+  function bindEventListeners() {
+    window.addEventListener('resize', resizeCanvas);
 
+    resizeCanvas();
+  }
   function render() {
     stats.begin();
     sceneManager.update();
     stats.end();
     window.requestAnimationFrame(render);
   }
+
+  bindEventListeners();
+  render();
 };
 
 function createCanvas(document, containerElement) {
