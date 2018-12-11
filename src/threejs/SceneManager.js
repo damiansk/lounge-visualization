@@ -16,9 +16,10 @@ class SceneManager {
         this.scene = buildScene();
         this.renderer = buildRender(canvas);
         this.camera = this.buildCamera(this.screenDimensions);
-        this.initSceneSubjects();
         
         InteractionService.init(this.camera, this.renderer);
+
+        this.initSceneSubjects();
     }
     
     update = () => {
@@ -66,6 +67,10 @@ class SceneManager {
         factory.createModels(modelsConfig, model => {
             this.sceneSubjects.push(model);
             this.scene.add(model.mesh);
+
+            if(model.isInteractive) {
+                InteractionService.register(model.mesh);
+            }
         });
     
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
