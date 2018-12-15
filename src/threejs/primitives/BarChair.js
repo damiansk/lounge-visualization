@@ -1,6 +1,6 @@
-import { InteractionModel } from '../abstract/InteractionModel';
+import { InteractiveModel } from '../abstract/InteractiveModel';
 
-class BarChair extends InteractionModel {
+class BarChair extends InteractiveModel {
     constructor(mesh) {
         super();
         this.mesh = mesh;

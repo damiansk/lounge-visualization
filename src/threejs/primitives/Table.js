@@ -1,7 +1,7 @@
 import { Math as THREEMath } from 'three';
-import { InteractionModel } from '../abstract/InteractionModel';
+import { InteractiveModel } from '../abstract/InteractiveModel';
 
-class Table extends InteractionModel {
+class Table extends InteractiveModel {
     constructor(mesh) {
         super();
         this.mesh = mesh;

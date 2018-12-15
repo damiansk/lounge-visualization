@@ -26,6 +26,7 @@ class SceneManager {
       width: canvas.width,
       height: canvas.height,
     };
+    this.sceneSubjects = [];
   }
 
   init = () => {
@@ -47,14 +48,17 @@ class SceneManager {
 
     ControlsService.init(this.camera, this.renderer.domElement);
     InteractionService.init(this.camera, this.renderer);
+
+    this.initSceneSubjects();
   }
 
   update = () => {
-    const elapsedTime = this.clock.getElapsedTime();
+    // Should be removed?
+    // const elapsedTime = this.clock.getElapsedTime();
 
-    for (let i = 0; i < this.sceneSubjects.length; i++) {
-      this.sceneSubjects[i].update(elapsedTime);
-    }
+    // for (let i = 0; i < this.sceneSubjects.length; i++) {
+    //   this.sceneSubjects[i].update(elapsedTime);
+    // }
 
     this.renderer.render(this.scene, this.camera);
   }
