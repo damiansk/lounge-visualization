@@ -318,4 +318,5 @@ import {
   DragControls.prototype = Object.create(EventDispatcher.prototype);
   DragControls.prototype.constructor = DragControls;
   
-  export default DragControls;
+  export { DragControls };
+  

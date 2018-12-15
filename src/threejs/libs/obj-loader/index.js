@@ -793,4 +793,4 @@ var OBJLoader = ( function () {
 
 } )();
 
-export default OBJLoader;
+export { OBJLoader };

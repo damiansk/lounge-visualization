@@ -569,4 +569,4 @@ MTLLoader.MaterialCreator.prototype = {
 
 };
 
-export default MTLLoader;
+export { MTLLoader };

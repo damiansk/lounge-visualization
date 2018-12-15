@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import DragControls from 'three-dragcontrols';
+import { DragControls } from '../libs/three-dragcontrols';
 import { ControlsService } from '../services/CameraControlsService';
 
 const meshes = [];

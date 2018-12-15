@@ -10,10 +10,7 @@
     "react-dom": "^16.6.1",
     "react-scripts": "2.1.1",
     "stats.js": "^0.17.0",
-    "three": "^0.97.0",
-    "obj-loader": "file:./libs/obj-loader",
-    "mtl-loader": "file:./libs/mtl-loader",
-    "three-dragcontrols": "file:./libs/three-dragcontrols"
+    "three": "^0.97.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,7 +18,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "node_modules\\.bin\\eslint --fix src/*",
-    "format": "prettier --write --trailing-comma es5 --single-quote src/* !src/*.css"
+    "format": "prettier --write src/*.js src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,7 +30,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",

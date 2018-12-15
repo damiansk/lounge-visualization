@@ -1,53 +1,55 @@
-import { SceneManager } from './SceneManager';
 import Stats from 'stats.js';
+import SceneManager from './SceneManager';
 
 
-const threeEntryPoint = threeRootNode => {
-    const canvas = createCanvas(document, threeRootNode);
-    const sceneManager = new SceneManager(canvas);
-    const stats = initStatsPanel(canvas);
-    canvas.style.position = 'absolute';
-    bindEventListeners();
-    render();
+const threeEntryPoint = (threeRootNode) => {
+  const canvas = createCanvas(document, threeRootNode);
+  const sceneManager = new SceneManager(canvas);
+  sceneManager.init();
+  const stats = initStatsPanel(canvas);
+  canvas.style.position = 'absolute';
 
-    function bindEventListeners() {
-        window.onresize = resizeCanvas;
+  function resizeCanvas() {
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
 
-        resizeCanvas();
-    }
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
 
-    function resizeCanvas() {
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = canvas.parentElement.clientHeight;
+    sceneManager.onWindowResize();
+  }
+  function bindEventListeners() {
+    window.addEventListener('resize', resizeCanvas);
 
-        sceneManager.onWindowResize();
-    }
+    resizeCanvas();
+  }
+  function render() {
+    stats.begin();
+    sceneManager.update();
+    stats.end();
+    window.requestAnimationFrame(render);
+  }
 
-    function render() {
-        stats.begin();
-        sceneManager.update();  
-        stats.end();
-        window.requestAnimationFrame(render);
-    }
-}
+  bindEventListeners();
+  render();
+};
 
 function createCanvas(document, containerElement) {
-    const canvas = document.createElement('canvas');
-    containerElement.appendChild(canvas);
+  const canvas = document.createElement('canvas');
+  containerElement.appendChild(canvas);
 
-    return canvas;
+  return canvas;
 }
 
 function initStatsPanel(canvas) {
-    const stats = new Stats();
-    stats.showPanel(0);
-    stats.dom.style.position = 'absolute';
-    canvas.parentElement.appendChild(stats.dom);
+  const stats = new Stats();
+  stats.showPanel(0);
+  stats.dom.style.position = 'absolute';
+  canvas.parentElement.appendChild(stats.dom);
 
-    return stats;
+  return stats;
 }
 
-export { threeEntryPoint };
+export {
+  threeEntryPoint,
+};

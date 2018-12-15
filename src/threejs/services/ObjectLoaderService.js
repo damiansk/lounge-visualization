@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import OBJLoader from 'obj-loader';
-import MTLLoader from 'mtl-loader';
+import { OBJLoader } from '../libs/obj-loader';
+import { MTLLoader } from '../libs/mtl-loader';
 
 const objectLoader = new THREE.ObjectLoader();
 // objectLoader.setPath('assets/');
