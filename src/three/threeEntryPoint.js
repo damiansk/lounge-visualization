@@ -1,8 +1,7 @@
 import Stats from 'stats.js';
 import SceneManager from './SceneManager';
 
-
-const threeEntryPoint = (threeRootNode) => {
+const threeEntryPoint = threeRootNode => {
   const canvas = createCanvas(document, threeRootNode);
   const sceneManager = new SceneManager(canvas);
   sceneManager.init();
@@ -50,6 +49,4 @@ function initStatsPanel(canvas) {
   return stats;
 }
 
-export {
-  threeEntryPoint,
-};
+export { threeEntryPoint };

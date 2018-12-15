@@ -8,4 +8,4 @@ class Microwave {
   }
 }
 
-export { Microwave }
+export { Microwave };

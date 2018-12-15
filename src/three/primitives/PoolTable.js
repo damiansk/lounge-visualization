@@ -8,4 +8,4 @@ class PoolTable {
   }
 }
 
-export { PoolTable }
+export { PoolTable };
