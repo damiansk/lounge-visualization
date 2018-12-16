@@ -9,17 +9,9 @@ let dragStartPosition = null;
 function isCollideWithAnyMesh(object) {
   const boundingBox = new THREE.Box3().setFromObject(object);
 
-  for (let mesh of interactiveMeshes) {
-    const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
+  const meshes = interactiveMeshes.concat(staticMeshes);
 
-    const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
-
-    if (isIntersected && mesh !== object) {
-      return true;
-    }
-  }
-
-  for (let mesh of staticMeshes) {
+  for (let mesh of meshes) {
     const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
 
     const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
