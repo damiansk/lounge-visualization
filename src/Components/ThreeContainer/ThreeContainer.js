@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 
-import { threeEntryPoint } from '../../threejs/threeEntryPoint';
-
+import { threeEntryPoint } from '../../three/threeEntryPoint';
 
 export class ThreeContainer extends Component {
+  containerRef = React.createRef();
+  barSpacerHeight = '64px';
 
-    containerRef = React.createRef();
-    barSpacerHeight = '64px';
+  componentDidMount() {
+    threeEntryPoint(this.containerRef.current);
+  }
 
-    componentDidMount() {  
-        threeEntryPoint(this.containerRef.current);
-    }
-
-    render() {
-        return <div style={{ height: `calc(100% - ${this.barSpacerHeight})`, position: 'relative' }} ref={this.containerRef}/>;
-    }
+  render() {
+    return (
+      <div
+        style={{
+          height: `calc(100% - ${this.barSpacerHeight})`,
+          position: 'relative',
+        }}
+        ref={this.containerRef}
+      />
+    );
+  }
 }
