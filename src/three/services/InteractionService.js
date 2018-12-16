@@ -1,32 +1,13 @@
-import * as THREE from 'three';
+import { Box3 } from 'three';
 import { DragControls } from '../libs/three-dragcontrols';
-import { ControlsService } from '../services/CameraControlsService';
-
-const interactiveMeshes = [];
-const staticMeshes = [];
-let dragStartPosition = null;
-
-function isCollideWithAnyMesh(object) {
-  const boundingBox = new THREE.Box3().setFromObject(object);
-
-  const meshes = interactiveMeshes.concat(staticMeshes);
-
-  for (let mesh of meshes) {
-    const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
-
-    const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
-
-    if (isIntersected && mesh !== object) {
-      return true;
-    }
-  }
-
-  return false;
-}
+import { ControlsService } from './CameraControlsService';
 
 class InteractionService {
-  static init(camera, renderer) {
-    const dragControls = new DragControls(interactiveMeshes, camera, renderer.domElement);
+  constructor(camera, renderer) {
+    this.interactiveMeshes = [];
+    this.staticMeshes = [];
+    this.dragStartPosition = null;
+    const dragControls = new DragControls(this.interactiveMeshes, camera, renderer.domElement);
 
     dragControls.addEventListener('dragstart', () => ControlsService.disable());
     dragControls.addEventListener('dragend', () => ControlsService.enable());
@@ -35,15 +16,36 @@ class InteractionService {
     dragControls.addEventListener('drag', this.dragHandler);
   }
 
-  static registerInteractiveMesh(mesh) {
-    interactiveMeshes.push(mesh);
+  register(mesh) {
+    this.meshes.push(mesh);
   }
 
-  static registerStaticMesh(mesh) {
-    staticMeshes.push(mesh);
+  registerInteractiveMesh = (mesh) => {
+    this.interactiveMeshes.push(mesh);
   }
 
-  static dragStartHandler({ object }) {
+  registerStaticMesh = (mesh) => {
+    this.staticMeshes.push(mesh);
+  }
+
+  isCollideWithAnyMesh(object) {
+    const boundingBox = new Box3().setFromObject(object);
+    const meshes = this.interactiveMeshes.concat(this.staticMeshes);
+    for (let i = meshes.length - 1; i >= 0; i--) {
+      const tempBoundingBox = new Box3().setFromObject(meshes[i]);
+
+      const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
+
+      if (isIntersected && meshes[i] !== object) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  dragStartHandler = (event) => {
+    const { object } = event;
     object.userData.interactionService = {
       material: object.material.clone(),
     };
@@ -51,21 +53,28 @@ class InteractionService {
     object.material.transparent = true;
     object.material.opacity = 0.6;
 
-    dragStartPosition = object.position.clone();
+    this.dragStartPosition = object.position.clone();
   }
 
-  static dragEndHandler({ object }) {
+  dragEndHandler = (event) => {
+    const { object } = event;
     object.material = object.userData.interactionService.material;
 
-    if (isCollideWithAnyMesh(object)) {
-      const { x, y, z } = dragStartPosition;
+    if (this.isCollideWithAnyMesh(object)) {
+      const {
+        x,
+        y,
+        z,
+      } = this.dragStartPosition;
       object.position.set(x, y, z);
-      dragStartPosition = null;
+      this.dragStartPosition = null;
     }
   }
 
-  static dragHandler({ object }) {
-    if (isCollideWithAnyMesh(object)) {
+  dragHandler = ({
+    object,
+  }) => {
+    if (this.isCollideWithAnyMesh(object)) {
       object.material.color.set(0xff0000);
     } else {
       object.material.color.set(0x808080);
@@ -73,4 +82,6 @@ class InteractionService {
   }
 }
 
-export { InteractionService };
+export {
+  InteractionService,
+};

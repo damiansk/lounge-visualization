@@ -41,7 +41,7 @@ class SceneManager {
       fieldOfView,
       aspectRatio,
       nearPlane,
-      farPlane
+      farPlane,
     );
     this.camera.position.set(-10, 10, 10);
     this.camera.lookAt(0, 0, 0);
@@ -50,7 +50,7 @@ class SceneManager {
     this.scene.background = new Color('#020345');
 
     ControlsService.init(this.camera, this.renderer.domElement);
-    InteractionService.init(this.camera, this.renderer);
+    this.interactionService = new InteractionService(this.camera, this.renderer);
 
     this.initSceneSubjects();
   };
@@ -84,14 +84,14 @@ class SceneManager {
 
     factory.createFloor(model => this.scene.add(model.mesh));
 
-    factory.createModels(modelsConfig, model => {
+    factory.createModels(modelsConfig, (model) => {
       this.sceneSubjects.push(model);
       this.scene.add(model.mesh);
 
       if (model.isInteractive) {
-        InteractionService.registerInteractiveMesh(model.mesh);
+        this.interactionService.registerInteractiveMesh(model.mesh);
       } else {
-        InteractionService.registerStaticMesh(model.mesh);
+        this.interactionService.registerStaticMesh(model.mesh);
       }
     });
 
