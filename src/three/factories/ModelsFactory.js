@@ -34,9 +34,6 @@ class ModelsFactory {
         case 'pool_table':
           configs.forEach(config => this.createPoolTable(config, callback));
           break;
-        case 'floor':
-          this.createFloor(callback);
-          break;
         default:
           break;
       }

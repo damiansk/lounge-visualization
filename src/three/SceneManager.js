@@ -82,12 +82,16 @@ class SceneManager {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
 
+    factory.createFloor(model => this.scene.add(model.mesh));
+
     factory.createModels(modelsConfig, model => {
       this.sceneSubjects.push(model);
       this.scene.add(model.mesh);
 
       if (model.isInteractive) {
-        InteractionService.register(model.mesh);
+        InteractionService.registerInteractiveMesh(model.mesh);
+      } else {
+        InteractionService.registerStaticMesh(model.mesh);
       }
     });
 

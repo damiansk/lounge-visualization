@@ -2,13 +2,24 @@ import * as THREE from 'three';
 import { DragControls } from '../libs/three-dragcontrols';
 import { ControlsService } from '../services/CameraControlsService';
 
-const meshes = [];
+const interactiveMeshes = [];
+const staticMeshes = [];
 let dragStartPosition = null;
 
 function isCollideWithAnyMesh(object) {
   const boundingBox = new THREE.Box3().setFromObject(object);
 
-  for (let mesh of meshes) {
+  for (let mesh of interactiveMeshes) {
+    const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
+
+    const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
+
+    if (isIntersected && mesh !== object) {
+      return true;
+    }
+  }
+
+  for (let mesh of staticMeshes) {
     const tempBoundingBox = new THREE.Box3().setFromObject(mesh);
 
     const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
@@ -23,7 +34,7 @@ function isCollideWithAnyMesh(object) {
 
 class InteractionService {
   static init(camera, renderer) {
-    const dragControls = new DragControls(meshes, camera, renderer.domElement);
+    const dragControls = new DragControls(interactiveMeshes, camera, renderer.domElement);
 
     dragControls.addEventListener('dragstart', () => ControlsService.disable());
     dragControls.addEventListener('dragend', () => ControlsService.enable());
@@ -32,8 +43,12 @@ class InteractionService {
     dragControls.addEventListener('drag', this.dragHandler);
   }
 
-  static register(mesh) {
-    meshes.push(mesh);
+  static registerInteractiveMesh(mesh) {
+    interactiveMeshes.push(mesh);
+  }
+
+  static registerStaticMesh(mesh) {
+    staticMeshes.push(mesh);
   }
 
   static dragStartHandler({ object }) {
