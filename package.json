@@ -9,6 +9,8 @@
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-scripts": "2.1.1",
+    "rxjs": "^6.2.2",
+    "rxjs-compat": "^6.2.2",
     "stats.js": "^0.17.0",
     "three": "^0.97.0"
   },
