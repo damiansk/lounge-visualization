@@ -17,11 +17,13 @@ const threeEntryPoint = threeRootNode => {
 
     sceneManager.onWindowResize();
   }
+
   function bindEventListeners() {
     window.addEventListener('resize', resizeCanvas);
 
     resizeCanvas();
   }
+
   function render() {
     stats.begin();
     sceneManager.update();

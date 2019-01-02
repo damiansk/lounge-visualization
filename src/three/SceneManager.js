@@ -25,9 +25,14 @@ class SceneManager {
       height: canvas.height,
     };
     this.sceneSubjects = [];
+
+    this.init = this.init.bind(this);
+    this.update = this.update.bind(this);
+    this.onWindowResize = this.onWindowResize.bind(this);
+    this.initSceneSubjects = this.initSceneSubjects.bind(this);
   }
 
-  init = () => {
+  init() {
     const aspectRatio = this.canvas.width / this.canvas.height;
     const DPR = window.devicePixelRatio || 1;
 
@@ -56,20 +61,13 @@ class SceneManager {
     );
 
     this.initSceneSubjects();
-  };
+  }
 
-  update = () => {
-    // Should be removed?
-    // const elapsedTime = this.clock.getElapsedTime();
-
-    // for (let i = 0; i < this.sceneSubjects.length; i++) {
-    //   this.sceneSubjects[i].update(elapsedTime);
-    // }
-
+  update() {
     this.renderer.render(this.scene, this.camera);
-  };
+  }
 
-  onWindowResize = () => {
+  onWindowResize() {
     const { width, height } = this.renderer.domElement;
 
     this.screenDimensions.width = width;
@@ -79,29 +77,32 @@ class SceneManager {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(width, height);
-  };
+  }
 
-  initSceneSubjects = () => {
+  initSceneSubjects() {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
 
-    factory.createFloor(model => this.scene.add(model.mesh));
+    factory.createFloor()
+      .subscribe(model => this.scene.add(model));
 
-    factory.createModels(modelsConfig, model => {
-      this.sceneSubjects.push(model);
-      this.scene.add(model);
+    factory.createModels(modelsConfig)
+      .subscribe(model => {
+        console.log(model);
+        // this.sceneSubjects.push(model);
+        // this.scene.add(model);
 
-      if (model.isInteractive) {
-        this.interactionService.registerInteractiveMesh(model);
-      } else {
-        this.interactionService.registerStaticMesh(model);
-      }
-    });
+        // if (model.isInteractive) {
+        //   this.interactionService.registerInteractiveMesh(model);
+        // } else {
+        //   this.interactionService.registerStaticMesh(model);
+        // }
+      });
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
-  };
+  }
 }
 
 export default SceneManager;

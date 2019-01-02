@@ -1,7 +1,8 @@
 import { Mesh, Box3, Math as THREEMath } from 'three';
-import { from, of } from 'rxjs';
-import { map, mergeAll, flatMap } from 'rxjs/operators';
-import * as LoaderService from '../services/ObjectLoaderService';
+import { from, of, forkJoin, combineLatest, zip } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { map, mergeAll, flatMap, withLatestFrom, mergeMap, concatMap } from 'rxjs/operators';
+import { LoaderService } from '../services/ObjectLoaderService';
 import {
   Chair,
   Microwave,
@@ -14,68 +15,62 @@ import {
 class ModelsFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
+    this.loaderService = new LoaderService(this.loadingManager);
   }
 
-  createModels(modelsConfig, callback) {
-    // modelsConfig.forEach(model => {
-    //   const { configs } = model;
-    //   switch (model.type) {
-    //     case 'chair':
-    //       configs.map(config => this.createChair(config, callback));
-    //       break;
-    //     case 'microwave':
-    //       configs.forEach(config => this.createMicrowave(config, callback));
-    //       break;
-    //     case 'table':
-    //       configs.forEach(config => this.createTable(config, callback));
-    //       break;
-    //     case 'bar_chair':
-    //       configs.forEach(config => this.createBarChair(config, callback));
-    //       break;
-    //     case 'pool_table':
-    //       configs.forEach(config => this.createPoolTable(config, callback));
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
-
-    from(modelsConfig)
+  createModels(modelsConfig) {
+    return from(modelsConfig)
       .pipe(
-        map(item => this.createModels1(item)),
-        map(models => models.pipe(mergeAll())),
+        map(this.createModels1),
         mergeAll()
-      )
-      .subscribe(val => {
-        callback(val);
-      });
+      );
   }
 
   createModels1 = ({ configs, type }) => {
+    let observable;
     switch (type) {
       case 'chair':
-        return from(configs.map(this.createChair.bind(this)));
-      case 'microwave':
-        return from(configs.map(this.createMicrowave.bind(this)));
-      case 'table':
-        return from(configs.map(this.createTable.bind(this)));
-      case 'bar_chair':
-        return from(configs.map(this.createBarChair.bind(this)));   
-      case 'pool_table':
-        return from(configs.map(this.createPoolTable.bind(this)));
+        observable = this.createChair(configs);
+        break;
+      // case 'microwave':
+      //   return from(configs.map(this.createMicrowave.bind(this)));
+      // case 'table':
+      //   return from(configs.map(this.createTable.bind(this)));
+      // case 'bar_chair':
+      //   return from(configs.map(this.createBarChair.bind(this)));
+      // case 'pool_table':
+      //   return from(configs.map(this.createPoolTable.bind(this)));
+      default:
+        observable = Observable.create();
     }
-  };
 
-  createChair(config, callback) {
-    return LoaderService.loadObject('chair', this.loadingManager)
-      .pipe(flatMap(model => {
-        const mesh = findMainMesh(model);
-        const chair = new Chair(mesh);
-        setConfig(mesh, config);
-
-        return chair;
-      }));
+    return observable
+      .pipe(mergeMap(from));
   }
+
+  createFloor() {
+    return this.loaderService.loadOBJ('floor2');
+  }
+
+  createChair(configs) {
+    return this.loaderService.loadJSON('chair')
+      .pipe(
+        map(findMainMesh),
+        map(model => configs.map(config => {
+          const modelClone = setConfig(model.clone(), config);
+          return new Chair(modelClone);
+        }))
+      );
+  }
+
+
+
+
+
+
+
+
+
 
   createMicrowave(config, callback) {
     return LoaderService.loadOBJ('microwave', this.loadingManager)
@@ -116,15 +111,6 @@ class ModelsFactory {
       //   callback(poolTable);
       // });
   }
-
-  createFloor(callback) {
-    return LoaderService.loadOBJ('floor', this.loadingManager)
-      // .subscribe(model => {
-      //   const floor = new Floor(model);
-      //   setConfig(model);
-      //   callback(floor);
-      // });
-  }
 }
 
 function findMainMesh(model) {
@@ -151,6 +137,8 @@ function setConfig(mesh, config = {}) {
   if (config.rotation) {
     mesh.rotateZ(config.rotation * THREEMath.DEG2RAD);
   }
+
+  return mesh;
 }
 
 export { ModelsFactory };
