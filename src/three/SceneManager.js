@@ -89,8 +89,8 @@ class SceneManager {
     factory.createModels(modelsConfig)
       .subscribe(model => {
         console.log(model);
-        // this.sceneSubjects.push(model);
-        // this.scene.add(model);
+        this.sceneSubjects.push(model);
+        this.scene.add(model.mesh);
 
         // if (model.isInteractive) {
         //   this.interactionService.registerInteractiveMesh(model);

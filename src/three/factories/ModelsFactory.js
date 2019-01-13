@@ -28,14 +28,16 @@ class ModelsFactory {
 
   createModels1 = ({ configs, type }) => {
     let observable;
+
     switch (type) {
       case 'chair':
         observable = this.createChair(configs);
         break;
       // case 'microwave':
       //   return from(configs.map(this.createMicrowave.bind(this)));
-      // case 'table':
-      //   return from(configs.map(this.createTable.bind(this)));
+      case 'table':
+        observable = this.createTable(configs);
+        break;
       // case 'bar_chair':
       //   return from(configs.map(this.createBarChair.bind(this)));
       // case 'pool_table':
@@ -56,14 +58,32 @@ class ModelsFactory {
     return this.loaderService.loadJSON('chair')
       .pipe(
         map(findMainMesh),
-        map(model => configs.map(config => {
-          const modelClone = setConfig(model.clone(), config);
-          return new Chair(modelClone);
-        }))
+        map(obj => {
+          obj.scale.set(0.01, 0.01, 0.01);
+          obj.rotateX(-90 * THREEMath.DEG2RAD);
+          fixYPosition(obj);
+          return configs.map(config => new Chair(setConfig(obj.clone(), config)));
+        })
       );
   }
 
-
+  createTable(configs) {
+    return this.loaderService.loadOBJ('table')
+      .pipe(
+        map(obj => {
+          obj.scale.set(0.007, 0.007, 0.007);
+          obj.rotateZ(90 * THREEMath.DEG2RAD);
+          fixYPosition(obj);
+          return configs.map(config => new Table(setConfig(obj.clone(), config)));
+        })
+        // flatMap(model => {
+        //   const table = new Table(model);
+        //   setConfig(model, config);
+          
+        //   return table;
+        // })
+      );
+  }
 
 
 
@@ -80,16 +100,6 @@ class ModelsFactory {
       //   setConfig(mesh, config);
       //   callback(microwave);
       // });
-  }
-
-  createTable(config, callback) {
-    return LoaderService.loadOBJ('table', this.loadingManager)
-      .pipe(flatMap(model => {
-        const table = new Table(model);
-        setConfig(model, config);
-        
-        return table;
-      }));
   }
 
   createBarChair(config, callback) {
@@ -125,9 +135,16 @@ function findMainMesh(model) {
   return mesh;
 }
 
-function setConfig(mesh, config = {}) {
+function fixYPosition(mesh) {
   const boundingBox = new Box3().setFromObject(mesh);
   mesh.position.y = Math.abs(boundingBox.min.y);
+
+  return mesh;
+}
+
+function setConfig(mesh, config = {}) {
+  // const boundingBox = new Box3().setFromObject(mesh);
+  // mesh.position.y = Math.abs(boundingBox.min.y);
 
   if (config.position) {
     mesh.position.x = config.position.x;
