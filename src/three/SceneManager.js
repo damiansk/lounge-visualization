@@ -88,15 +88,14 @@ class SceneManager {
 
     factory.createModels(modelsConfig)
       .subscribe(model => {
-        console.log(model);
         this.sceneSubjects.push(model);
         this.scene.add(model.mesh);
 
-        // if (model.isInteractive) {
-        //   this.interactionService.registerInteractiveMesh(model);
-        // } else {
-        //   this.interactionService.registerStaticMesh(model);
-        // }
+        if (model.isInteractive) {
+          this.interactionService.registerInteractiveMesh(model.mesh);
+        } else {
+          this.interactionService.registerStaticMesh(model.mesh);
+        }
       });
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
