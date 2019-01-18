@@ -21,6 +21,7 @@ module.exports = {
       },
     ],
     'one-var-declaration-per-line': ['error', 'initializations'],
-    'linebreak-style': ["error", "windows"]
+    'linebreak-style': ["error", "windows"],
+    "import/prefer-default-export": "off"
   },
 };

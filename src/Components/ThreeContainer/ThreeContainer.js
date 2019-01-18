@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 
 import { threeEntryPoint } from '../../three/threeEntryPoint';
 
-export class ThreeContainer extends Component {
+class ThreeContainer extends Component {
   containerRef = React.createRef();
+
   barSpacerHeight = '64px';
 
   componentDidMount() {
@@ -22,3 +23,5 @@ export class ThreeContainer extends Component {
     );
   }
 }
+
+export { ThreeContainer };
