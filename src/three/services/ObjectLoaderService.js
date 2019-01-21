@@ -1,37 +1,50 @@
 import * as THREE from 'three';
+import { bindCallback } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 import { OBJLoader } from '../libs/obj-loader';
 import { MTLLoader } from '../libs/mtl-loader';
 
 const basePath = 'assets/';
 
-const loadOBJ = (fileName, loadManager) => {
-  const objLoader = new OBJLoader(loadManager);
-  objLoader.setPath(basePath);
-  const file = `${fileName}.obj`;
+class LoaderService {
+  constructor(loadingManager) {
+    this.loadingManager = loadingManager;
 
-  return new Promise(resolve => {
-    loadMTL(fileName, loadManager).then(materials => {
-      materials.preload();
-      objLoader.setMaterials(materials);
-      objLoader.load(file, resolve);
-    });
-  });
-};
+    this.loadOBJ = this.loadOBJ.bind(this);
+    this.loadMTL = this.loadMTL.bind(this);
+    this.loadJSON = this.loadJSON.bind(this);
+  }
 
-const loadMTL = (fileName, loadManager) => {
-  const mtlLoader = new MTLLoader(loadManager);
-  mtlLoader.setPath(basePath);
-  const file = `${fileName}.mtl`;
+  loadOBJ(fileName) {
+    const objLoader = new OBJLoader(this.loadingManager);
+    objLoader.setPath(basePath);
+    const file = `${fileName}.obj`;
 
-  return new Promise(resolve => mtlLoader.load(file, resolve));
-};
+    return this.loadMTL(fileName)
+      .pipe(
+        flatMap(materials => {
+          materials.preload();
+          objLoader.setMaterials(materials);
 
-const loadObject = (fileName, loadManager) => {
-  const objectLoader = new THREE.ObjectLoader(loadManager);
-  // objectLoader.setPath('assets/');
-  const file = `${basePath}${fileName}.json`;
+          return bindCallback(objLoader.load.bind(objLoader))(file);
+        })
+      );
+  }
 
-  return new Promise(resolve => objectLoader.load(file, resolve));
-};
+  loadMTL(fileName) {
+    const mtlLoader = new MTLLoader(this.loadingManager);
+    mtlLoader.setPath(basePath);
+    const file = `${fileName}.mtl`;
+  
+    return bindCallback(mtlLoader.load.bind(mtlLoader))(file);
+  };
+  
+  loadJSON(fileName) {
+    const objectLoader = new THREE.ObjectLoader(this.loadingManager);
+    const file = `${basePath}${fileName}.json`;
+  
+    return bindCallback(objectLoader.load.bind(objectLoader))(file);
+  };
+}
 
-export { loadOBJ, loadMTL, loadObject };
+export { LoaderService };

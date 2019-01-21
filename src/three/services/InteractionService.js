@@ -7,7 +7,11 @@ class InteractionService {
     this.interactiveMeshes = [];
     this.staticMeshes = [];
     this.dragStartPosition = null;
-    const dragControls = new DragControls(this.interactiveMeshes, camera, renderer.domElement);
+    const dragControls = new DragControls(
+      this.interactiveMeshes,
+      camera,
+      renderer.domElement
+    );
 
     dragControls.addEventListener('dragstart', () => ControlsService.disable());
     dragControls.addEventListener('dragend', () => ControlsService.enable());
@@ -20,13 +24,13 @@ class InteractionService {
     this.meshes.push(mesh);
   }
 
-  registerInteractiveMesh = (mesh) => {
+  registerInteractiveMesh = mesh => {
     this.interactiveMeshes.push(mesh);
-  }
+  };
 
-  registerStaticMesh = (mesh) => {
+  registerStaticMesh = mesh => {
     this.staticMeshes.push(mesh);
-  }
+  };
 
   isCollideWithAnyMesh(object) {
     const boundingBox = new Box3().setFromObject(object);
@@ -44,7 +48,7 @@ class InteractionService {
     return false;
   }
 
-  dragStartHandler = (event) => {
+  dragStartHandler = event => {
     const { object } = event;
     object.userData.interactionService = {
       material: object.material.clone(),
@@ -54,34 +58,26 @@ class InteractionService {
     object.material.opacity = 0.6;
 
     this.dragStartPosition = object.position.clone();
-  }
+  };
 
-  dragEndHandler = (event) => {
+  dragEndHandler = event => {
     const { object } = event;
     object.material = object.userData.interactionService.material;
 
     if (this.isCollideWithAnyMesh(object)) {
-      const {
-        x,
-        y,
-        z,
-      } = this.dragStartPosition;
+      const { x, y, z } = this.dragStartPosition;
       object.position.set(x, y, z);
       this.dragStartPosition = null;
     }
-  }
+  };
 
-  dragHandler = ({
-    object,
-  }) => {
+  dragHandler = ({ object }) => {
     if (this.isCollideWithAnyMesh(object)) {
       object.material.color.set(0xff0000);
     } else {
       object.material.color.set(0x808080);
     }
-  }
+  };
 }
 
-export {
-  InteractionService,
-};
+export { InteractionService };
