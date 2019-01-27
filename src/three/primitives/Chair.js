@@ -1,9 +1,5 @@
-class Chair {
-  isInteractive = true;
+import { BaseModel } from './BaseModel';
 
-  constructor(mesh) {
-    this.mesh = mesh;
-  }
-}
+class Chair extends BaseModel {}
 
 export { Chair };

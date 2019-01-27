@@ -2,7 +2,7 @@ import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { Chair } from '../primitives';
+import { BarChair } from '../primitives';
 
 class BarChairFactory {
     constructor(loadingManager) {
@@ -23,7 +23,7 @@ class BarChairFactory {
             }),
             map(fixPosition),
             map(applyConfig(config)),
-            map(obj => new Chair(obj))
+            map(obj => new BarChair(obj))
         );
     }
 
