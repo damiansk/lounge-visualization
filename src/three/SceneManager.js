@@ -7,7 +7,7 @@ import {
   LoadingManager,
   DirectionalLight,
 } from 'three';
-import { ControlsService } from './services/CameraControlsService';
+import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
 import { models as modelsConfig } from './config/models.json';
 import { ModelsFactory } from './factories/ModelsFactory';
@@ -54,7 +54,7 @@ class SceneManager {
     this.renderer.setSize(this.canvas.width, this.canvas.height);
     this.scene.background = new Color('#020345');
 
-    ControlsService.init(this.camera, this.renderer.domElement);
+    CameraControlsService.init(this.camera, this.renderer.domElement);
     this.interactionService = new InteractionService(
       this.camera,
       this.renderer
@@ -90,12 +90,7 @@ class SceneManager {
       .subscribe(model => {
         this.sceneSubjects.push(model);
         this.scene.add(model.mesh);
-
-        if (model.isInteractive) {
-          this.interactionService.registerInteractiveMesh(model.mesh);
-        } else {
-          this.interactionService.registerStaticMesh(model.mesh);
-        }
+        this.interactionService.register(model);
       });
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
