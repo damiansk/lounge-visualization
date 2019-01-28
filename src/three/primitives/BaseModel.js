@@ -6,6 +6,10 @@ class BaseModel {
       this.isEqual = this.isEqual.bind(this);
     }
 
+    getId() {
+      return this.mesh.id;
+    }
+
     isEqual(model) {
       return model.mesh === this.mesh;
     }

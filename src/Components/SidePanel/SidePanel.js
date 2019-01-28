@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Drawer,
   Divider,
@@ -30,31 +30,56 @@ const styles = theme => ({
   },
 });
 
-const DrawerPanel = ({ classes, theme, open, handleDrawerClose }) => (
-  <Drawer
-    className={classes.drawer}
-    variant="persistent"
-    anchor="left"
-    open={open}
-    classes={{
-      paper: classes.drawerPaper,
-    }}
-  >
-    <div className={classes.drawerHeader}>
-      <IconButton onClick={handleDrawerClose}>
-        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-      </IconButton>
-    </div>
-    <Divider />
-    <List>
-      {['Inbox'].map((text, index) => (
-        <ListItem button key={text}>
-          <ListItemText primary={text} />
-        </ListItem>
-      ))}
-    </List>
-  </Drawer>
-);
+class DrawerPanel extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      models: []
+    };
+  }
+  
+  componentDidMount() {
+    this.subscription = this.props.store
+      .getModels$()
+      .subscribe(value => console.log(value));
+  }
+
+  componentWillUnmount() {
+    this.subscription.unsubscribe();
+  }
+
+  render() {
+    const { classes, theme, open, handleDrawerClose } = this.props;
+
+    return (
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Inbox'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+    );
+  }
+}
 
 const SidePanel = withStyles(styles, { withTheme: true })(DrawerPanel);
 

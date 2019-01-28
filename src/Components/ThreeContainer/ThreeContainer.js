@@ -17,7 +17,7 @@ class ThreeContainer extends Component {
   
   componentDidMount() {
     this.canvas = createCanvas(document, this.containerRef.current);
-    this.sceneManager = new SceneManager(this.canvas);
+    this.sceneManager = new SceneManager(this.canvas, this.props.store);
     this.sceneManager.init();
 
     this.stats = initStatsPanel(this.canvas);

@@ -1,18 +1,31 @@
+import { BehaviorSubject } from 'rxjs';
+
 class ModelsStore {
-    constructor() {
-        this.models = [];
+  constructor(models = []) {
+    this.models = models;
+    this.modelsSubject = new BehaviorSubject(this.models);
 
-        this.add = this.add.bind(this);
-        this.remove = this.remove.bind(this);
-    }
+    this.remove = this.remove.bind(this);
+    this.add = this.add.bind(this);
+  }
 
-    add(model) {
-        this.models.push(model);
-    }
+  getModels$() {
+    return this.modelsSubject.asObservable();
+  }
 
-    remove(model) {
-        this.models = this.models.filter(m => !m.isEqual(model));
-    }
+  getModels() {
+    return this.models;
+  }
+
+  add(model) {
+    this.models.push(model);
+    this.modelsSubject.next(this.models);
+  }
+
+  remove(model) {
+    this.models = this.models.filter(m => !model.isEqual(m));
+    this.modelsSubject.next(this.models);
+  }
 }
 
 export { ModelsStore };

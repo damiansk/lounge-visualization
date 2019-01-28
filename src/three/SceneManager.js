@@ -17,8 +17,9 @@ const farPlane = 4000;
 const fieldOfView = 60;
 
 class SceneManager {
-  constructor(canvas) {
+  constructor(canvas, store) {
     this.canvas = canvas;
+    this.store = store;
     this.clock = new Clock();
     this.screenDimensions = {
       width: canvas.width,
@@ -88,6 +89,7 @@ class SceneManager {
 
     factory.createModels(modelsConfig)
       .subscribe(model => {
+        this.store.add(model);
         this.sceneSubjects.push(model);
         this.scene.add(model.mesh);
         this.interactionService.register(model);
