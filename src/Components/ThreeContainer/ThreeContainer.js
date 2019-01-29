@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 
 import { createCanvas, initStatsPanel } from './utils';
 import SceneManager from '../../three/SceneManager';
@@ -8,7 +8,7 @@ class ThreeContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.containerRef = React.createRef();
+    this.containerRef = createRef();
     this.barSpacerHeight = '64px';
 
     this.onCanvasResize = this.onCanvasResize.bind(this);

@@ -1,30 +1,38 @@
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 class ModelsStore {
   constructor(models = []) {
     this.models = models;
-    this.modelsSubject = new BehaviorSubject(this.models);
+    this.modelsSubject = new Subject(this.models);
 
-    this.remove = this.remove.bind(this);
     this.add = this.add.bind(this);
-  }
-
-  getModels$() {
-    return this.modelsSubject.asObservable();
+    this.remove = this.remove.bind(this);
   }
 
   getModels() {
     return this.models;
   }
 
+  modelsUpdate$() {
+    return this.modelsSubject.asObservable();
+  }
+
   add(model) {
     this.models.push(model);
-    this.modelsSubject.next(this.models);
+    this.modelsSubject.next({
+      action: 'add',
+      model,
+      models: this.models
+    });
   }
 
   remove(model) {
     this.models = this.models.filter(m => !model.isEqual(m));
-    this.modelsSubject.next(this.models);
+    this.modelsSubject.next({
+      action: 'remove',
+      model,
+      models: this.models
+    });
   }
 }
 

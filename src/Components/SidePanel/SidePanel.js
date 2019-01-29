@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Drawer,
   Divider,
-  List,
-  ListItem,
-  ListItemText,
   IconButton,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { ModelsStore } from '../../ModelsStore';
+import { ModelsList } from '../ModelsList';
 
 const drawerWidth = 240;
 
@@ -31,27 +31,8 @@ const styles = theme => ({
 });
 
 class DrawerPanel extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      models: []
-    };
-  }
-  
-  componentDidMount() {
-    this.subscription = this.props.store
-      .getModels$()
-      .subscribe(value => console.log(value));
-  }
-
-  componentWillUnmount() {
-    this.subscription.unsubscribe();
-  }
-
   render() {
-    const { classes, theme, open, handleDrawerClose } = this.props;
+    const { classes, theme, open, handleDrawerClose, store } = this.props;
 
     return (
       <Drawer
@@ -69,16 +50,14 @@ class DrawerPanel extends Component {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <ModelsList store={store} />
       </Drawer>
     );
   }
+}
+
+DrawerPanel.propTypes = {
+  store: PropTypes.instanceOf(ModelsStore)
 }
 
 const SidePanel = withStyles(styles, { withTheme: true })(DrawerPanel);
