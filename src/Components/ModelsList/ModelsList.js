@@ -16,8 +16,8 @@ class ModelsList extends React.Component {
   
   componentDidMount() {
     this.subscription = this.props.store
-      .modelsUpdate$()
-      .subscribe(({ models }) => this.setState({ models }));
+      .getUpdateEvent$()
+      .subscribe(models => this.setState({ models }));
   }
 
   componentWillUnmount() {

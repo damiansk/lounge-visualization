@@ -25,12 +25,10 @@ class SceneManager {
       width: canvas.width,
       height: canvas.height,
     };
-    this.sceneSubjects = [];
 
     this.init = this.init.bind(this);
     this.update = this.update.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
-    this.initSceneSubjects = this.initSceneSubjects.bind(this);
   }
 
   init() {
@@ -61,6 +59,7 @@ class SceneManager {
       this.renderer
     );
 
+    this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
 
@@ -80,6 +79,13 @@ class SceneManager {
     this.renderer.setSize(width, height);
   }
 
+  subscribeForStoreEvents() {
+    this.store.getAddEvent$()
+      .subscribe(model => this.scene.add(model.mesh));
+    this.store.getRemoveEvent$()
+      .subscribe(model => this.scene.remove(model.mesh));
+  }
+
   initSceneSubjects() {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
@@ -90,8 +96,6 @@ class SceneManager {
     factory.createModels(modelsConfig)
       .subscribe(model => {
         this.store.add(model);
-        this.sceneSubjects.push(model);
-        this.scene.add(model.mesh);
         this.interactionService.register(model);
       });
 
