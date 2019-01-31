@@ -41,6 +41,10 @@ class ModelsStore {
     this.updateModelsSubject.next(this.models);
     this.removeModelsSubject.next(model);
   }
+
+  getModel() {
+    
+  }
 }
 
 export { ModelsStore };

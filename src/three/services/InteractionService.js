@@ -7,6 +7,7 @@ class InteractionService {
     this.interactiveMeshes = [];
     this.staticMeshes = [];
     this.dragStartPosition = null;
+    this.prevHoverOnMesh = null;
 
     this.dragControls = new DragControls(
       this.interactiveMeshes,
@@ -14,23 +15,30 @@ class InteractionService {
       renderer.domElement
     );
 
+    this.modelsWeakMap = new WeakMap();
+
     this.dragStartHandler = this.dragStartHandler.bind(this);
     this.dragEndHandler = this.dragEndHandler.bind(this);
     this.dragHandler = this.dragHandler.bind(this);
+    this.hoverOnHandler = this.hoverOnHandler.bind(this);
+    this.hoverOffHandler = this.hoverOffHandler.bind(this);
 
     this.dragControls.addEventListener('dragstart', CameraControlsService.disable);
     this.dragControls.addEventListener('dragend', CameraControlsService.enable);
     this.dragControls.addEventListener('dragstart', this.dragStartHandler);
     this.dragControls.addEventListener('dragend', this.dragEndHandler);
     this.dragControls.addEventListener('drag', this.dragHandler);
+    this.dragControls.addEventListener('hoveron', this.hoverOnHandler);
+    this.dragControls.addEventListener('hoveroff', this.hoverOffHandler);
   }
 
-  add({ isInteractive, mesh }) {
-    if (isInteractive) {
-      this.interactiveMeshes.push(mesh);
+  add(model) {
+    if (model.isInteractive) {
+      this.interactiveMeshes.push(model.mesh);
     } else {
-      this.staticMeshes.push(mesh);
+      this.staticMeshes.push(model.mesh);
     }
+    this.modelsWeakMap.set(model.mesh, model);
   }
 
   remove({ mesh }) {
@@ -75,6 +83,19 @@ class InteractionService {
       object.material.color.set(0x808080);
     }
   };
+
+  hoverOnHandler({ object: mesh }) {
+    if(!!this.prevHoverOnMesh && this.prevHoverOnMesh !== mesh) {
+      this.modelsWeakMap.get(this.prevHoverOnMesh).setHover(false);
+    }
+    this.prevHoverOnMesh = mesh;
+    this.modelsWeakMap.get(mesh).setHover(true);
+  }
+
+  hoverOffHandler({ object: mesh }) {
+    this.modelsWeakMap.get(mesh).setHover(false);
+    this.prevHoverOnMesh = null;
+  }
 
   isCollideWithAnyMesh(object) {
     const boundingBox = new Box3().setFromObject(object);

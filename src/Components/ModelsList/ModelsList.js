@@ -4,6 +4,7 @@ import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Swit
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import { ModelsStore } from '../../ModelsStore';
+import { ModelsListItem } from './ModelsListItem/ModelsListItem';
 
 class ModelsList extends React.Component {
   constructor(props) {
@@ -55,30 +56,7 @@ class ModelsList extends React.Component {
             <List key={i} component="div" disablePadding>
               {
                 modelGroups[modelName].map((model, index) => (
-                  <ListItem
-                    key={index}
-                    button
-                    // onMouseOver={() => this.hoveHandler(model)}
-                    // onMouseOut={() => this.blurHandler(model)}
-                  >
-                    <ListItemText
-                      primary={`${index}) Some label`}
-                    />
-                    <ListItemSecondaryAction>
-                      {/* {model.userData.checkbox ? */}
-                        <Switch
-                          // defaultChecked={model.userData.checkbox.initialStatus}
-                          // onChange={model.userData.checkbox.callback}
-                        />
-                      {/* : null} */}
-                      <IconButton
-                        aria-label="Delete"
-                        onClick={() => this.props.store.remove(model)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
+                  <ModelsListItem key={index} index={index} model={model} onRemove={this.props.store.remove} />
                 ))
               }
             </List>
