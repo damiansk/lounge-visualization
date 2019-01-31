@@ -25,11 +25,23 @@ class InteractionService {
     this.dragControls.addEventListener('drag', this.dragHandler);
   }
 
-  register(model) {
-    if (model.isInteractive) {
-      this.interactiveMeshes.push(model.mesh);
+  add({ isInteractive, mesh }) {
+    if (isInteractive) {
+      this.interactiveMeshes.push(mesh);
     } else {
-      this.staticMeshes.push(model.mesh);
+      this.staticMeshes.push(mesh);
+    }
+  }
+
+  remove({ mesh }) {
+    const interactiveMeshIndex = this.interactiveMeshes.indexOf(mesh);
+    if(interactiveMeshIndex >= 0) {
+      this.interactiveMeshes.splice(interactiveMeshIndex, 1);
+    }
+    
+    const staticMeshIndex = this.interactiveMeshes.indexOf(mesh);
+    if(staticMeshIndex >= 0) {
+      this.staticMeshes.splice(staticMeshIndex, 1);
     }
   }
 
