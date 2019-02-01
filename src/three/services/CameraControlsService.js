@@ -2,7 +2,7 @@ import OrbitControls from 'orbit-controls-es6';
 
 let controls = null;
 
-class ControlsService {
+class CameraControlsService {
   static init(camera, domElement) {
     controls = new OrbitControls(camera, domElement);
     controls.enabled = true;
@@ -19,4 +19,4 @@ class ControlsService {
   }
 }
 
-export { ControlsService };
+export { CameraControlsService };

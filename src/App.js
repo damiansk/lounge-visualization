@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
+import { ModelsStore } from './ModelsStore';
 
 const drawerWidth = 240;
 
@@ -48,15 +49,25 @@ const styles = theme => ({
 });
 
 class App extends React.Component {
-  state = {
-    open: false,
-  };
 
-  handleDrawerOpen = () => {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false,
+    };
+
+    this.modelsStore = new ModelsStore();
+
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
+  }
+
+  handleDrawerOpen() {
     this.setState({ open: true });
   };
 
-  handleDrawerClose = () => {
+  handleDrawerClose() {
     this.setState({ open: false });
   };
 
@@ -72,14 +83,14 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <SidePanel handleDrawerClose={this.handleDrawerClose} open={open} />
+        <SidePanel handleDrawerClose={this.handleDrawerClose} open={open} store={this.modelsStore} />
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: open,
           })}
         >
           <div className={classes.appBarSpacer} />
-          <ThreeContainer />
+          <ThreeContainer store={this.modelsStore} />
         </main>
       </div>
     );

@@ -40,6 +40,7 @@ class ModelsFactory {
               return Observable.create();
           }
         }),
+        // Important arrow function - in other case (eg. with simple reference) rxjs returns error
         mergeMap(data => from(data)),
         mergeAll()
       );

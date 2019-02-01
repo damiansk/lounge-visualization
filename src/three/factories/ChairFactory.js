@@ -6,32 +6,32 @@ import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
 
 class ChairFactory {
-    constructor(loadingManager) {
-        this.loadingManager = loadingManager;
-        this.loaderService = new LoaderService(this.loadingManager);
+  constructor(loadingManager) {
+    this.loadingManager = loadingManager;
+    this.loaderService = new LoaderService(this.loadingManager);
 
-        this.createChair = this.createChair.bind(this);
-        this.createChairs = this.createChairs.bind(this);
-    }
+    this.createChair = this.createChair.bind(this);
+    this.createChairs = this.createChairs.bind(this);
+  }
 
-    createChair(config) {
-        return this.loaderService.loadJSON('chair')
-            .pipe(
-                map(findRoot),
-                map(obj => {
-                    obj.scale.set(0.01, 0.01, 0.01);
-                    obj.rotateX(-90 * TMath.DEG2RAD);
-                    return obj;
-                }),
-                map(fixPosition),
-                map(applyConfig(config)),
-                map(obj => new Chair(obj))
-            );
-    }
+  createChair(config) {
+    return this.loaderService.loadJSON('chair')
+      .pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.01, 0.01, 0.01);
+          obj.rotateX(-90 * TMath.DEG2RAD);
+          return obj;
+        }),
+        map(fixPosition),
+        map(applyConfig(config)),
+        map(obj => new Chair(obj))
+      );
+  }
 
-    createChairs(configs) {
-        return from(configs).pipe(map(this.createChair));
-    }
+  createChairs(configs) {
+    return from(configs).pipe(map(this.createChair));
+  }
 }
 
 export { ChairFactory };

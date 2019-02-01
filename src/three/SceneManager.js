@@ -7,7 +7,7 @@ import {
   LoadingManager,
   DirectionalLight,
 } from 'three';
-import { ControlsService } from './services/CameraControlsService';
+import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
 import { models as modelsConfig } from './config/models.json';
 import { ModelsFactory } from './factories/ModelsFactory';
@@ -17,19 +17,18 @@ const farPlane = 4000;
 const fieldOfView = 60;
 
 class SceneManager {
-  constructor(canvas) {
+  constructor(canvas, store) {
     this.canvas = canvas;
+    this.store = store;
     this.clock = new Clock();
     this.screenDimensions = {
       width: canvas.width,
       height: canvas.height,
     };
-    this.sceneSubjects = [];
 
     this.init = this.init.bind(this);
     this.update = this.update.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
-    this.initSceneSubjects = this.initSceneSubjects.bind(this);
   }
 
   init() {
@@ -54,12 +53,13 @@ class SceneManager {
     this.renderer.setSize(this.canvas.width, this.canvas.height);
     this.scene.background = new Color('#020345');
 
-    ControlsService.init(this.camera, this.renderer.domElement);
+    CameraControlsService.init(this.camera, this.renderer.domElement);
     this.interactionService = new InteractionService(
       this.camera,
       this.renderer
     );
 
+    this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
 
@@ -79,6 +79,19 @@ class SceneManager {
     this.renderer.setSize(width, height);
   }
 
+  subscribeForStoreEvents() {
+    this.store.getAddEvent$()
+      .subscribe(model => {
+        this.interactionService.add(model);
+        this.scene.add(model.mesh);
+      });
+    this.store.getRemoveEvent$()
+      .subscribe(model => {
+        this.interactionService.remove(model);
+        this.scene.remove(model.mesh);
+      });
+  }
+
   initSceneSubjects() {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
@@ -87,16 +100,7 @@ class SceneManager {
       .subscribe(model => this.scene.add(model));
 
     factory.createModels(modelsConfig)
-      .subscribe(model => {
-        this.sceneSubjects.push(model);
-        this.scene.add(model.mesh);
-
-        if (model.isInteractive) {
-          this.interactionService.registerInteractiveMesh(model.mesh);
-        } else {
-          this.interactionService.registerStaticMesh(model.mesh);
-        }
-      });
+      .subscribe(this.store.add);
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
