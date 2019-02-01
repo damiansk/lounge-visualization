@@ -1,6 +1,6 @@
 import Stats from 'stats.js';
 
-function createCanvas(document, containerElement) {
+function createCanvas(containerElement) {
   const canvas = document.createElement('canvas');
   containerElement.appendChild(canvas);
   canvas.style.position = 'absolute';

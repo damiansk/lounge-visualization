@@ -16,7 +16,7 @@ class ThreeContainer extends Component {
   }
   
   componentDidMount() {
-    this.canvas = createCanvas(document, this.containerRef.current);
+    this.canvas = createCanvas(this.containerRef.current);
     this.sceneManager = new SceneManager(this.canvas, this.props.store);
     this.sceneManager.init();
 
@@ -57,7 +57,5 @@ class ThreeContainer extends Component {
     );
   }
 }
-
-
 
 export { ThreeContainer };
