@@ -15,18 +15,17 @@ class ChairFactory {
   }
 
   createChair(config) {
-    return this.loaderService.loadJSON('chair')
-      .pipe(
-        map(findRoot),
-        map(obj => {
-          obj.scale.set(0.01, 0.01, 0.01);
-          obj.rotateX(-90 * TMath.DEG2RAD);
-          return obj;
-        }),
-        map(fixPosition),
-        map(applyConfig(config)),
-        map(obj => new Chair(obj))
-      );
+    return this.loaderService.loadJSON('chair').pipe(
+      map(findRoot),
+      map(obj => {
+        obj.scale.set(0.01, 0.01, 0.01);
+        obj.rotateX(-90 * TMath.DEG2RAD);
+        return obj;
+      }),
+      map(fixPosition),
+      map(applyConfig(config)),
+      map(obj => new Chair(obj))
+    );
   }
 
   createChairs(configs) {

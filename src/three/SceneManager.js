@@ -80,27 +80,23 @@ class SceneManager {
   }
 
   subscribeForStoreEvents() {
-    this.store.getAddEvent$()
-      .subscribe(model => {
-        this.interactionService.add(model);
-        this.scene.add(model.mesh);
-      });
-    this.store.getRemoveEvent$()
-      .subscribe(model => {
-        this.interactionService.remove(model);
-        this.scene.remove(model.mesh);
-      });
+    this.store.getAddEvent$().subscribe(model => {
+      this.interactionService.add(model);
+      this.scene.add(model.mesh);
+    });
+    this.store.getRemoveEvent$().subscribe(model => {
+      this.interactionService.remove(model);
+      this.scene.remove(model.mesh);
+    });
   }
 
   initSceneSubjects() {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
 
-    factory.createFloor()
-      .subscribe(model => this.scene.add(model));
+    factory.createFloor().subscribe(model => this.scene.add(model));
 
-    factory.createModels(modelsConfig)
-      .subscribe(this.store.add);
+    factory.createModels(modelsConfig).subscribe(this.store.add);
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);

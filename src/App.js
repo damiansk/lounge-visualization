@@ -49,7 +49,6 @@ const styles = theme => ({
 });
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -65,11 +64,11 @@ class App extends React.Component {
 
   handleDrawerOpen() {
     this.setState({ open: true });
-  };
+  }
 
   handleDrawerClose() {
     this.setState({ open: false });
-  };
+  }
 
   render() {
     const { classes, theme } = this.props;
@@ -83,7 +82,11 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <SidePanel handleDrawerClose={this.handleDrawerClose} open={open} store={this.modelsStore} />
+        <SidePanel
+          handleDrawerClose={this.handleDrawerClose}
+          open={open}
+          store={this.modelsStore}
+        />
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: open,

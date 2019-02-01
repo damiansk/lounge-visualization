@@ -6,7 +6,7 @@ import {
   ChairFactory,
   TableFactory,
   PoolTableFactory,
-  BarChairFactory
+  BarChairFactory,
 } from './index';
 
 class ModelsFactory {
@@ -24,26 +24,25 @@ class ModelsFactory {
   }
 
   createModels(modelsConfig) {
-    return from(modelsConfig)
-      .pipe(
-        map(({ configs, type }) => {
-          switch (type) {
-            case 'chair':
-              return this.chairFactory.createChairs(configs);
-            case 'table':
-              return this.tableFactory.createTables(configs);
-            case 'pool_table':
-              return this.poolTableFactory.createPoolTables(configs);
-            case 'bar_chair':
-              return this.barChairFactory.createBarChairs(configs);
-            default:
-              return Observable.create();
-          }
-        }),
-        // Important arrow function - in other case (eg. with simple reference) rxjs returns error
-        mergeMap(data => from(data)),
-        mergeAll()
-      );
+    return from(modelsConfig).pipe(
+      map(({ configs, type }) => {
+        switch (type) {
+          case 'chair':
+            return this.chairFactory.createChairs(configs);
+          case 'table':
+            return this.tableFactory.createTables(configs);
+          case 'pool_table':
+            return this.poolTableFactory.createPoolTables(configs);
+          case 'bar_chair':
+            return this.barChairFactory.createBarChairs(configs);
+          default:
+            return Observable.create();
+        }
+      }),
+      // Important arrow function - in other case (eg. with simple reference) rxjs returns error
+      mergeMap(data => from(data)),
+      mergeAll()
+    );
   }
 
   createFloor() {

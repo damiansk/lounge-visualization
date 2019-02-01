@@ -15,18 +15,17 @@ class PoolTableFactory {
   }
 
   createPoolTable(config) {
-    return this.loaderService.loadOBJ('pool_table')
-      .pipe(
-        map(findRoot),
-        map(obj => {
-          obj.scale.set(0.011, 0.011, 0.011);
-          obj.rotateX(-90 * TMath.DEG2RAD);
-          return obj;
-        }),
-        map(fixPosition),
-        map(applyConfig(config)),
-        map(obj => new PoolTable(obj))
-      );
+    return this.loaderService.loadOBJ('pool_table').pipe(
+      map(findRoot),
+      map(obj => {
+        obj.scale.set(0.011, 0.011, 0.011);
+        obj.rotateX(-90 * TMath.DEG2RAD);
+        return obj;
+      }),
+      map(fixPosition),
+      map(applyConfig(config)),
+      map(obj => new PoolTable(obj))
+    );
   }
 
   createPoolTables(configs) {

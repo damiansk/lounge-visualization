@@ -14,17 +14,16 @@ class BarChairFactory {
   }
 
   createBarChair(config) {
-    return this.loaderService.loadOBJ('bar_chair')
-      .pipe(
-        map(findRoot),
-        map(obj => {
-          obj.scale.set(0.25, 0.25, 0.25);
-          return obj;
-        }),
-        map(fixPosition),
-        map(applyConfig(config)),
-        map(obj => new BarChair(obj))
-      );
+    return this.loaderService.loadOBJ('bar_chair').pipe(
+      map(findRoot),
+      map(obj => {
+        obj.scale.set(0.25, 0.25, 0.25);
+        return obj;
+      }),
+      map(fixPosition),
+      map(applyConfig(config)),
+      map(obj => new BarChair(obj))
+    );
   }
 
   createBarChairs(configs) {

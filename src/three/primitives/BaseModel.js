@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject } from 'rxjs';
 
 const hoverColor = 0x808080;
 
@@ -33,7 +33,7 @@ class BaseModel {
       this.mesh.material.color.set(this.color);
     }
 
-    this.updateSubject.next({ isHovered }) 
+    this.updateSubject.next({ isHovered });
   }
 
   subscribeForChanges$() {
