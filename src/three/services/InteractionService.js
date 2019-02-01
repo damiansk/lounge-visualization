@@ -23,7 +23,10 @@ class InteractionService {
     this.hoverOnHandler = this.hoverOnHandler.bind(this);
     this.hoverOffHandler = this.hoverOffHandler.bind(this);
 
-    this.dragControls.addEventListener('dragstart', CameraControlsService.disable);
+    this.dragControls.addEventListener(
+      'dragstart',
+      CameraControlsService.disable
+    );
     this.dragControls.addEventListener('dragend', CameraControlsService.enable);
     this.dragControls.addEventListener('dragstart', this.dragStartHandler);
     this.dragControls.addEventListener('dragend', this.dragEndHandler);
@@ -43,12 +46,12 @@ class InteractionService {
 
   remove({ mesh }) {
     const interactiveMeshIndex = this.interactiveMeshes.indexOf(mesh);
-    if(interactiveMeshIndex >= 0) {
+    if (interactiveMeshIndex >= 0) {
       this.interactiveMeshes.splice(interactiveMeshIndex, 1);
     }
-    
+
     const staticMeshIndex = this.interactiveMeshes.indexOf(mesh);
-    if(staticMeshIndex >= 0) {
+    if (staticMeshIndex >= 0) {
       this.staticMeshes.splice(staticMeshIndex, 1);
     }
   }
@@ -63,7 +66,7 @@ class InteractionService {
     object.material.opacity = 0.6;
 
     this.dragStartPosition = object.position.clone();
-  };
+  }
 
   dragEndHandler(event) {
     const { object } = event;
@@ -74,7 +77,7 @@ class InteractionService {
       object.position.set(x, y, z);
       this.dragStartPosition = null;
     }
-  };
+  }
 
   dragHandler({ object }) {
     if (this.isCollideWithAnyMesh(object)) {
@@ -82,10 +85,10 @@ class InteractionService {
     } else {
       object.material.color.set(0x808080);
     }
-  };
+  }
 
   hoverOnHandler({ object: mesh }) {
-    if(!!this.prevHoverOnMesh && this.prevHoverOnMesh !== mesh) {
+    if (!!this.prevHoverOnMesh && this.prevHoverOnMesh !== mesh) {
       this.modelsWeakMap.get(this.prevHoverOnMesh).setHover(false);
     }
     this.prevHoverOnMesh = mesh;

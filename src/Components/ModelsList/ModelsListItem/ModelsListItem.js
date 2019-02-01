@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
-import { ListItem, ListItemText, ListItemSecondaryAction, IconButton, Switch } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Switch,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 class ModelsListItem extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {};
 
-    props.model.subscribeForChanges$()
+    props.model
+      .subscribeForChanges$()
       .subscribe(({ isHovered }) => this.setState({ isHovered }));
   }
 
@@ -24,9 +30,7 @@ class ModelsListItem extends Component {
         onMouseOut={() => model.setHover(false)}
         selected={this.state.isHovered}
       >
-        <ListItemText
-          primary={`${index}) Some label`}
-        />
+        <ListItemText primary={`${index}) Some label`} />
         <ListItemSecondaryAction>
           {/* {model.userData.checkbox ? */}
           <Switch
@@ -34,15 +38,12 @@ class ModelsListItem extends Component {
           // onChange={model.userData.checkbox.callback}
           />
           {/* : null} */}
-          <IconButton
-            aria-label="Delete"
-            onClick={() => onRemove(model)}
-          >
+          <IconButton aria-label="Delete" onClick={() => onRemove(model)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
-    )
+    );
   }
 }
 

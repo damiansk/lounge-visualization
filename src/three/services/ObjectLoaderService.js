@@ -20,31 +20,30 @@ class LoaderService {
     objLoader.setPath(basePath);
     const file = `${fileName}.obj`;
 
-    return this.loadMTL(fileName)
-      .pipe(
-        flatMap(materials => {
-          materials.preload();
-          objLoader.setMaterials(materials);
+    return this.loadMTL(fileName).pipe(
+      flatMap(materials => {
+        materials.preload();
+        objLoader.setMaterials(materials);
 
-          return bindCallback(objLoader.load.bind(objLoader))(file);
-        })
-      );
+        return bindCallback(objLoader.load.bind(objLoader))(file);
+      })
+    );
   }
 
   loadMTL(fileName) {
     const mtlLoader = new MTLLoader(this.loadingManager);
     mtlLoader.setPath(basePath);
     const file = `${fileName}.mtl`;
-  
+
     return bindCallback(mtlLoader.load.bind(mtlLoader))(file);
-  };
-  
+  }
+
   loadJSON(fileName) {
     const objectLoader = new THREE.ObjectLoader(this.loadingManager);
     const file = `${basePath}${fileName}.json`;
-  
+
     return bindCallback(objectLoader.load.bind(objectLoader))(file);
-  };
+  }
 }
 
 export { LoaderService };

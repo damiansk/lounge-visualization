@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Switch, Divider } from '@material-ui/core';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Switch,
+  Divider,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import { ModelsStore } from '../../ModelsStore';
@@ -11,10 +19,10 @@ class ModelsList extends React.Component {
     super(props);
 
     this.state = {
-      models: props.store.getModels()
+      models: props.store.getModels(),
     };
   }
-  
+
   componentDidMount() {
     this.subscription = this.props.store
       .getUpdateEvent$()
@@ -27,11 +35,11 @@ class ModelsList extends React.Component {
 
   render() {
     const modelGroups = this.state.models.reduce((acc, model) => {
-      if(!acc[model.name]) {
+      if (!acc[model.name]) {
         acc[model.name] = [];
       }
 
-      acc[model.name].push(model);      
+      acc[model.name].push(model);
       return acc;
     }, {});
 
@@ -39,37 +47,34 @@ class ModelsList extends React.Component {
       <>
         <List>
           <ListItem>
-            <ListItemText
-              primary="JSON"
-            />
+            <ListItemText primary="JSON" />
             <ListItemSecondaryAction>
               <IconButton onClick={this.createJson}>
-                <SaveIcon/>
+                <SaveIcon />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
         </List>
-        <Divider/>
-        {
-          Object.keys(modelGroups)
-          .map((modelName, i) => (
-            <List key={i} component="div" disablePadding>
-              {
-                modelGroups[modelName].map((model, index) => (
-                  <ModelsListItem key={index} index={index} model={model} onRemove={this.props.store.remove} />
-                ))
-              }
-            </List>
-          ))
-        }
+        <Divider />
+        {Object.keys(modelGroups).map((modelName, i) => (
+          <List key={i} component="div" disablePadding>
+            {modelGroups[modelName].map((model, index) => (
+              <ModelsListItem
+                key={index}
+                index={index}
+                model={model}
+                onRemove={this.props.store.remove}
+              />
+            ))}
+          </List>
+        ))}
       </>
-    )
+    );
   }
 }
 
-
 ModelsList.propTypes = {
-  store: PropTypes.instanceOf(ModelsStore)
-}
+  store: PropTypes.instanceOf(ModelsStore),
+};
 
 export { ModelsList };

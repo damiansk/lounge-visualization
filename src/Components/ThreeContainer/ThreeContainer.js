@@ -4,7 +4,6 @@ import { createCanvas, initStatsPanel } from './utils';
 import SceneManager from '../../three/SceneManager';
 
 class ThreeContainer extends Component {
-
   constructor(props) {
     super(props);
 
@@ -14,7 +13,7 @@ class ThreeContainer extends Component {
     this.onCanvasResize = this.onCanvasResize.bind(this);
     this.renderFrame = this.renderFrame.bind(this);
   }
-  
+
   componentDidMount() {
     this.canvas = createCanvas(this.containerRef.current);
     this.sceneManager = new SceneManager(this.canvas, this.props.store);
@@ -23,7 +22,7 @@ class ThreeContainer extends Component {
     this.stats = initStatsPanel(this.canvas);
 
     window.addEventListener('resize', this.onCanvasResize);
-    
+
     this.renderFrame();
     this.onCanvasResize();
   }
