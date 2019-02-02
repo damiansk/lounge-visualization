@@ -6,10 +6,8 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Switch,
   Divider,
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import { ModelsStore } from '../../ModelsStore';
 import { ModelsListItem } from './ModelsListItem/ModelsListItem';

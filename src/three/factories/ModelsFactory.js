@@ -5,8 +5,12 @@ import { LoaderService } from '../services/ObjectLoaderService';
 import {
   ChairFactory,
   TableFactory,
+  BarTableFactory,
   PoolTableFactory,
   BarChairFactory,
+  LampFactory,
+  BookcaseFactory,
+  SofaFactory,
 } from './index';
 
 class ModelsFactory {
@@ -18,6 +22,10 @@ class ModelsFactory {
     this.chairFactory = new ChairFactory(this.loadingManager);
     this.poolTableFactory = new PoolTableFactory(this.loadingManager);
     this.tableFactory = new TableFactory(this.loadingManager);
+    this.barTableFactory = new BarTableFactory(this.loadingManager);
+    this.lampFactory = new LampFactory(this.loadingManager);
+    this.bookcaseFactory = new BookcaseFactory(this.loadingManager);
+    this.sofaFactory = new SofaFactory(this.loadingManager);
 
     this.createModels = this.createModels.bind(this);
     this.createFloor = this.createFloor.bind(this);
@@ -31,10 +39,18 @@ class ModelsFactory {
             return this.chairFactory.createChairs(configs);
           case 'table':
             return this.tableFactory.createTables(configs);
+          case 'bar_table':
+            return this.barTableFactory.createBarTables(configs);
           case 'pool_table':
             return this.poolTableFactory.createPoolTables(configs);
           case 'bar_chair':
             return this.barChairFactory.createBarChairs(configs);
+          case 'lamp':
+            return this.lampFactory.createLamps(configs);
+          case 'bookcase':
+            return this.bookcaseFactory.createBookcases(configs);
+          case 'sofa':
+            return this.sofaFactory.createSofas(configs);
           default:
             return Observable.create();
         }
@@ -46,7 +62,11 @@ class ModelsFactory {
   }
 
   createFloor() {
-    return this.loaderService.loadOBJ('floor2');
+    return this.loaderService.loadOBJ('floor')
+    .pipe(map(obj => {
+      obj.scale.set(3.5, 3.5, 3.5);
+      return obj;
+    }));
   }
 }
 

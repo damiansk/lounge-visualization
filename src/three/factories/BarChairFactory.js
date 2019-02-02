@@ -17,7 +17,7 @@ class BarChairFactory {
     return this.loaderService.loadOBJ('bar_chair').pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.25, 0.25, 0.25);
+        obj.scale.set(0.23, 0.23, 0.23);
         return obj;
       }),
       map(fixPosition),
