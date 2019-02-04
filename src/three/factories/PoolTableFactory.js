@@ -5,6 +5,8 @@ import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { PoolTable } from '../primitives';
 
+const fileName = 'pool_table';
+
 class PoolTableFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
@@ -15,11 +17,12 @@ class PoolTableFactory {
   }
 
   createPoolTable$(config) {
-    return this.loaderService.loadOBJ$('pool_table').pipe(
+    return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.011, 0.011, 0.011);
         obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.name = 'Pool table';
         return obj;
       }),
       map(fixPosition),

@@ -5,6 +5,8 @@ import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
 
+const fileName = 'chair';
+
 class ChairFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
@@ -15,11 +17,12 @@ class ChairFactory {
   }
 
   createChair$(config) {
-    return this.loaderService.loadJSON$('chair').pipe(
+    return this.loaderService.loadJSON$(fileName).pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
         obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.name = 'Chair';
         return obj;
       }),
       map(fixPosition),

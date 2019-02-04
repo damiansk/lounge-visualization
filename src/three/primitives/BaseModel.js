@@ -19,6 +19,10 @@ class BaseModel {
     return this.mesh.id;
   }
 
+  getName() {
+    return this.mesh.name;
+  }
+
   isEqual(model) {
     return model.mesh === this.mesh;
   }

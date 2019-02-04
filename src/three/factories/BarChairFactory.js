@@ -4,6 +4,8 @@ import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarChair } from '../primitives';
 
+const fileName = 'bar_chair';
+
 class BarChairFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
@@ -14,10 +16,11 @@ class BarChairFactory {
   }
 
   createBarChair$(config) {
-    return this.loaderService.loadOBJ$('bar_chair').pipe(
+    return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.23, 0.23, 0.23);
+        obj.name = 'Bar chair';
         return obj;
       }),
       map(fixPosition),

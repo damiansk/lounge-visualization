@@ -5,6 +5,8 @@ import { fixPosition, applyConfig, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarTable } from '../primitives';
 
+const fileName = 'Wooden_Table_2';
+
 class BarTableFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
@@ -15,10 +17,11 @@ class BarTableFactory {
   }
 
   createBarTable$(config) {
-    return this.loaderService.loadOBJ$('Wooden_Table_2').pipe(
+    return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.015, 0.015, 0.01);
+        obj.name = 'Bar table';
         return obj;
       }),
       map(fixPosition),

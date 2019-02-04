@@ -5,6 +5,8 @@ import { fixPosition, applyConfig, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Lamp } from '../primitives';
 
+const fileName = 'rv_lamp_post_2';
+
 class LampFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
@@ -15,7 +17,7 @@ class LampFactory {
   }
 
   createLamp$(config) {
-    return this.loaderService.loadOBJ$('rv_lamp_post_2').pipe(
+    return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.2, 0.2, 0.2);
@@ -33,6 +35,8 @@ class LampFactory {
         pointLight.castShadow = true; 
   
         obj.add(pointLight);
+
+        obj.name = 'Lamp';
 
         return obj;
       }),
