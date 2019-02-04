@@ -1,6 +1,8 @@
 import { BaseModel } from './BaseModel';
 
 class Lamp extends BaseModel {
+  isInteractive = false;
+
   constructor(args) {
     super(args);
 
