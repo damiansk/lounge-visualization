@@ -9,12 +9,12 @@ class TableFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createTable = this.createTable.bind(this);
-    this.createTables = this.createTables.bind(this);
+    this.createTable$ = this.createTable$.bind(this);
+    this.createTables$ = this.createTables$.bind(this);
   }
 
-  createTable(config) {
-    return this.loaderService.loadOBJ('Wooden_Table_2').pipe(
+  createTable$(config) {
+    return this.loaderService.loadOBJ$('Wooden_Table_2').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
@@ -26,8 +26,8 @@ class TableFactory {
     );
   }
 
-  createTables(configs) {
-    return from(configs).pipe(map(this.createTable));
+  createTables$(configs) {
+    return from(configs).pipe(map(this.createTable$));
   }
 }
 

@@ -27,30 +27,30 @@ class ModelsFactory {
     this.bookcaseFactory = new BookcaseFactory(this.loadingManager);
     this.sofaFactory = new SofaFactory(this.loadingManager);
 
-    this.createModels = this.createModels.bind(this);
-    this.createFloor = this.createFloor.bind(this);
+    this.createModels$ = this.createModels$.bind(this);
+    this.createFloor$ = this.createFloor$.bind(this);
   }
 
-  createModels(modelsConfig) {
+  createModels$(modelsConfig) {
     return from(modelsConfig).pipe(
       map(({ configs, type }) => {
         switch (type) {
           case 'chair':
-            return this.chairFactory.createChairs(configs);
+            return this.chairFactory.createChairs$(configs);
           case 'table':
-            return this.tableFactory.createTables(configs);
+            return this.tableFactory.createTables$(configs);
           case 'bar_table':
-            return this.barTableFactory.createBarTables(configs);
+            return this.barTableFactory.createBarTables$(configs);
           case 'pool_table':
-            return this.poolTableFactory.createPoolTables(configs);
+            return this.poolTableFactory.createPoolTables$(configs);
           case 'bar_chair':
-            return this.barChairFactory.createBarChairs(configs);
+            return this.barChairFactory.createBarChairs$(configs);
           case 'lamp':
-            return this.lampFactory.createLamps(configs);
+            return this.lampFactory.createLamps$(configs);
           case 'bookcase':
-            return this.bookcaseFactory.createBookcases(configs);
+            return this.bookcaseFactory.createBookcases$(configs);
           case 'sofa':
-            return this.sofaFactory.createSofas(configs);
+            return this.sofaFactory.createSofas$(configs);
           default:
             return Observable.create();
         }
@@ -61,8 +61,8 @@ class ModelsFactory {
     );
   }
 
-  createFloor() {
-    return this.loaderService.loadOBJ('floor')
+  createFloor$() {
+    return this.loaderService.loadOBJ$('floor')
     .pipe(map(obj => {
       obj.scale.set(3.5, 3.5, 3.5);
       return obj;

@@ -9,12 +9,12 @@ class BarTableFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createBarTable = this.createBarTable.bind(this);
-    this.createBarTables = this.createBarTables.bind(this);
+    this.createBarTable$ = this.createBarTable$.bind(this);
+    this.createBarTables$ = this.createBarTables$.bind(this);
   }
 
-  createBarTable(config) {
-    return this.loaderService.loadOBJ('Wooden_Table_2').pipe(
+  createBarTable$(config) {
+    return this.loaderService.loadOBJ$('Wooden_Table_2').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.015, 0.015, 0.01);
@@ -26,8 +26,8 @@ class BarTableFactory {
     );
   }
 
-  createBarTables(configs) {
-    return from(configs).pipe(map(this.createBarTable));
+  createBarTables$(configs) {
+    return from(configs).pipe(map(this.createBarTable$));
   }
 }
 

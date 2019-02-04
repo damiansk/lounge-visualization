@@ -10,12 +10,12 @@ class LampFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createLamp = this.createLamp.bind(this);
-    this.createLamps = this.createLamps.bind(this);
+    this.createLamp$ = this.createLamp$.bind(this);
+    this.createLamps$ = this.createLamps$.bind(this);
   }
 
-  createLamp(config) {
-    return this.loaderService.loadOBJ('rv_lamp_post_2').pipe(
+  createLamp$(config) {
+    return this.loaderService.loadOBJ$('rv_lamp_post_2').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.2, 0.2, 0.2);
@@ -42,8 +42,8 @@ class LampFactory {
     );
   }
 
-  createLamps(configs) {
-    return from(configs).pipe(map(this.createLamp));
+  createLamps$(configs) {
+    return from(configs).pipe(map(this.createLamp$));
   }
 }
 

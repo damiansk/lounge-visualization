@@ -10,12 +10,12 @@ class ChairFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createChair = this.createChair.bind(this);
-    this.createChairs = this.createChairs.bind(this);
+    this.createChair$ = this.createChair$.bind(this);
+    this.createChairs$ = this.createChairs$.bind(this);
   }
 
-  createChair(config) {
-    return this.loaderService.loadJSON('chair').pipe(
+  createChair$(config) {
+    return this.loaderService.loadJSON$('chair').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
@@ -28,8 +28,8 @@ class ChairFactory {
     );
   }
 
-  createChairs(configs) {
-    return from(configs).pipe(map(this.createChair));
+  createChairs$(configs) {
+    return from(configs).pipe(map(this.createChair$));
   }
 }
 

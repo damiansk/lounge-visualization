@@ -10,12 +10,12 @@ class PoolTableFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createPoolTable = this.createPoolTable.bind(this);
-    this.createPoolTables = this.createPoolTables.bind(this);
+    this.createPoolTable$ = this.createPoolTable$.bind(this);
+    this.createPoolTables$ = this.createPoolTables$.bind(this);
   }
 
-  createPoolTable(config) {
-    return this.loaderService.loadOBJ('pool_table').pipe(
+  createPoolTable$(config) {
+    return this.loaderService.loadOBJ$('pool_table').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.011, 0.011, 0.011);
@@ -28,8 +28,8 @@ class PoolTableFactory {
     );
   }
 
-  createPoolTables(configs) {
-    return from(configs).pipe(map(this.createPoolTable));
+  createPoolTables$(configs) {
+    return from(configs).pipe(map(this.createPoolTable$));
   }
 }
 

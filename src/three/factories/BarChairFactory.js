@@ -9,12 +9,12 @@ class BarChairFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createBarChair = this.createBarChair.bind(this);
-    this.createBarChairs = this.createBarChairs.bind(this);
+    this.createBarChair$ = this.createBarChair$.bind(this);
+    this.createBarChairs$ = this.createBarChairs$.bind(this);
   }
 
-  createBarChair(config) {
-    return this.loaderService.loadOBJ('bar_chair').pipe(
+  createBarChair$(config) {
+    return this.loaderService.loadOBJ$('bar_chair').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.23, 0.23, 0.23);
@@ -26,8 +26,8 @@ class BarChairFactory {
     );
   }
 
-  createBarChairs(configs) {
-    return from(configs).pipe(map(this.createBarChair));
+  createBarChairs$(configs) {
+    return from(configs).pipe(map(this.createBarChair$));
   }
 }
 

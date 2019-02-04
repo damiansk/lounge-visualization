@@ -10,12 +10,12 @@ class BookcaseFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createBookcase = this.createBookcase.bind(this);
-    this.createBookcases = this.createBookcases.bind(this);
+    this.createBookcase$ = this.createBookcase$.bind(this);
+    this.createBookcases$ = this.createBookcases$.bind(this);
   }
 
-  createBookcase(config) {
-    return this.loaderService.loadOBJ('20357_Cube_Bookcase_v1 Textured').pipe(
+  createBookcase$(config) {
+    return this.loaderService.loadOBJ$('20357_Cube_Bookcase_v1 Textured').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.125, 0.125, 0.125);
@@ -28,8 +28,8 @@ class BookcaseFactory {
     );
   }
 
-  createBookcases(configs) {
-    return from(configs).pipe(map(this.createBookcase));
+  createBookcases$(configs) {
+    return from(configs).pipe(map(this.createBookcase$));
   }
 }
 

@@ -10,12 +10,12 @@ class SofaFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createSofa = this.createSofa.bind(this);
-    this.createSofas = this.createSofas.bind(this);
+    this.createSofa$ = this.createSofa$.bind(this);
+    this.createSofas$ = this.createSofas$.bind(this);
   }
 
-  createSofa(config) {
-    return this.loaderService.loadOBJ('HSM0012').pipe(
+  createSofa$(config) {
+    return this.loaderService.loadOBJ$('HSM0012').pipe(
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
@@ -28,8 +28,8 @@ class SofaFactory {
     );
   }
 
-  createSofas(configs) {
-    return from(configs).pipe(map(this.createSofa));
+  createSofas$(configs) {
+    return from(configs).pipe(map(this.createSofa$));
   }
 }
 
