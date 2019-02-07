@@ -21,6 +21,7 @@ class TableFactory {
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
+        obj.castShadow = true;
         obj.name = 'Table';
         return obj;
       }),

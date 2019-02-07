@@ -22,6 +22,7 @@ class ChairFactory {
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
         obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.castShadow = true;
         obj.name = 'Chair';
         return obj;
       }),

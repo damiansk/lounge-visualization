@@ -6,6 +6,7 @@ import {
   Color,
   LoadingManager,
   DirectionalLight,
+  PCFSoftShadowMap,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -41,6 +42,10 @@ class SceneManager {
       antialias: true,
       alpha: true,
     });
+
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFSoftShadowMap; 
+
     this.camera = new PerspectiveCamera(
       fieldOfView,
       aspectRatio,
@@ -95,6 +100,7 @@ class SceneManager {
     const factory = new ModelsFactory(manager);
 
     factory.createFloor$().subscribe(model => {
+      model.traverse(mesh => mesh.receiveShadow = true);
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });

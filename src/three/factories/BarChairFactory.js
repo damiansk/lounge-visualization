@@ -20,6 +20,7 @@ class BarChairFactory {
       map(findRoot),
       map(obj => {
         obj.scale.set(0.23, 0.23, 0.23);
+        obj.castShadow = true;
         obj.name = 'Bar chair';
         return obj;
       }),

@@ -22,6 +22,7 @@ class PoolTableFactory {
       map(obj => {
         obj.scale.set(0.011, 0.011, 0.011);
         obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.castShadow = true;
         obj.name = 'Pool table';
         return obj;
       }),

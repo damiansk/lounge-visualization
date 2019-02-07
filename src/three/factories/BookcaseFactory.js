@@ -22,6 +22,7 @@ class BookcaseFactory {
       map(obj => {
         obj.scale.set(0.125, 0.125, 0.125);
         obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.castShadow = true;
         obj.name = 'Bookcase';
         return obj;
       }),

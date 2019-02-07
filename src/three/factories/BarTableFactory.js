@@ -21,6 +21,7 @@ class BarTableFactory {
       map(findRoot),
       map(obj => {
         obj.scale.set(0.015, 0.015, 0.01);
+        obj.castShadow = true;
         obj.name = 'Bar table';
         return obj;
       }),
