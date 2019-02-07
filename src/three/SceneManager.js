@@ -94,9 +94,11 @@ class SceneManager {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
 
-    factory.createFloor$().subscribe(model => this.scene.add(model));
-
-    factory.createModels$(modelsConfig).subscribe(this.store.add);
+    factory.createFloor$().subscribe(model => {
+      this.interactionService.registerInterationScope(model);
+      this.scene.add(model);
+    });
+    factory.createModels$(modelsConfig).subscribe(model => this.store.add(model));
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
