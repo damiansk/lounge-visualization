@@ -1,7 +1,7 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Math as TMath } from 'three';
-import { fixPosition, applyConfig, findRoot } from './utils';
+import { fixPosition, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarTable } from '../primitives';
 
@@ -32,11 +32,11 @@ class BarTableFactory {
           mesh.position.x = config.position.x;
           mesh.position.z = config.position.z;
         }
-      
+
         if (config.rotation) {
           mesh.rotateY(config.rotation * TMath.DEG2RAD);
         }
-      
+
         return mesh;
       }),
       map(obj => new BarTable(obj))

@@ -62,11 +62,12 @@ class ModelsFactory {
   }
 
   createFloor$() {
-    return this.loaderService.loadOBJ$('floor')
-    .pipe(map(obj => {
-      obj.scale.set(3.5, 3.5, 3.5);
-      return obj;
-    }));
+    return this.loaderService.loadOBJ$('floor').pipe(
+      map(obj => {
+        obj.scale.set(3.5, 3.5, 3.5);
+        return obj;
+      })
+    );
   }
 }
 

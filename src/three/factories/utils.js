@@ -21,8 +21,9 @@ const fixPosition = mesh => {
 
 const applyConfig = config => mesh => {
   if (config.position) {
-    mesh.position.x = config.position.x;
-    mesh.position.z = config.position.z;
+    mesh.position.x = config.position.x || mesh.position.x;
+    mesh.position.z = config.position.z || mesh.position.z;
+    mesh.position.y = config.position.y || mesh.position.y;
   }
 
   if (config.rotation) {
