@@ -44,7 +44,7 @@ class SceneManager {
     });
 
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = PCFSoftShadowMap; 
+    this.renderer.shadowMap.type = PCFSoftShadowMap;
 
     this.camera = new PerspectiveCamera(
       fieldOfView,
@@ -100,11 +100,13 @@ class SceneManager {
     const factory = new ModelsFactory(manager);
 
     factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => mesh.receiveShadow = true);
+      model.traverse(mesh => (mesh.receiveShadow = true));
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });
-    factory.createModels$(modelsConfig).subscribe(model => this.store.add(model));
+    factory
+      .createModels$(modelsConfig)
+      .subscribe(model => this.store.add(model));
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);

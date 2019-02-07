@@ -8,7 +8,7 @@ class InteractionService {
     this.staticMeshes = [];
     this.dragStartPosition = null;
     this.prevHoverOnMesh = null;
-    
+
     this.raycaster = new Raycaster();
 
     this.dragControls = new DragControls(
@@ -78,7 +78,10 @@ class InteractionService {
     const { object } = event;
     object.material = object.userData.interactionService.material;
 
-    if (this.isCollideWithAnyMesh(object) || !this.isInInteractionsScope(object)) {
+    if (
+      this.isCollideWithAnyMesh(object) ||
+      !this.isInInteractionsScope(object)
+    ) {
       const { x, y, z } = this.dragStartPosition;
       object.position.set(x, y, z);
       this.dragStartPosition = null;
@@ -86,7 +89,10 @@ class InteractionService {
   }
 
   dragHandler({ object }) {
-    if (this.isCollideWithAnyMesh(object) || !this.isInInteractionsScope(object)) {
+    if (
+      this.isCollideWithAnyMesh(object) ||
+      !this.isInInteractionsScope(object)
+    ) {
       object.material.color.set(0xff0000);
     } else {
       object.material.color.set(0x808080);
@@ -128,7 +134,9 @@ class InteractionService {
     new Box3().setFromObject(object).getCenter(objectCenter);
     this.raycaster.set(objectCenter, direction);
 
-    const colision = this.raycaster.intersectObjects(this.interactionScope.children);
+    const colision = this.raycaster.intersectObjects(
+      this.interactionScope.children
+    );
 
     return colision.length > 0;
   }
