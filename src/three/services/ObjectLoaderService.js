@@ -10,17 +10,17 @@ class LoaderService {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
 
-    this.loadOBJ = this.loadOBJ.bind(this);
-    this.loadMTL = this.loadMTL.bind(this);
-    this.loadJSON = this.loadJSON.bind(this);
+    this.loadOBJ$ = this.loadOBJ$.bind(this);
+    this.loadMTL$ = this.loadMTL$.bind(this);
+    this.loadJSON$ = this.loadJSON$.bind(this);
   }
 
-  loadOBJ(fileName) {
+  loadOBJ$(fileName) {
     const objLoader = new OBJLoader(this.loadingManager);
     objLoader.setPath(basePath);
     const file = `${fileName}.obj`;
 
-    return this.loadMTL(fileName).pipe(
+    return this.loadMTL$(fileName).pipe(
       flatMap(materials => {
         materials.preload();
         objLoader.setMaterials(materials);
@@ -30,7 +30,7 @@ class LoaderService {
     );
   }
 
-  loadMTL(fileName) {
+  loadMTL$(fileName) {
     const mtlLoader = new MTLLoader(this.loadingManager);
     mtlLoader.setPath(basePath);
     const file = `${fileName}.mtl`;
@@ -38,7 +38,7 @@ class LoaderService {
     return bindCallback(mtlLoader.load.bind(mtlLoader))(file);
   }
 
-  loadJSON(fileName) {
+  loadJSON$(fileName) {
     const objectLoader = new THREE.ObjectLoader(this.loadingManager);
     const file = `${basePath}${fileName}.json`;
 

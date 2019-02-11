@@ -1,38 +1,40 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Math as TMath } from 'three';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { BarChair } from '../primitives';
+import { Chair } from '../primitives';
 
-const fileName = 'bar_chair';
+const fileName = 'HSM0012';
 
-class BarChairFactory {
+class SofaFactory {
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
-    this.createBarChair$ = this.createBarChair$.bind(this);
-    this.createBarChairs$ = this.createBarChairs$.bind(this);
+    this.createSofa$ = this.createSofa$.bind(this);
+    this.createSofas$ = this.createSofas$.bind(this);
   }
 
-  createBarChair$(config) {
+  createSofa$(config) {
     return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.23, 0.23, 0.23);
+        obj.scale.set(0.01, 0.01, 0.01);
+        obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
-        obj.name = 'Bar chair';
+        obj.name = 'Sofa';
         return obj;
       }),
       map(fixPosition),
       map(applyConfig(config)),
-      map(obj => new BarChair(obj))
+      map(obj => new Chair(obj))
     );
   }
 
-  createBarChairs$(configs) {
-    return from(configs).pipe(map(this.createBarChair$));
+  createSofas$(configs) {
+    return from(configs).pipe(map(this.createSofa$));
   }
 }
 
-export { BarChairFactory };
+export { SofaFactory };

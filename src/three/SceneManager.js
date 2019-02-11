@@ -6,6 +6,7 @@ import {
   Color,
   LoadingManager,
   DirectionalLight,
+  PCFSoftShadowMap,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -41,6 +42,10 @@ class SceneManager {
       antialias: true,
       alpha: true,
     });
+
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFSoftShadowMap;
+
     this.camera = new PerspectiveCamera(
       fieldOfView,
       aspectRatio,
@@ -94,9 +99,14 @@ class SceneManager {
     const manager = new LoadingManager();
     const factory = new ModelsFactory(manager);
 
-    factory.createFloor().subscribe(model => this.scene.add(model));
-
-    factory.createModels(modelsConfig).subscribe(this.store.add);
+    factory.createFloor$().subscribe(model => {
+      model.traverse(mesh => (mesh.receiveShadow = true));
+      this.interactionService.registerInterationScope(model);
+      this.scene.add(model);
+    });
+    factory
+      .createModels$(modelsConfig)
+      .subscribe(model => this.store.add(model));
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);

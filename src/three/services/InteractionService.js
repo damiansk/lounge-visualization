@@ -1,4 +1,4 @@
-import { Box3 } from 'three';
+import { Box3, Vector3, Raycaster } from 'three';
 import { DragControls } from '../libs/three-dragcontrols';
 import { CameraControlsService } from './CameraControlsService';
 
@@ -8,6 +8,8 @@ class InteractionService {
     this.staticMeshes = [];
     this.dragStartPosition = null;
     this.prevHoverOnMesh = null;
+
+    this.raycaster = new Raycaster();
 
     this.dragControls = new DragControls(
       this.interactiveMeshes,
@@ -56,6 +58,10 @@ class InteractionService {
     }
   }
 
+  registerInterationScope(model) {
+    this.interactionScope = model;
+  }
+
   dragStartHandler(event) {
     const { object } = event;
     object.userData.interactionService = {
@@ -72,7 +78,10 @@ class InteractionService {
     const { object } = event;
     object.material = object.userData.interactionService.material;
 
-    if (this.isCollideWithAnyMesh(object)) {
+    if (
+      this.isCollideWithAnyMesh(object) ||
+      !this.isInInteractionsScope(object)
+    ) {
       const { x, y, z } = this.dragStartPosition;
       object.position.set(x, y, z);
       this.dragStartPosition = null;
@@ -80,7 +89,10 @@ class InteractionService {
   }
 
   dragHandler({ object }) {
-    if (this.isCollideWithAnyMesh(object)) {
+    if (
+      this.isCollideWithAnyMesh(object) ||
+      !this.isInInteractionsScope(object)
+    ) {
       object.material.color.set(0xff0000);
     } else {
       object.material.color.set(0x808080);
@@ -114,6 +126,19 @@ class InteractionService {
     }
 
     return false;
+  }
+
+  isInInteractionsScope(object) {
+    const direction = new Vector3(0, -1, 0);
+    const objectCenter = new Vector3();
+    new Box3().setFromObject(object).getCenter(objectCenter);
+    this.raycaster.set(objectCenter, direction);
+
+    const colision = this.raycaster.intersectObjects(
+      this.interactionScope.children
+    );
+
+    return colision.length > 0;
   }
 }
 
