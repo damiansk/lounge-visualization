@@ -27,7 +27,7 @@ const applyConfig = config => mesh => {
   }
 
   if (config.rotation) {
-    mesh.rotateZ(config.rotation * TMath.DEG2RAD);
+    mesh.rotateY(config.rotation * TMath.DEG2RAD);
   }
 
   return mesh;
