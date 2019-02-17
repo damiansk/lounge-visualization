@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Math as TMath } from 'three';
+import { Math as TMath, AxesHelper } from 'three';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
@@ -17,11 +17,13 @@ class ChairFactory {
   }
 
   createChair$(config) {
-    return this.loaderService.loadJSON$(fileName).pipe(
+    return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.01, 0.01, 0.01);
-        obj.rotateX(-90 * TMath.DEG2RAD);
+        obj.scale.set(0.045, 0.045, 0.045);
+        // var axesHelper = new AxesHelper( 151 );
+        // obj.add( axesHelper );
+        // obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
         obj.name = 'Chair';
         return obj;
