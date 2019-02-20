@@ -1,16 +1,14 @@
-# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 04.04.2013 16:54:00
+# Blender MTL File: 'sofa.blend'
+# Material Count: 1
 
 newmtl _HSM0012_CasualSofa_V402___Default
-	Ns 10.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	illum 2
-	Ka 1.0000 1.0000 1.0000
-	Kd 1.0000 1.0000 1.0000
-	Ks 0.0000 0.0000 0.0000
-	Ke 0.0000 0.0000 0.0000
-	map_Ka CasualSofa_Diff.jpg
-	map_Kd CasualSofa_Diff.jpg
+Ns 9.803922
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd CasualSofa_Diff.jpg
+map_Ka CasualSofa_Diff.jpg

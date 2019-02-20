@@ -4,7 +4,7 @@ import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
 
-const fileName = 'sofa';
+const fileName = 'HSM0012';
 
 class SofaFactory {
   constructor(loadingManager) {
