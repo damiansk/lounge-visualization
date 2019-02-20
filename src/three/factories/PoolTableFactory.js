@@ -1,6 +1,5 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Math as TMath } from 'three';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { PoolTable } from '../primitives';
@@ -21,7 +20,6 @@ class PoolTableFactory {
       map(findRoot),
       map(obj => {
         obj.scale.set(0.011, 0.011, 0.011);
-        obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
         obj.name = 'Pool table';
         return obj;
