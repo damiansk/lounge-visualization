@@ -19,6 +19,8 @@ class ModelsList extends React.Component {
     this.state = {
       models: props.store.getModels(),
     };
+
+    this.createJson = this.createJson.bind(this);
   }
 
   componentDidMount() {
@@ -31,15 +33,20 @@ class ModelsList extends React.Component {
     this.subscription.unsubscribe();
   }
 
+  createJson() {
+    this.props.store.createJson();
+  }
+
   render() {
     const modelGroups = this.state.models.reduce((acc, model) => {
       if (!acc[model.name]) {
         acc[model.name] = [];
       }
-
+      
       acc[model.name].push(model);
       return acc;
     }, {});
+    // console.log(modelGroups)
 
     return (
       <>
@@ -56,6 +63,7 @@ class ModelsList extends React.Component {
         <Divider />
         {Object.keys(modelGroups).map((modelName, i) => (
           <List key={i} component="div" disablePadding>
+            {console.log(modelName)}
             {modelGroups[modelName].map((model, index) => (
               <ModelsListItem
                 key={index}

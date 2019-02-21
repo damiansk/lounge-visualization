@@ -26,6 +26,19 @@ class ModelsStore {
     return this.removeModelsSubject$.asObservable();
   }
 
+  createJson() {
+    // console.log(this.models)
+    const modelGroups = this.models.reduce((acc, model) => {
+      if (!acc[model.name]) {
+        acc[model.name] = [];
+      }
+
+      acc[model.name].push(model);
+      return acc;
+    }, {});
+    // console.log(modelGroups)
+  }
+
   getModels() {
     return this.models;
   }

@@ -1,6 +1,5 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Math as TMath } from 'three';
 import { fixPosition, findRoot, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarTable } from '../primitives';
