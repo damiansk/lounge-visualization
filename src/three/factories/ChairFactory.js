@@ -27,7 +27,6 @@ class ChairFactory {
             obj.rotateX(-90 * TMath.DEG2RAD);
             obj.castShadow = true;
             obj.name = 'Chair';
-            console.log('loading Chair...');
             return obj;
           }),
           map(fixPosition),
@@ -40,7 +39,7 @@ class ChairFactory {
         );
     }
 
-      return this.loadingChairCache$;
+    return this.loadingChairCache$;
   }
 
   createChair$(config) {
