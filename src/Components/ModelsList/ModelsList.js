@@ -46,7 +46,6 @@ class ModelsList extends React.Component {
       acc[model.name].push(model);
       return acc;
     }, {});
-    // console.log(modelGroups)
 
     return (
       <>
@@ -63,7 +62,6 @@ class ModelsList extends React.Component {
         <Divider />
         {Object.keys(modelGroups).map((modelName, i) => (
           <List key={i} component="div" disablePadding>
-            {console.log(modelName)}
             {modelGroups[modelName].map((model, index) => (
               <ModelsListItem
                 key={index}

@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { Math as TMath } from 'three';
 
 class ModelsStore {
   constructor(models = []) {
@@ -27,16 +28,31 @@ class ModelsStore {
   }
 
   createJson() {
-    // console.log(this.models)
     const modelGroups = this.models.reduce((acc, model) => {
-      if (!acc[model.name]) {
-        acc[model.name] = [];
+      if (acc.length > 0 && model.mesh.name === acc[acc.length - 1].type) {
+        acc[acc.length - 1].configs.push({
+          position: {
+            x: model.mesh.position.x,
+            z: model.mesh.position.z
+          },
+          rotation: model.mesh.rotation._y * TMath.RAD2DEG
+        })
+      } else {
+        acc.push({
+          type: model.mesh.name,
+          configs: [{
+            position: {
+              x: model.mesh.position.x,
+              z: model.mesh.position.z
+            },
+            rotation: model.mesh.rotation._y * TMath.RAD2DEG
+          }]
+        });
       }
 
-      acc[model.name].push(model);
       return acc;
-    }, {});
-    // console.log(modelGroups)
+    }, []);
+    console.log(modelGroups, this.models)
   }
 
   getModels() {
