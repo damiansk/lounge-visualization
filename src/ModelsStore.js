@@ -1,6 +1,20 @@
 import { Subject } from 'rxjs';
 import { Math as TMath } from 'three';
 
+function exportToJsonFile(jsonData) {
+  const dataStr = JSON.stringify(jsonData);
+  const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
+    dataStr
+  )}`;
+
+  const exportFileDefaultName = 'data.json';
+
+  const linkElement = document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.click();
+}
+
 class ModelsStore {
   constructor(models = []) {
     this.models = models;
@@ -33,26 +47,29 @@ class ModelsStore {
         acc[acc.length - 1].configs.push({
           position: {
             x: model.mesh.position.x,
-            z: model.mesh.position.z
+            z: model.mesh.position.z,
           },
-          rotation: model.mesh.rotation._y * TMath.RAD2DEG
-        })
+          rotation: model.mesh.rotation._y * TMath.RAD2DEG,
+        });
       } else {
         acc.push({
           type: model.mesh.name,
-          configs: [{
-            position: {
-              x: model.mesh.position.x,
-              z: model.mesh.position.z
+          configs: [
+            {
+              position: {
+                x: model.mesh.position.x,
+                z: model.mesh.position.z,
+              },
+              rotation: model.mesh.rotation._y * TMath.RAD2DEG,
             },
-            rotation: model.mesh.rotation._y * TMath.RAD2DEG
-          }]
+          ],
         });
       }
 
       return acc;
     }, []);
-    console.log(modelGroups, this.models)
+
+    exportToJsonFile({ models: modelGroups });
   }
 
   getModels() {

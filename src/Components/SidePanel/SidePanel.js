@@ -6,6 +6,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ModelsStore } from '../../ModelsStore';
 import { ModelsList } from '../ModelsList';
+import { JSONExportButton } from '../JSONExportButton';
 
 const drawerWidth = 240;
 
@@ -49,6 +50,8 @@ class DrawerPanel extends Component {
             )}
           </IconButton>
         </div>
+        <Divider />
+        <JSONExportButton store={store} />
         <Divider />
         <ModelsList store={store} />
       </Drawer>
