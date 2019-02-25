@@ -4,7 +4,7 @@ import { Drawer, Divider, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { ModelsStore } from '../../ModelsStore';
+import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsList } from '../ModelsList';
 import { JSONExportButton } from '../JSONExportButton';
 
@@ -61,6 +61,10 @@ class DrawerPanel extends Component {
 
 DrawerPanel.propTypes = {
   store: PropTypes.instanceOf(ModelsStore),
+  classes: PropTypes.object,
+  theme: PropTypes.object,
+  open: PropTypes.bool,
+  handleDrawerClose: PropTypes.func,
 };
 
 const SidePanel = withStyles(styles, { withTheme: true })(DrawerPanel);

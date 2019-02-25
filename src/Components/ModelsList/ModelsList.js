@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from '@material-ui/core';
-import { ModelsStore } from '../../ModelsStore';
+import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsListItem } from './ModelsListItem/ModelsListItem';
 
 class ModelsList extends React.Component {

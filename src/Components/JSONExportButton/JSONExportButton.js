@@ -8,7 +8,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { ModelsStore } from '../../ModelsStore';
+import { ModelsStore } from '../../three/store/ModelsStore';
 
 class JSONExportButton extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class JSONExportButton extends React.Component {
     return (
       <List>
         <ListItem>
-          <ListItemText primary="JSON" />
+          <ListItemText primary="Save JSON" />
           <ListItemSecondaryAction>
             <IconButton onClick={this.createJson}>
               <SaveIcon />

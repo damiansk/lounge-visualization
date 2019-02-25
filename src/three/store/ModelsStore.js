@@ -1,19 +1,6 @@
 import { Subject } from 'rxjs';
 import { Math as TMath } from 'three';
-
-function exportToJsonFile(jsonData) {
-  const dataStr = JSON.stringify(jsonData);
-  const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
-    dataStr
-  )}`;
-
-  const exportFileDefaultName = 'data.json';
-
-  const linkElement = document.createElement('a');
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
-}
+import { exportToJsonFile } from './utils';
 
 class ModelsStore {
   constructor(models = []) {

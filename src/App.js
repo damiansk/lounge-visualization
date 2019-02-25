@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
-import { ModelsStore } from './ModelsStore';
+import { ModelsStore } from './three/store/ModelsStore';
 
 const drawerWidth = 240;
 
@@ -101,7 +101,8 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object,
+  theme: PropTypes.object,
 };
 
 export default withStyles(styles, { withTheme: true })(App);
