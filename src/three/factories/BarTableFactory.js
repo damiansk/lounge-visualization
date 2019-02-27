@@ -42,17 +42,7 @@ class BarTableFactory {
   }
 
   createBarTable$(config) {
-    // return this.loaderService.loadOBJ$(fileName).pipe(
-    //   map(findRoot),
-    //   map(obj => {
-    //     obj.scale.set(0.015, 0.015, 0.01);
-    //     obj.castShadow = true;
-    //     obj.name = 'Bar table';
-    //     return obj;
-    //   }),
-    //   map(fixPosition),
-      // map(applyConfig(config)),
-      // TODO: Fix rotation axis (default is Z)
+    // TODO: Fix rotation axis (default is Z)
     return this.loadBarTable$().pipe(
       map(mesh => {
         if (config.position) {

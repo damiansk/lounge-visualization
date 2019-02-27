@@ -42,17 +42,7 @@ class TableFactory {
   }
 
   createTable$(config) {
-    // return this.loaderService.loadOBJ$(fileName).pipe(
-    //   map(findRoot),
-    //   map(obj => {
-    //     obj.scale.set(0.01, 0.01, 0.01);
-    //     obj.castShadow = true;
-    //     obj.name = 'Table';
-    //     return obj;
-    //   }),
-    //   map(fixPosition),
-      // map(applyConfig(config)),
-      // TODO: Fix rotation axis (default is Z)
+    // TODO: Fix rotation axis (default is Z)
     return this.loadTable$().pipe(
       map(mesh => {
         if (config.position) {
