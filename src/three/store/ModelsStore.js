@@ -1,6 +1,11 @@
 import { Subject } from 'rxjs';
 
-import { exportToJsonFile, getModelIndex, addModelConfig, addModel } from './utils';
+import {
+  exportToJsonFile,
+  getModelIndex,
+  addModelConfig,
+  addModel,
+} from './utils';
 
 class ModelsStore {
   constructor(models = []) {
@@ -31,7 +36,7 @@ class ModelsStore {
   createJson() {
     const modelGroups = this.models.reduce((acc, model) => {
       const existedModelIndex = getModelIndex(acc, model.mesh.name);
-      
+
       if (acc.length > 0 && existedModelIndex !== undefined) {
         addModelConfig(acc[existedModelIndex].configs, model);
       } else {

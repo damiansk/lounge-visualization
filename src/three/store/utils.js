@@ -14,7 +14,7 @@ const exportToJsonFile = jsonData => {
 };
 
 const getModelIndex = (arr, name) => {
-  let modelIndex; 
+  let modelIndex;
   arr.forEach((element, index) => {
     if (element.type === name) {
       modelIndex = index;
@@ -34,7 +34,7 @@ const addModelConfig = (arr, model) => {
   };
 
   arr.push(newConfig);
-}
+};
 
 const addModel = (arr, model) => {
   arr.push({
@@ -49,6 +49,6 @@ const addModel = (arr, model) => {
       },
     ],
   });
-}
+};
 
 export { exportToJsonFile, getModelIndex, addModelConfig, addModel };
