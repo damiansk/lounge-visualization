@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
-import { Math as TMath } from 'three';
-import { exportToJsonFile } from './utils';
+
+import { exportToJsonFile, getModelIndex, addModelConfig, addModel } from './utils';
 
 class ModelsStore {
   constructor(models = []) {
@@ -30,27 +30,12 @@ class ModelsStore {
 
   createJson() {
     const modelGroups = this.models.reduce((acc, model) => {
-      if (acc.length > 0 && model.mesh.name === acc[acc.length - 1].type) {
-        acc[acc.length - 1].configs.push({
-          position: {
-            x: model.mesh.position.x,
-            z: model.mesh.position.z,
-          },
-          rotation: model.mesh.rotation._y * TMath.RAD2DEG,
-        });
+      const existedModelIndex = getModelIndex(acc, model.mesh.name);
+      
+      if (acc.length > 0 && existedModelIndex !== undefined) {
+        addModelConfig(acc[existedModelIndex].configs, model);
       } else {
-        acc.push({
-          type: model.mesh.name,
-          configs: [
-            {
-              position: {
-                x: model.mesh.position.x,
-                z: model.mesh.position.z,
-              },
-              rotation: model.mesh.rotation._y * TMath.RAD2DEG,
-            },
-          ],
-        });
+        addModel(acc, model);
       }
 
       return acc;
