@@ -128,7 +128,7 @@ class InteractionService {
   getModelBoundingBox(mesh) {
     let boundingBox = this.modelsBoxWeakMap.get(mesh);
 
-    if(!boundingBox) {
+    if (!boundingBox) {
       boundingBox = this.updateModelBoundingBox(mesh);
     }
 

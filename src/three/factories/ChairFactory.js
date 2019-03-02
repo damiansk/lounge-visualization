@@ -18,25 +18,24 @@ class ChairFactory {
   }
 
   loadChair$() {
-    if(!this.loadingChairCache$) {
-      this.loadingChairCache$ = this.loaderService.loadJSON$(fileName)
-        .pipe(
-          map(findRoot),
-          map(obj => {
-            obj.scale.set(0.01, 0.01, 0.01);
-            obj.rotateX(-90 * TMath.DEG2RAD);
-            obj.castShadow = true;
-            obj.name = 'Chair';
-            return obj;
-          }),
-          map(fixPosition),
-          shareReplay(1),
-          map(obj => {
-            const clonedObj = obj.clone();
-            clonedObj.material = clonedObj.material.clone();
-            return clonedObj;
-          })
-        );
+    if (!this.loadingChairCache$) {
+      this.loadingChairCache$ = this.loaderService.loadJSON$(fileName).pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.01, 0.01, 0.01);
+          obj.rotateX(-90 * TMath.DEG2RAD);
+          obj.castShadow = true;
+          obj.name = 'Chair';
+          return obj;
+        }),
+        map(fixPosition),
+        shareReplay(1),
+        map(obj => {
+          const clonedObj = obj.clone();
+          clonedObj.material = clonedObj.material.clone();
+          return clonedObj;
+        })
+      );
     }
 
     return this.loadingChairCache$;

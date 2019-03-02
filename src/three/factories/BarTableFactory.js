@@ -18,24 +18,23 @@ class BarTableFactory {
   }
 
   loadBarTable$() {
-    if(!this.loadingBarTable$) {
-      this.loadingBarTable$ = this.loaderService.loadOBJ$(fileName)
-        .pipe(
-          map(findRoot),
-          map(obj => {
-            obj.scale.set(0.015, 0.015, 0.01);
-            obj.castShadow = true;
-            obj.name = 'Bar table';
-            return obj;
-          }),
-          map(fixPosition),
-          shareReplay(1),
-          map(obj => {
-            const clonedObj = obj.clone();
-            clonedObj.material = clonedObj.material.clone();
-            return clonedObj;
-          })
-        );
+    if (!this.loadingBarTable$) {
+      this.loadingBarTable$ = this.loaderService.loadOBJ$(fileName).pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.015, 0.015, 0.01);
+          obj.castShadow = true;
+          obj.name = 'Bar table';
+          return obj;
+        }),
+        map(fixPosition),
+        shareReplay(1),
+        map(obj => {
+          const clonedObj = obj.clone();
+          clonedObj.material = clonedObj.material.clone();
+          return clonedObj;
+        })
+      );
     }
 
     return this.loadingBarTable$;

@@ -18,24 +18,23 @@ class TableFactory {
   }
 
   loadTable$() {
-    if(!this.loadingTable$) {
-      this.loadingTable$ = this.loaderService.loadOBJ$(fileName)
-        .pipe(
-          map(findRoot),
-          map(obj => {
-            obj.scale.set(0.01, 0.01, 0.01);
-            obj.castShadow = true;
-            obj.name = 'Table';
-            return obj;
-          }),
-          map(fixPosition),
-          shareReplay(1),
-          map(obj => {
-            const clonedObj = obj.clone();
-            clonedObj.material = clonedObj.material.clone();
-            return clonedObj;
-          })
-        );
+    if (!this.loadingTable$) {
+      this.loadingTable$ = this.loaderService.loadOBJ$(fileName).pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.01, 0.01, 0.01);
+          obj.castShadow = true;
+          obj.name = 'Table';
+          return obj;
+        }),
+        map(fixPosition),
+        shareReplay(1),
+        map(obj => {
+          const clonedObj = obj.clone();
+          clonedObj.material = clonedObj.material.clone();
+          return clonedObj;
+        })
+      );
     }
 
     return this.loadingTable$;
