@@ -7,46 +7,20 @@ import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
 import { ModelsStore } from './three/store/ModelsStore';
+import { styles } from './styles';
 
-const drawerWidth = 240;
+const exportToJsonFile = jsonData => {
+  const dataStr = JSON.stringify(jsonData);
+  const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
+    dataStr
+  )}`;
+  const exportFileDefaultName = 'models.json';
+  const linkElement = document.createElement('a');
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    overflow: 'hidden',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-  content: {
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-    height: '100vh',
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-  appBarSpacer: theme.mixins.toolbar,
-});
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.click();
+};
 
 class App extends React.Component {
   constructor(props) {
@@ -60,6 +34,7 @@ class App extends React.Component {
 
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
+    this.handleExportButtonClick = this.handleExportButtonClick.bind(this);
   }
 
   handleDrawerOpen() {
@@ -68,6 +43,10 @@ class App extends React.Component {
 
   handleDrawerClose() {
     this.setState({ open: false });
+  }
+
+  handleExportButtonClick() {
+    exportToJsonFile(this.modelsStore.createJson());
   }
 
   render() {
@@ -86,6 +65,7 @@ class App extends React.Component {
           handleDrawerClose={this.handleDrawerClose}
           open={open}
           store={this.modelsStore}
+          handleExportButtonClick={this.handleExportButtonClick}
         />
         <main
           className={classNames(classes.content, {

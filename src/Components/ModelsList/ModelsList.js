@@ -11,8 +11,6 @@ class ModelsList extends React.Component {
     this.state = {
       models: props.store.getModels(),
     };
-
-    this.createJson = this.createJson.bind(this);
   }
 
   componentDidMount() {
@@ -23,10 +21,6 @@ class ModelsList extends React.Component {
 
   componentWillUnmount() {
     this.subscription.unsubscribe();
-  }
-
-  createJson() {
-    this.props.store.createJson();
   }
 
   render() {

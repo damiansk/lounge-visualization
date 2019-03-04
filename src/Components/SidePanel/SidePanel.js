@@ -7,29 +7,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsList } from '../ModelsList';
 import { JSONExportButton } from '../JSONExportButton';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-});
+import { styles } from './styles';
 
 class DrawerPanel extends Component {
   render() {
-    const { classes, theme, open, handleDrawerClose, store } = this.props;
+    const { classes, theme, open, handleDrawerClose, store, handleExportButtonClick } = this.props;
 
     return (
       <Drawer
@@ -51,7 +33,7 @@ class DrawerPanel extends Component {
           </IconButton>
         </div>
         <Divider />
-        <JSONExportButton store={store} />
+        <JSONExportButton handleExportButtonClick={handleExportButtonClick} />
         <Divider />
         <ModelsList store={store} />
       </Drawer>
@@ -65,6 +47,7 @@ DrawerPanel.propTypes = {
   theme: PropTypes.object,
   open: PropTypes.bool,
   handleDrawerClose: PropTypes.func,
+  handleExportButtonClick: PropTypes.func,
 };
 
 const SidePanel = withStyles(styles, { withTheme: true })(DrawerPanel);

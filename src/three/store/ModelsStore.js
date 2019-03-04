@@ -1,7 +1,5 @@
 import { Subject } from 'rxjs';
-
 import {
-  exportToJsonFile,
   getModelIndex,
   addModelConfig,
   addModel,
@@ -46,7 +44,7 @@ class ModelsStore {
       return acc;
     }, []);
 
-    exportToJsonFile({ models: modelGroups });
+    return { models: modelGroups };
   }
 
   getModels() {

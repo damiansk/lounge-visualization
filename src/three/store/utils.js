@@ -1,18 +1,5 @@
 import { Math as TMath } from 'three';
 
-const exportToJsonFile = jsonData => {
-  const dataStr = JSON.stringify(jsonData);
-  const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
-    dataStr
-  )}`;
-  const exportFileDefaultName = 'models.json';
-  const linkElement = document.createElement('a');
-
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
-};
-
 const getModelIndex = (arr, name) => {
   let modelIndex;
   arr.forEach((element, index) => {
@@ -51,4 +38,4 @@ const addModel = (arr, model) => {
   });
 };
 
-export { exportToJsonFile, getModelIndex, addModelConfig, addModel };
+export { getModelIndex, addModelConfig, addModel };
