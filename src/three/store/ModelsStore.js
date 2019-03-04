@@ -1,9 +1,5 @@
 import { Subject } from 'rxjs';
-import {
-  getModelIndex,
-  addModelConfig,
-  addModel,
-} from './utils';
+import { getModelIndex, addModelConfig, addModel } from './utils';
 
 class ModelsStore {
   constructor(models = []) {

@@ -11,7 +11,14 @@ import { styles } from './styles';
 
 class DrawerPanel extends Component {
   render() {
-    const { classes, theme, open, handleDrawerClose, store, handleExportButtonClick } = this.props;
+    const {
+      classes,
+      theme,
+      open,
+      handleDrawerClose,
+      store,
+      handleExportButtonClick,
+    } = this.props;
 
     return (
       <Drawer
