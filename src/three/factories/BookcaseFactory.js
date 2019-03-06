@@ -24,6 +24,7 @@ class BookcaseFactory {
         obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
         obj.name = 'Bookcase';
+        obj.type = 'bookcase';
         return obj;
       }),
       map(fixPosition),

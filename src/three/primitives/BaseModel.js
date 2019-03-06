@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import { Math as TMath } from 'three';
 
 const hoverColor = 0x808080;
 
@@ -13,6 +14,16 @@ class BaseModel {
     this.isEqual = this.isEqual.bind(this);
     this.setHover = this.setHover.bind(this);
     this.subscribeForChanges$ = this.subscribeForChanges$.bind(this);
+  }
+
+  getConfig() {
+    return {
+      position: {
+        x: this.mesh.position.x,
+        z: this.mesh.position.z,
+      },
+      rotation: this.mesh.rotation._y * TMath.RAD2DEG,
+    };
   }
 
   getId() {

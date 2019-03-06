@@ -22,6 +22,7 @@ class BarTableFactory {
         obj.scale.set(0.015, 0.015, 0.01);
         obj.castShadow = true;
         obj.name = 'Bar table';
+        obj.type = 'bar_table';
         return obj;
       }),
       map(fixPosition),

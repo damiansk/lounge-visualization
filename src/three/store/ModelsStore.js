@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { getModelIndex, addModelConfig, addModel } from './utils';
+import { getModelIndex } from './utils';
 
 class ModelsStore {
   constructor(models = []) {
@@ -29,12 +29,15 @@ class ModelsStore {
 
   createJson() {
     const modelGroups = this.models.reduce((acc, model) => {
-      const existedModelIndex = getModelIndex(acc, model.mesh.name);
+      const existedModelIndex = getModelIndex(acc, model.mesh.type);
 
       if (acc.length > 0 && existedModelIndex !== undefined) {
-        addModelConfig(acc[existedModelIndex].configs, model);
+        acc[existedModelIndex].configs.push(model.getConfig());
       } else {
-        addModel(acc, model);
+        acc.push({
+          type: model.mesh.type,
+          configs: [model.getConfig()],
+        });
       }
 
       return acc;

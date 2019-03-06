@@ -22,6 +22,7 @@ class SofaFactory {
         obj.scale.set(0.01, 0.01, 0.01);
         obj.castShadow = true;
         obj.name = 'Sofa';
+        obj.type = 'sofa';
         return obj;
       }),
       map(fixPosition),
