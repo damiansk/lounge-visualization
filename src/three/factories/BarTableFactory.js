@@ -1,5 +1,5 @@
 import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { Math as TMath } from 'three';
 import { fixPosition, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
@@ -12,22 +12,37 @@ class BarTableFactory {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
 
+    this.loadBarTable$ = this.loadBarTable$.bind(this);
     this.createBarTable$ = this.createBarTable$.bind(this);
     this.createBarTables$ = this.createBarTables$.bind(this);
   }
 
+  loadBarTable$() {
+    if (!this.loadingBarTable$) {
+      this.loadingBarTable$ = this.loaderService.loadOBJ$(fileName).pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.015, 0.015, 0.01);
+          obj.castShadow = true;
+          obj.name = 'Bar table';
+          return obj;
+        }),
+        map(fixPosition),
+        shareReplay(1),
+        map(obj => {
+          const clonedObj = obj.clone();
+          clonedObj.material = clonedObj.material.clone();
+          return clonedObj;
+        })
+      );
+    }
+
+    return this.loadingBarTable$;
+  }
+
   createBarTable$(config) {
-    return this.loaderService.loadOBJ$(fileName).pipe(
-      map(findRoot),
-      map(obj => {
-        obj.scale.set(0.015, 0.015, 0.01);
-        obj.castShadow = true;
-        obj.name = 'Bar table';
-        return obj;
-      }),
-      map(fixPosition),
-      // map(applyConfig(config)),
-      // TODO: Fix rotation axis (default is Z)
+    // TODO: Fix rotation axis (default is Z)
+    return this.loadBarTable$().pipe(
       map(mesh => {
         if (config.position) {
           mesh.position.x = config.position.x;
