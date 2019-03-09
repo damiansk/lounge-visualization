@@ -18,12 +18,15 @@ class InteractionService {
     );
 
     this.modelsWeakMap = new WeakMap();
+    this.modelsBoxWeakMap = new WeakMap();
 
     this.dragStartHandler = this.dragStartHandler.bind(this);
     this.dragEndHandler = this.dragEndHandler.bind(this);
     this.dragHandler = this.dragHandler.bind(this);
     this.hoverOnHandler = this.hoverOnHandler.bind(this);
     this.hoverOffHandler = this.hoverOffHandler.bind(this);
+    this.updateModelBoundingBox = this.updateModelBoundingBox.bind(this);
+    this.getModelBoundingBox = this.getModelBoundingBox.bind(this);
 
     this.dragControls.addEventListener(
       'dragstart',
@@ -44,6 +47,7 @@ class InteractionService {
       this.staticMeshes.push(model.mesh);
     }
     this.modelsWeakMap.set(model.mesh, model);
+    this.updateModelBoundingBox(model.mesh);
   }
 
   remove({ mesh }) {
@@ -85,6 +89,8 @@ class InteractionService {
       const { x, y, z } = this.dragStartPosition;
       object.position.set(x, y, z);
       this.dragStartPosition = null;
+    } else {
+      this.updateModelBoundingBox(object);
     }
   }
 
@@ -112,11 +118,28 @@ class InteractionService {
     this.prevHoverOnMesh = null;
   }
 
+  updateModelBoundingBox(mesh) {
+    const boundingBox = new Box3().setFromObject(mesh);
+    this.modelsBoxWeakMap.set(mesh, boundingBox);
+
+    return boundingBox;
+  }
+
+  getModelBoundingBox(mesh) {
+    let boundingBox = this.modelsBoxWeakMap.get(mesh);
+
+    if (!boundingBox) {
+      boundingBox = this.updateModelBoundingBox(mesh);
+    }
+
+    return boundingBox;
+  }
+
   isCollideWithAnyMesh(object) {
     const boundingBox = new Box3().setFromObject(object);
     const meshes = this.interactiveMeshes.concat(this.staticMeshes);
     for (let i = meshes.length - 1; i >= 0; i--) {
-      const tempBoundingBox = new Box3().setFromObject(meshes[i]);
+      const tempBoundingBox = this.getModelBoundingBox(meshes[i]);
 
       const isIntersected = boundingBox.intersectsBox(tempBoundingBox);
 

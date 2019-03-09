@@ -1,5 +1,5 @@
 import { from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, shareReplay } from 'rxjs/operators';
 import { fixPosition, applyConfig, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Lamp } from '../primitives';
@@ -17,22 +17,37 @@ class LampFactory {
     this.createLamps$ = this.createLamps$.bind(this);
   }
 
+  loadLamp$() {
+    if (!this.loadingLamp$) {
+      this.loadingLamp$ = this.loaderService.loadOBJ$(fileName).pipe(
+        map(findRoot),
+        map(obj => {
+          obj.scale.set(0.2, 0.2, 0.2);
+          obj.name = 'Lamp';
+          obj.type = 'lamp';
+          return obj;
+        }),
+        map(fixPosition),
+        shareReplay(1),
+        map(obj => {
+          const clonedObj = obj.clone();
+          // clonedObj.material = clonedObj.material.clone();
+          return clonedObj;
+        })
+      );
+    }
+
+    return this.loadingLamp$;
+  }
+
   createLamp$(config) {
-    return this.loaderService.loadOBJ$(fileName).pipe(
-      map(findRoot),
-      map(obj => {
-        obj.scale.set(0.2, 0.2, 0.2);
-        obj.name = 'Lamp';
-        obj.type = 'lamp';
-        return obj;
-      }),
-      map(fixPosition),
+    return this.loadLamp$().pipe(
       map(applyConfig(config)),
       map(obj => new Lamp(obj)),
       tap(obj => {
-        // TODO fix magic number
+        const lightAltitude = 18;
         this.lightFactory
-          .createLightBulb$({ position: { y: 18 } })
+          .createLightBulb$({ position: { y: lightAltitude } })
           .subscribe(light => obj.addLight(light));
       })
     );
