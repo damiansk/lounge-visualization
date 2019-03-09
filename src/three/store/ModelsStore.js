@@ -29,13 +29,13 @@ class ModelsStore {
 
   createJson() {
     const modelGroups = this.models.reduce((acc, model) => {
-      const existedModelIndex = getModelIndex(acc, model.mesh.type);
+      const existedModelIndex = getModelIndex(acc, model.getType());
 
       if (acc.length > 0 && existedModelIndex !== undefined) {
         acc[existedModelIndex].configs.push(model.getConfig());
       } else {
         acc.push({
-          type: model.mesh.type,
+          type: model.getType(),
           configs: [model.getConfig()],
         });
       }

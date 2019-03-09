@@ -34,6 +34,10 @@ class BaseModel {
     return this.mesh.name;
   }
 
+  getType() {
+    return this.mesh.type;
+  }
+
   isEqual(model) {
     return model.mesh === this.mesh;
   }

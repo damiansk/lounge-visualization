@@ -7,20 +7,8 @@ import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
 import { ModelsStore } from './three/store/ModelsStore';
+import { exportToJsonFile } from './utils';
 import { styles } from './styles';
-
-const exportToJsonFile = jsonData => {
-  const dataStr = JSON.stringify(jsonData);
-  const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
-    dataStr
-  )}`;
-  const exportFileDefaultName = 'models.json';
-  const linkElement = document.createElement('a');
-
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
-};
 
 class App extends React.Component {
   constructor(props) {
