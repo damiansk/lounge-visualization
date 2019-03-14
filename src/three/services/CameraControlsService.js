@@ -10,9 +10,9 @@ class CameraControlsService {
     controls.minDistance = 10;
     controls.maxDistance = 40;
     controls.minPolarAngle = 0;
-    controls.maxPolarAngle = Math.PI/2;
-    controls.panningMode  = Math.PI/2;
-    
+    controls.maxPolarAngle = Math.PI / 2;
+    controls.panningMode = Math.PI / 2;
+
     return controls;
   }
 
