@@ -8,7 +8,7 @@ class CameraControlsService {
 
     controls.enabled = true;
     controls.minDistance = 10;
-    controls.maxDistance = 40;
+    controls.maxDistance = 30;
     controls.minPolarAngle = 0;
     controls.maxPolarAngle = Math.PI / 2;
     controls.panningMode = Math.PI / 2;
