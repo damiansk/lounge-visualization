@@ -24,7 +24,6 @@ class BarChairFactory {
           obj.scale.set(0.23, 0.23, 0.23);
           obj.castShadow = true;
           obj.name = 'Bar chair';
-          obj.type = 'bar_chair';
           return obj;
         }),
         map(fixPosition),

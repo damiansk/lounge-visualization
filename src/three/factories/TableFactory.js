@@ -24,7 +24,6 @@ class TableFactory {
           obj.scale.set(0.01, 0.01, 0.01);
           obj.castShadow = true;
           obj.name = 'Table';
-          obj.type = 'table';
           return obj;
         }),
         map(fixPosition),

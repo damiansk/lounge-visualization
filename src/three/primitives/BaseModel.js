@@ -8,7 +8,7 @@ class BaseModel {
     this.mesh = mesh;
     this.isInteractive = true;
     this.isHovered = false;
-
+    this.type = 'base_model';
     this.updateSubject$ = new BehaviorSubject({ isHovered: this.isHovered });
 
     this.isEqual = this.isEqual.bind(this);
@@ -35,7 +35,7 @@ class BaseModel {
   }
 
   getType() {
-    return this.mesh.type;
+    return this.type;
   }
 
   isEqual(model) {

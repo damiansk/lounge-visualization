@@ -24,7 +24,6 @@ class LampFactory {
         map(obj => {
           obj.scale.set(0.2, 0.2, 0.2);
           obj.name = 'Lamp';
-          obj.type = 'lamp';
           return obj;
         }),
         map(fixPosition),

@@ -22,7 +22,6 @@ class PoolTableFactory {
         obj.scale.set(0.011, 0.011, 0.011);
         obj.castShadow = true;
         obj.name = 'Pool table';
-        obj.type = 'pool_table';
         return obj;
       }),
       map(fixPosition),

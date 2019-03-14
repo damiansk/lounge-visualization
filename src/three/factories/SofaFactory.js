@@ -2,7 +2,7 @@ import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { Chair } from '../primitives';
+import { Sofa } from '../primitives';
 
 const fileName = 'HSM0012';
 
@@ -22,12 +22,11 @@ class SofaFactory {
         obj.scale.set(0.01, 0.01, 0.01);
         obj.castShadow = true;
         obj.name = 'Sofa';
-        obj.type = 'sofa';
         return obj;
       }),
       map(fixPosition),
       map(applyConfig(config)),
-      map(obj => new Chair(obj))
+      map(obj => new Sofa(obj))
     );
   }
 
