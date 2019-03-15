@@ -1,6 +1,14 @@
 /* eslint-disable */
 
-import { EventDispatcher, Plane, Raycaster, Vector2, Vector3 } from 'three';
+import {
+  EventDispatcher,
+  Plane,
+  Raycaster,
+  Vector2,
+  Vector3,
+  Camera,
+  Matrix4,
+} from 'three';
 
 /*
  * @author zz85 / https://github.com/zz85
@@ -8,10 +16,10 @@ import { EventDispatcher, Plane, Raycaster, Vector2, Vector3 } from 'three';
  * Running this will allow you to drag three.js objects around the screen.
  */
 
-function DragControls(_objects, _camera, _domElement) {
-  if (_objects.isCamera) {
+const DragControls = function(_objects, _camera, _domElement) {
+  if (_objects instanceof Camera) {
     console.warn(
-      'THREE.DragControls: Constructor now expects ( objects, camera, domElement )'
+      'DragControls: Constructor now expects ( objects, camera, domElement )'
     );
     var temp = _objects;
     _objects = _camera;
@@ -24,10 +32,11 @@ function DragControls(_objects, _camera, _domElement) {
   var _mouse = new Vector2();
   var _offset = new Vector3();
   var _intersection = new Vector3();
+  var _worldPosition = new Vector3();
+  var _inverseMatrix = new Matrix4();
 
   var _selected = null,
-    _hovered = null,
-    _startPosition = null;
+    _hovered = null;
 
   //
 
@@ -69,13 +78,12 @@ function DragControls(_objects, _camera, _domElement) {
 
     if (_selected && scope.enabled) {
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-        _selected.position.copy(_intersection.sub(_offset));
+        _selected.position.copy(
+          _intersection.sub(_offset).applyMatrix4(_inverseMatrix)
+        );
       }
 
-      scope.dispatchEvent({
-        type: 'drag',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'drag', object: _selected });
 
       return;
     }
@@ -86,27 +94,19 @@ function DragControls(_objects, _camera, _domElement) {
 
     if (intersects.length > 0) {
       var object = intersects[0].object;
+      var touchPoint = intersects[0].point;
 
-      _plane.setFromNormalAndCoplanarPoint(
-        new Vector3(0, 1, 0),
-        object.position
-      );
+      _plane.setFromNormalAndCoplanarPoint(new Vector3(0, 1, 0), touchPoint);
 
       if (_hovered !== object) {
-        scope.dispatchEvent({
-          type: 'hoveron',
-          object: object,
-        });
+        scope.dispatchEvent({ type: 'hoveron', object: object });
 
         _domElement.style.cursor = 'pointer';
         _hovered = object;
       }
     } else {
       if (_hovered !== null) {
-        scope.dispatchEvent({
-          type: 'hoveroff',
-          object: _hovered,
-        });
+        scope.dispatchEvent({ type: 'hoveroff', object: _hovered });
 
         _domElement.style.cursor = 'auto';
         _hovered = null;
@@ -123,18 +123,17 @@ function DragControls(_objects, _camera, _domElement) {
 
     if (intersects.length > 0) {
       _selected = intersects[0].object;
-      _startPosition = _selected.position.clone();
 
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-        _offset.copy(_intersection).sub(_selected.position);
+        _inverseMatrix.getInverse(_selected.parent.matrixWorld);
+        _offset
+          .copy(_intersection)
+          .sub(_worldPosition.setFromMatrixPosition(_selected.matrixWorld));
       }
 
       _domElement.style.cursor = 'move';
 
-      scope.dispatchEvent({
-        type: 'dragstart',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'dragstart', object: _selected });
     }
   }
 
@@ -142,15 +141,12 @@ function DragControls(_objects, _camera, _domElement) {
     event.preventDefault();
 
     if (_selected) {
-      scope.dispatchEvent({
-        type: 'dragend',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'dragend', object: _selected });
 
       _selected = null;
     }
 
-    _domElement.style.cursor = 'auto';
+    _domElement.style.cursor = _hovered ? 'pointer' : 'auto';
   }
 
   function onDocumentTouchMove(event) {
@@ -166,13 +162,12 @@ function DragControls(_objects, _camera, _domElement) {
 
     if (_selected && scope.enabled) {
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-        _selected.position.copy(_intersection.sub(_offset));
+        _selected.position.copy(
+          _intersection.sub(_offset).applyMatrix4(_inverseMatrix)
+        );
       }
 
-      scope.dispatchEvent({
-        type: 'drag',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'drag', object: _selected });
 
       return;
     }
@@ -196,19 +191,19 @@ function DragControls(_objects, _camera, _domElement) {
 
       _plane.setFromNormalAndCoplanarPoint(
         _camera.getWorldDirection(_plane.normal),
-        _selected.position
+        _worldPosition.setFromMatrixPosition(_selected.matrixWorld)
       );
 
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-        _offset.copy(_intersection).sub(_selected.position);
+        _inverseMatrix.getInverse(_selected.parent.matrixWorld);
+        _offset
+          .copy(_intersection)
+          .sub(_worldPosition.setFromMatrixPosition(_selected.matrixWorld));
       }
 
       _domElement.style.cursor = 'move';
 
-      scope.dispatchEvent({
-        type: 'dragstart',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'dragstart', object: _selected });
     }
   }
 
@@ -216,10 +211,7 @@ function DragControls(_objects, _camera, _domElement) {
     event.preventDefault();
 
     if (_selected) {
-      scope.dispatchEvent({
-        type: 'dragend',
-        object: _selected,
-      });
+      scope.dispatchEvent({ type: 'dragend', object: _selected });
 
       _selected = null;
     }
@@ -240,32 +232,30 @@ function DragControls(_objects, _camera, _domElement) {
   // Backward compatibility
 
   this.setObjects = function() {
-    console.error('THREE.DragControls: setObjects() has been removed.');
+    console.error('DragControls: setObjects() has been removed.');
   };
 
   this.on = function(type, listener) {
     console.warn(
-      'THREE.DragControls: on() has been deprecated. Use addEventListener() instead.'
+      'DragControls: on() has been deprecated. Use addEventListener() instead.'
     );
     scope.addEventListener(type, listener);
   };
 
   this.off = function(type, listener) {
     console.warn(
-      'THREE.DragControls: off() has been deprecated. Use removeEventListener() instead.'
+      'DragControls: off() has been deprecated. Use removeEventListener() instead.'
     );
     scope.removeEventListener(type, listener);
   };
 
   this.notify = function(type) {
     console.error(
-      'THREE.DragControls: notify() has been deprecated. Use dispatchEvent() instead.'
+      'DragControls: notify() has been deprecated. Use dispatchEvent() instead.'
     );
-    scope.dispatchEvent({
-      type: type,
-    });
+    scope.dispatchEvent({ type: type });
   };
-}
+};
 
 DragControls.prototype = Object.create(EventDispatcher.prototype);
 DragControls.prototype.constructor = DragControls;
