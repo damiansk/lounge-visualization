@@ -34,7 +34,7 @@ class App extends React.Component {
   }
 
   handleExportButtonClick() {
-    exportToJsonFile(this.modelsStore.createJson());
+    exportToJsonFile('models', this.modelsStore.createJson());
   }
 
   render() {

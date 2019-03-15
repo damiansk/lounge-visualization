@@ -1,9 +1,9 @@
-const exportToJsonFile = jsonData => {
+const exportToJsonFile = (fileName, jsonData) => {
   const dataStr = JSON.stringify(jsonData);
   const dataUri = `data:application/json;charset=utf-8, ${encodeURIComponent(
     dataStr
   )}`;
-  const exportFileDefaultName = 'models.json';
+  const exportFileDefaultName = `${fileName}.json`;
   const linkElement = document.createElement('a');
 
   linkElement.setAttribute('href', dataUri);
