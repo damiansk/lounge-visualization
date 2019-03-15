@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -6,32 +7,7 @@ import classNames from 'classnames';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
-  },
-  hide: {
-    display: 'none',
-  },
-});
+import { styles } from './styles';
 
 const Heading = ({ classes, open, handleDrawerOpen }) => {
   return (
@@ -62,6 +38,12 @@ const Heading = ({ classes, open, handleDrawerOpen }) => {
       </Toolbar>
     </AppBar>
   );
+};
+
+Heading.propTypes = {
+  classes: PropTypes.object,
+  open: PropTypes.bool,
+  handleDrawerOpen: PropTypes.func,
 };
 
 const Header = withStyles(styles, { withTheme: true })(Heading);

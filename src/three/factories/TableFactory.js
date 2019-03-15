@@ -1,7 +1,6 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { Math as TMath } from 'three';
-import { fixPosition, findRoot } from './utils';
+import { fixPosition, findRoot, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
@@ -41,20 +40,8 @@ class TableFactory {
   }
 
   createTable$(config) {
-    // TODO: Fix rotation axis (default is Z)
     return this.loadTable$().pipe(
-      map(mesh => {
-        if (config.position) {
-          mesh.position.x = config.position.x;
-          mesh.position.z = config.position.z;
-        }
-
-        if (config.rotation) {
-          mesh.rotateY(config.rotation * TMath.DEG2RAD);
-        }
-
-        return mesh;
-      }),
+      map(applyConfig(config)),
       map(obj => new Table(obj))
     );
   }

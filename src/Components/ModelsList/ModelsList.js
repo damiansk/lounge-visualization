@@ -1,15 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  Divider,
-} from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
-import { ModelsStore } from '../../ModelsStore';
+import { List } from '@material-ui/core';
+import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsListItem } from './ModelsListItem/ModelsListItem';
 
 class ModelsList extends React.Component {
@@ -43,17 +35,6 @@ class ModelsList extends React.Component {
 
     return (
       <>
-        <List>
-          <ListItem>
-            <ListItemText primary="JSON" />
-            <ListItemSecondaryAction>
-              <IconButton onClick={this.createJson}>
-                <SaveIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
-        <Divider />
         {Object.keys(modelGroups).map((modelName, i) => (
           <List key={i} component="div" disablePadding>
             {modelGroups[modelName].map((model, index) => (

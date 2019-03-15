@@ -3,9 +3,10 @@ import { BaseModel } from './BaseModel';
 class Lamp extends BaseModel {
   isInteractive = false;
 
+  type = 'lamp';
+
   constructor(args) {
     super(args);
-
     this.setHover = this.setHover.bind(this);
     this.setLight = this.setLight.bind(this);
 

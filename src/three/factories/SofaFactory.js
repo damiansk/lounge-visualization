@@ -1,9 +1,8 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Math as TMath } from 'three';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { Chair } from '../primitives';
+import { Sofa } from '../primitives';
 
 const fileName = 'HSM0012';
 
@@ -21,14 +20,13 @@ class SofaFactory {
       map(findRoot),
       map(obj => {
         obj.scale.set(0.01, 0.01, 0.01);
-        obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
         obj.name = 'Sofa';
         return obj;
       }),
       map(fixPosition),
       map(applyConfig(config)),
-      map(obj => new Chair(obj))
+      map(obj => new Sofa(obj))
     );
   }
 

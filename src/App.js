@@ -6,47 +6,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
-import { ModelsStore } from './ModelsStore';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    overflow: 'hidden',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-  content: {
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-    height: '100vh',
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-  appBarSpacer: theme.mixins.toolbar,
-});
+import { ModelsStore } from './three/store/ModelsStore';
+import { exportToJsonFile } from './utils';
+import { styles } from './styles';
 
 class App extends React.Component {
   constructor(props) {
@@ -60,6 +22,7 @@ class App extends React.Component {
 
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
+    this.handleExportButtonClick = this.handleExportButtonClick.bind(this);
   }
 
   handleDrawerOpen() {
@@ -68,6 +31,10 @@ class App extends React.Component {
 
   handleDrawerClose() {
     this.setState({ open: false });
+  }
+
+  handleExportButtonClick() {
+    exportToJsonFile('models', this.modelsStore.createJson());
   }
 
   render() {
@@ -86,6 +53,7 @@ class App extends React.Component {
           handleDrawerClose={this.handleDrawerClose}
           open={open}
           store={this.modelsStore}
+          handleExportButtonClick={this.handleExportButtonClick}
         />
         <main
           className={classNames(classes.content, {
@@ -101,7 +69,8 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object,
+  theme: PropTypes.object,
 };
 
 export default withStyles(styles, { withTheme: true })(App);

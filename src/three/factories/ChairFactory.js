@@ -1,6 +1,5 @@
 import { from } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
-import { Math as TMath } from 'three';
+import { map, shareReplay } from 'rxjs/operators';
 import { findRoot, fixPosition, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
@@ -19,11 +18,10 @@ class ChairFactory {
 
   loadChair$() {
     if (!this.loadingChairCache$) {
-      this.loadingChairCache$ = this.loaderService.loadJSON$(fileName).pipe(
+      this.loadingChairCache$ = this.loaderService.loadOBJ$(fileName).pipe(
         map(findRoot),
         map(obj => {
-          obj.scale.set(0.01, 0.01, 0.01);
-          obj.rotateX(-90 * TMath.DEG2RAD);
+          obj.scale.set(0.045, 0.045, 0.045);
           obj.castShadow = true;
           obj.name = 'Chair';
           return obj;

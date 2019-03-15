@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { getModelIndex } from './utils';
 
 class ModelsStore {
   constructor(models = []) {
@@ -24,6 +25,25 @@ class ModelsStore {
 
   getRemoveEvent$() {
     return this.removeModelsSubject$.asObservable();
+  }
+
+  createJson() {
+    const modelGroups = this.models.reduce((acc, model) => {
+      const existedModelIndex = getModelIndex(acc, model.getType());
+
+      if (acc.length > 0 && existedModelIndex !== undefined) {
+        acc[existedModelIndex].configs.push(model.getConfig());
+      } else {
+        acc.push({
+          type: model.getType(),
+          configs: [model.getConfig()],
+        });
+      }
+
+      return acc;
+    }, []);
+
+    return { models: modelGroups };
   }
 
   getModels() {

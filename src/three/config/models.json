@@ -18,170 +18,170 @@
                 {
                     "position": {
                         "x": 4.2,
+                        "z": 8.2
+                    },
+                    "rotation": 90
+                },
+                {
+                    "position": {
+                        "x": 4.2,
+                        "z": 8.9
+                    },
+                    "rotation": 90
+                },
+                {
+                    "position": {
+                        "x": 6,
                         "z": 8.5
                     },
-                    "rotation": 0
-                },
-                {
-                    "position": {
-                        "x": 4.2,
-                        "z": 9.2
-                    },
-                    "rotation": 0
-                },
-                {
-                    "position": {
-                        "x": 6,
-                        "z": 8.5
-                    },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": 6,
                         "z": 9.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": 4.2,
-                        "z": 11.5
+                        "z": 11.2
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": 4.2,
-                        "z": 12.2
+                        "z": 11.9
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": 6,
                         "z": 11.5
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": 6,
                         "z": 12.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": 4.2,
-                        "z": 14.5
+                        "z": 14.2
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": 4.2,
-                        "z": 15.2
+                        "z": 14.9
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": 6,
                         "z": 14.5
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": 6,
                         "z": 15.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 8.5
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 9.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 8.5
+                        "z": 8.2
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 9.2
+                        "z": 8.9
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 11.5
+                        "z": 11.2
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 12.2
+                        "z": 11.9
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 11.5
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 12.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 14.5
+                        "z": 14.2
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -4.5,
-                        "z": 15.2
+                        "z": 14.9
                     },
-                    "rotation": 0
+                    "rotation": 90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 14.5
                     },
-                    "rotation": 180
+                    "rotation": -90
                 },
                 {
                     "position": {
                         "x": -2.5,
                         "z": 15.2
                     },
-                    "rotation": 180
+                    "rotation": -90
                 }
             ]
         },
