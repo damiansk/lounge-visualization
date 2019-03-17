@@ -82,6 +82,7 @@ class InteractionService {
     const { object } = event;
     object.material = object.userData.interactionService.material;
 
+    // TODO Improvement - isCollideWithAnyMesh && isInInteractionsScope calculating object bounding Box
     if (
       this.isCollideWithAnyMesh(object) ||
       !this.isInInteractionsScope(object)
@@ -152,16 +153,33 @@ class InteractionService {
   }
 
   isInInteractionsScope(object) {
+    const boundingBox = new Box3().setFromObject(object);
     const direction = new Vector3(0, -1, 0);
-    const objectCenter = new Vector3();
-    new Box3().setFromObject(object).getCenter(objectCenter);
-    this.raycaster.set(objectCenter, direction);
 
-    const colision = this.raycaster.intersectObjects(
-      this.interactionScope.children
-    );
+    const y = 1;
+    const xMin = boundingBox.min.x;
+    const zMin = boundingBox.min.z;
+    const xMax = boundingBox.max.x;
+    const zMax = boundingBox.max.z;
 
-    return colision.length > 0;
+    const points = [
+      new Vector3(xMin, y, zMin),
+      new Vector3(xMax, y, zMin),
+      new Vector3(xMax, y, zMax),
+      new Vector3(xMin, y, zMax),
+    ];
+
+    const isAnyPointOutsideTheScope = points.some(point => {
+      this.raycaster.set(point, direction);
+
+      const collisions = this.raycaster.intersectObjects(
+        this.interactionScope.children
+      );
+
+      return collisions.length === 0;
+    });
+
+    return !isAnyPointOutsideTheScope;
   }
 }
 
