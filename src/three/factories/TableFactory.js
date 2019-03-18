@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { fixPosition, findRoot, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
-const fileName = 'Wooden_Table_2';
+const fileName = 'table_v3';
 
 class TableFactory {
   constructor(loadingManager) {
@@ -21,16 +21,22 @@ class TableFactory {
       this.loadingTable$ = this.loaderService.loadOBJ$(fileName).pipe(
         map(findRoot),
         map(obj => {
-          obj.scale.set(0.01, 0.01, 0.01);
           obj.castShadow = true;
           obj.name = 'Table';
           return obj;
         }),
-        map(fixPosition),
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();
-          clonedObj.material = clonedObj.material.clone();
+
+          if(clonedObj.material) {
+            if(Array.isArray(clonedObj.material)) {
+              clonedObj.material = clonedObj.material.map(material => material.clone());
+            } else {
+              clonedObj.material = clonedObj.material.clone();
+            }
+          }
+          
           return clonedObj;
         })
       );
