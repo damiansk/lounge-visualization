@@ -7,10 +7,15 @@ const JSONImportControls = () => (
     <Paper>
       <label>
         Add file
-        <input type="file" name="json-upload" onChange={FileUploadService.onFileChange} />
+        <input
+          type="file"
+          name="json-upload"
+          onChange={FileUploadService.onFileChange}
+        />
       </label>
+      <button onClick={console.log}>Load</button>
     </Paper>
   </ListItem>
-)
+);
 
 export { JSONImportControls };

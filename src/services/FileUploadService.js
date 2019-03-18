@@ -1,8 +1,10 @@
 class FileUploadServiceClass {
   constructor() {
     this.reader = new FileReader();
+    this.result = {};
     this.onFileChange = this.onFileChange.bind(this);
-    // register FilerReader onload method 
+    this.getFile = this.getFile.bind(this);
+    // register FilerReader onload method
     this.reader.onload = this.onLoad.bind(this);
   }
 
@@ -11,7 +13,11 @@ class FileUploadServiceClass {
   }
 
   onLoad(event) {
-    console.log(JSON.parse(event.target.result));
+    this.result = event.target.result;
+  }
+
+  getFile() {
+    return this.result;
   }
 }
 

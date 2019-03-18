@@ -27,6 +27,9 @@ class SceneManager {
       height: canvas.height,
     };
 
+    const manager = new LoadingManager();
+    this.factory = new ModelsFactory(manager);
+
     this.init = this.init.bind(this);
     this.update = this.update.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
@@ -96,21 +99,39 @@ class SceneManager {
   }
 
   initSceneSubjects() {
-    const manager = new LoadingManager();
-    const factory = new ModelsFactory(manager);
-
-    factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => (mesh.receiveShadow = true));
+    this.factory.createFloor$().subscribe(model => {
+      model.traverse(mesh => {
+        mesh.receiveShadow = true;
+      });
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });
-    factory
-      .createModels$(modelsConfig)
-      .subscribe(model => this.store.add(model));
+
+    this.loadSceneModels(modelsConfig);
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
+  }
+
+  loadSceneModels(config) {
+    this.factory
+      .createModels$(config)
+      .subscribe(model => this.store.add(model));
+  }
+
+  destroySceneModels() {
+    this.scene.children.forEach(child => {
+      if (child.name.length > 0) {
+        this.scene.remove(child);
+      }
+      this.store.models = [];
+    });
+  }
+
+  updateScene(config) {
+    // this.loadSceneModels(config);
+    this.destroySceneModels();
   }
 }
 
