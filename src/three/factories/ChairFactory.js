@@ -1,3 +1,7 @@
+import {
+  MeshBasicMaterial,
+  BackSide,
+} from 'three';
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { findRoot, fixPosition, applyConfig } from './utils';

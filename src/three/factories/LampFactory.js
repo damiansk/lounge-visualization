@@ -1,11 +1,12 @@
+import { DoubleSide } from 'three';
 import { from } from 'rxjs';
 import { map, tap, shareReplay } from 'rxjs/operators';
-import { fixPosition, applyConfig, findRoot } from './utils';
+import { applyConfig, findRoot } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Lamp } from '../primitives';
 import { LightBulbFactory } from './LighBulbFactory';
 
-const fileName = 'rv_lamp_post_2';
+const fileName = 'lamp_v3';
 
 class LampFactory {
   constructor(loadingManager) {
@@ -22,15 +23,14 @@ class LampFactory {
       this.loadingLamp$ = this.loaderService.loadOBJ$(fileName).pipe(
         map(findRoot),
         map(obj => {
-          obj.scale.set(0.2, 0.2, 0.2);
           obj.name = 'Lamp';
+          obj.material.side = DoubleSide;
           return obj;
         }),
-        map(fixPosition),
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();
-          // clonedObj.material = clonedObj.material.clone();
+          clonedObj.material = clonedObj.material.clone();
           return clonedObj;
         })
       );
@@ -44,7 +44,7 @@ class LampFactory {
       map(applyConfig(config)),
       map(obj => new Lamp(obj)),
       tap(obj => {
-        const lightAltitude = 18;
+        const lightAltitude = 4.7;
         this.lightFactory
           .createLightBulb$({ position: { y: lightAltitude } })
           .subscribe(light => obj.addLight(light));
