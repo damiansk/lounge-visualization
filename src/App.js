@@ -9,6 +9,7 @@ import { SidePanel } from './Components/SidePanel';
 import { ModelsStore } from './three/store/ModelsStore';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
+import { models as modelsConfig } from './three/config/models.json';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class App extends React.Component {
 
     this.state = {
       open: false,
+      modelsConfig,
     };
 
     this.modelsStore = new ModelsStore();
@@ -61,7 +63,10 @@ class App extends React.Component {
           })}
         >
           <div className={classes.appBarSpacer} />
-          <ThreeContainer store={this.modelsStore} />
+          <ThreeContainer
+            store={this.modelsStore}
+            modelsConfig={this.state.modelsConfig}
+          />
         </main>
       </div>
     );

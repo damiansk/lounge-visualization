@@ -18,13 +18,18 @@ class ThreeContainer extends Component {
     this.canvas = createCanvas(this.containerRef.current);
     this.sceneManager = new SceneManager(this.canvas, this.props.store);
     this.sceneManager.init();
-
+    this.sceneManager.loadSceneModels(this.props.modelsConfig);
     this.stats = initStatsPanel(this.canvas);
 
     window.addEventListener('resize', this.onCanvasResize);
 
     this.renderFrame();
     this.onCanvasResize();
+  }
+
+  componentDidUpdate() {
+    this.sceneManager.destroySceneModels();
+    this.sceneManager.loadSceneModels(this.props.modelsConfig);
   }
 
   onCanvasResize() {
