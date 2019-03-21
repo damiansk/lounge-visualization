@@ -118,17 +118,10 @@ class SceneManager {
   }
 
   destroySceneModels() {
-    this.scene.children.forEach(child => {
-      if (child.name.length > 0) {
-        this.scene.remove(child);
-      }
-      this.store.models = [];
+    const models = this.store.getModels();
+    models.forEach(element => {
+      this.store.remove(element);
     });
-  }
-
-  updateScene(config) {
-    // this.loadSceneModels(config);
-    this.destroySceneModels();
   }
 }
 
