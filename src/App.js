@@ -25,6 +25,7 @@ class App extends React.Component {
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
     this.handleExportButtonClick = this.handleExportButtonClick.bind(this);
+    this.handleImportButtonClick = this.handleImportButtonClick.bind(this);
   }
 
   handleDrawerOpen() {
@@ -37,6 +38,10 @@ class App extends React.Component {
 
   handleExportButtonClick() {
     exportToJsonFile('models', this.modelsStore.createJson());
+  }
+
+  handleImportButtonClick(config) {
+    this.setState({ modelsConfig: config });
   }
 
   render() {
@@ -56,6 +61,7 @@ class App extends React.Component {
           open={open}
           store={this.modelsStore}
           handleExportButtonClick={this.handleExportButtonClick}
+          handleImportButtonClick={this.handleImportButtonClick}
         />
         <main
           className={classNames(classes.content, {

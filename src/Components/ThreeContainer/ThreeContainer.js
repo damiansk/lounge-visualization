@@ -1,9 +1,10 @@
-import React, { Component, createRef } from 'react';
-
+import React, { Component, createRef, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { ModelsStore } from '../../three/store/ModelsStore';
 import { createCanvas, initStatsPanel } from './utils';
 import SceneManager from '../../three/SceneManager';
 
-class ThreeContainer extends Component {
+class ThreeContainer extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -22,7 +23,6 @@ class ThreeContainer extends Component {
     this.stats = initStatsPanel(this.canvas);
 
     window.addEventListener('resize', this.onCanvasResize);
-
     this.renderFrame();
     this.onCanvasResize();
   }
@@ -61,5 +61,9 @@ class ThreeContainer extends Component {
     );
   }
 }
+
+ThreeContainer.propTypes = {
+  store: PropTypes.instanceOf(ModelsStore),
+};
 
 export { ThreeContainer };
