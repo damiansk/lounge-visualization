@@ -1,19 +1,34 @@
 class FileUploadServiceClass {
   constructor() {
-    this.reader = new FileReader();
+    this.fileReader = new FileReader();
     this.result = {};
+    this.isError = false;
+    this.isLoaded = false;
     this.onFileChange = this.onFileChange.bind(this);
     this.getFile = this.getFile.bind(this);
     // register FilerReader onload method
-    this.reader.onload = this.onLoad.bind(this);
+    this.fileReader.onload = this.onLoad.bind(this);
+    this.fileReader.onerror = this.onError.bind(this);
   }
 
   onFileChange(event) {
-    this.reader.readAsText(event.target.files[0]);
+    if (event.target.files.length > 0) {
+      this.fileReader.readAsText(event.target.files[0]);
+    }
+  }
+
+  onError(event) {
+    console.log('File reader error:', event);
   }
 
   onLoad(event) {
-    this.result = event.target.result;
+    if (event.target.result === undefined) {
+      this.isError = true;
+      return;
+    }
+
+    this.isLoaded = true;
+    this.result = JSON.parse(event.target.result);
   }
 
   getFile() {

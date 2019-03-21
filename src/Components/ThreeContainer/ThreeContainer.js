@@ -1,4 +1,4 @@
-import React, { Component, createRef, PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { ModelsStore } from '../../three/store/ModelsStore';
 import { createCanvas, initStatsPanel } from './utils';
@@ -64,6 +64,20 @@ class ThreeContainer extends PureComponent {
 
 ThreeContainer.propTypes = {
   store: PropTypes.instanceOf(ModelsStore),
+  modelsConfig: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      configs: PropTypes.arrayOf(
+        PropTypes.shape({
+          position: PropTypes.shape({
+            x: PropTypes.number,
+            z: PropTypes.number,
+          }),
+          rotation: PropTypes.number,
+        })
+      ),
+    })
+  ),
 };
 
 export { ThreeContainer };

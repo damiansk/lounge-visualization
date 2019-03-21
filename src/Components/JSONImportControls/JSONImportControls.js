@@ -11,12 +11,13 @@ const JSONImportControls = ({ handleImportButtonClick }) => (
         <input
           type="file"
           name="json-upload"
+          accept=".json"
           onChange={FileUploadService.onFileChange}
         />
       </label>
       <button
         onClick={() => {
-          handleImportButtonClick(JSON.parse(FileUploadService.getFile()).models);
+          handleImportButtonClick(FileUploadService.getFile().models);
         }}
       >
         Load
