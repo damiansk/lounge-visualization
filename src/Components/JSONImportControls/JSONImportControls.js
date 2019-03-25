@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Refresh from '@material-ui/icons/Refresh';
 import AddBox from '@material-ui/icons/AddBox';
@@ -21,8 +26,7 @@ const JSONImportControlsBase = ({ handleImportButtonClick, classes }) => (
             accept=".json"
             onChange={FileUploadService.onFileChange}
           />
-          <IconButton
-            component="span">
+          <IconButton component="span">
             <AddBox />
           </IconButton>
         </label>
@@ -48,6 +52,6 @@ JSONImportControlsBase.propTypes = {
   handleImportButtonClick: PropTypes.func,
 };
 
-const JSONImportControls = withStyles(styles)(JSONImportControlsBase)
+const JSONImportControls = withStyles(styles)(JSONImportControlsBase);
 
 export { JSONImportControls };
