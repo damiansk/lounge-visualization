@@ -1,33 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListItem, Paper } from '@material-ui/core';
+import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Refresh from '@material-ui/icons/Refresh';
+import AddBox from '@material-ui/icons/AddBox';
 import { FileUploadService } from '../../services';
+import { styles } from './styles';
 
-const JSONImportControls = ({ handleImportButtonClick }) => (
-  <ListItem>
-    <Paper>
-      <label>
-        Add file
-        <input
-          type="file"
-          name="json-upload"
-          accept=".json"
-          onChange={FileUploadService.onFileChange}
-        />
-      </label>
-      <button
-        onClick={() => {
-          handleImportButtonClick(FileUploadService.getFile().models);
-        }}
-      >
-        Load
-      </button>
-    </Paper>
-  </ListItem>
+const JSONImportControlsBase = ({ handleImportButtonClick, classes }) => (
+  <>
+    <ListItem>
+      <ListItemText primary="Add JSON" />
+      <ListItemSecondaryAction>
+        <label htmlFor="json-import-input">
+          <input
+            className={classes.fileInput}
+            type="file"
+            id="json-import-input"
+            name="json-upload"
+            accept=".json"
+            onChange={FileUploadService.onFileChange}
+          />
+          <IconButton
+            component="span">
+            <AddBox />
+          </IconButton>
+        </label>
+      </ListItemSecondaryAction>
+    </ListItem>
+    <ListItem>
+      <ListItemText primary="Load models" />
+      <ListItemSecondaryAction>
+        <IconButton
+          onClick={() => {
+            handleImportButtonClick(FileUploadService.getFile().models);
+          }}
+        >
+          <Refresh />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  </>
 );
 
-JSONImportControls.propTypes = {
+JSONImportControlsBase.propTypes = {
+  classes: PropTypes.object.isRequired,
   handleImportButtonClick: PropTypes.func,
 };
+
+const JSONImportControls = withStyles(styles)(JSONImportControlsBase)
 
 export { JSONImportControls };
