@@ -11,9 +11,10 @@ class FileUploadServiceClass {
     this.fileReader.onerror = this.onError.bind(this);
   }
 
-  onFileChange(event) {
+  onFileChange(event, cb) {
     if (event.target.files.length > 0) {
       this.fileReader.readAsText(event.target.files[0]);
+      this.callBack = cb;
     }
   }
 
@@ -29,6 +30,7 @@ class FileUploadServiceClass {
 
     this.isLoaded = true;
     this.result = JSON.parse(event.target.result);
+    this.callBack(this.result.models);
   }
 
   getFile() {

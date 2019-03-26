@@ -7,15 +7,14 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Refresh from '@material-ui/icons/Refresh';
 import AddBox from '@material-ui/icons/AddBox';
 import { FileUploadService } from '../../services';
 import { styles } from './styles';
 
-const JSONImportControlsBase = ({ handleImportButtonClick, classes }) => (
+const JSONImportControlsBase = ({ loadModelsConfig, classes }) => (
   <>
     <ListItem>
-      <ListItemText primary="Add JSON" />
+      <ListItemText primary="Load JSON" />
       <ListItemSecondaryAction>
         <label htmlFor="json-import-input">
           <input
@@ -24,7 +23,9 @@ const JSONImportControlsBase = ({ handleImportButtonClick, classes }) => (
             id="json-import-input"
             name="json-upload"
             accept=".json"
-            onChange={FileUploadService.onFileChange}
+            onChange={e => {
+              FileUploadService.onFileChange(e, loadModelsConfig);
+            }}
           />
           <IconButton component="span">
             <AddBox />
@@ -32,24 +33,12 @@ const JSONImportControlsBase = ({ handleImportButtonClick, classes }) => (
         </label>
       </ListItemSecondaryAction>
     </ListItem>
-    <ListItem>
-      <ListItemText primary="Load models" />
-      <ListItemSecondaryAction>
-        <IconButton
-          onClick={() => {
-            handleImportButtonClick(FileUploadService.getFile().models);
-          }}
-        >
-          <Refresh />
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
   </>
 );
 
 JSONImportControlsBase.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleImportButtonClick: PropTypes.func,
+  loadModelsConfig: PropTypes.func,
 };
 
 const JSONImportControls = withStyles(styles)(JSONImportControlsBase);

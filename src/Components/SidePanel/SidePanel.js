@@ -17,7 +17,7 @@ const DrawerPanel = ({
   handleDrawerClose,
   store,
   handleExportButtonClick,
-  handleImportButtonClick,
+  loadModelsConfig,
 }) => (
   <Drawer
     className={classes.drawer}
@@ -36,7 +36,7 @@ const DrawerPanel = ({
     <Divider />
     <List>
       <JSONExportButton handleExportButtonClick={handleExportButtonClick} />
-      <JSONImportControls handleImportButtonClick={handleImportButtonClick} />
+      <JSONImportControls loadModelsConfig={loadModelsConfig} />
     </List>
     <Divider />
     <ModelsList store={store} />
@@ -50,7 +50,7 @@ DrawerPanel.propTypes = {
   open: PropTypes.bool,
   handleDrawerClose: PropTypes.func,
   handleExportButtonClick: PropTypes.func,
-  handleImportButtonClick: PropTypes.func,
+  loadModelsConfig: PropTypes.func,
 };
 
 const SidePanel = withStyles(styles, { withTheme: true })(DrawerPanel);
