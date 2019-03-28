@@ -20,11 +20,11 @@ class LightBulbFactory {
     light.distance = 15;
     light.castShadow = true;
 
-    const geometry = new SphereGeometry(1.5, 64, 64);
+    const geometry = new SphereGeometry(.5, 20, 20);
     const material = new MeshBasicMaterial({ color: 0xffffff });
     const bulb = new Mesh(geometry, material);
 
-    light.add(bulb);
+    // light.add(bulb);
 
     return of(light).pipe(
       map(applyConfig(config)),
