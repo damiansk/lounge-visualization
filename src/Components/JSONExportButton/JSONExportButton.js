@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  List,
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
@@ -10,16 +9,14 @@ import {
 import SaveIcon from '@material-ui/icons/Save';
 
 const JSONExportButton = ({ handleExportButtonClick }) => (
-  <List>
-    <ListItem>
-      <ListItemText primary="Save JSON" />
-      <ListItemSecondaryAction>
-        <IconButton onClick={handleExportButtonClick}>
-          <SaveIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
-  </List>
+  <ListItem>
+    <ListItemText primary="Save JSON" />
+    <ListItemSecondaryAction>
+      <IconButton onClick={handleExportButtonClick}>
+        <SaveIcon />
+      </IconButton>
+    </ListItemSecondaryAction>
+  </ListItem>
 );
 
 JSONExportButton.propTypes = {

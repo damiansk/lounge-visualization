@@ -9,6 +9,7 @@ import { SidePanel } from './Components/SidePanel';
 import { ModelsStore } from './three/store/ModelsStore';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
+import { models as modelsConfig } from './three/config/models.json';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class App extends React.Component {
 
     this.state = {
       open: false,
+      modelsConfig,
     };
 
     this.modelsStore = new ModelsStore();
@@ -23,6 +25,7 @@ class App extends React.Component {
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
     this.handleExportButtonClick = this.handleExportButtonClick.bind(this);
+    this.loadModelsConfig = this.loadModelsConfig.bind(this);
   }
 
   handleDrawerOpen() {
@@ -35,6 +38,10 @@ class App extends React.Component {
 
   handleExportButtonClick() {
     exportToJsonFile('models', this.modelsStore.createJson());
+  }
+
+  loadModelsConfig(config) {
+    this.setState({ modelsConfig: config });
   }
 
   render() {
@@ -54,6 +61,7 @@ class App extends React.Component {
           open={open}
           store={this.modelsStore}
           handleExportButtonClick={this.handleExportButtonClick}
+          loadModelsConfig={this.loadModelsConfig}
         />
         <main
           className={classNames(classes.content, {
@@ -61,7 +69,10 @@ class App extends React.Component {
           })}
         >
           <div className={classes.appBarSpacer} />
-          <ThreeContainer store={this.modelsStore} />
+          <ThreeContainer
+            store={this.modelsStore}
+            modelsConfig={this.state.modelsConfig}
+          />
         </main>
       </div>
     );

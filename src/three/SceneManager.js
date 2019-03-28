@@ -10,7 +10,6 @@ import {
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
-import { models as modelsConfig } from './config/models.json';
 import { ModelsFactory } from './factories/ModelsFactory';
 
 const nearPlane = 0.1;
@@ -26,6 +25,9 @@ class SceneManager {
       width: canvas.width,
       height: canvas.height,
     };
+
+    const manager = new LoadingManager();
+    this.factory = new ModelsFactory(manager);
 
     this.init = this.init.bind(this);
     this.update = this.update.bind(this);
@@ -96,21 +98,30 @@ class SceneManager {
   }
 
   initSceneSubjects() {
-    const manager = new LoadingManager();
-    const factory = new ModelsFactory(manager);
-
-    factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => (mesh.receiveShadow = true));
+    this.factory.createFloor$().subscribe(model => {
+      model.traverse(mesh => {
+        mesh.receiveShadow = true;
+      });
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });
-    factory
-      .createModels$(modelsConfig)
-      .subscribe(model => this.store.add(model));
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
+  }
+
+  loadSceneModels(config) {
+    this.factory
+      .createModels$(config)
+      .subscribe(model => this.store.add(model));
+  }
+
+  destroySceneModels() {
+    const models = this.store.getModels();
+    models.forEach(element => {
+      this.store.remove(element);
+    });
   }
 }
 

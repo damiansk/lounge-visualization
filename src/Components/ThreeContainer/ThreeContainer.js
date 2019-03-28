@@ -1,9 +1,10 @@
-import React, { Component, createRef } from 'react';
-
+import React, { createRef, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { ModelsStore } from '../../three/store/ModelsStore';
 import { createCanvas, initStatsPanel } from './utils';
 import SceneManager from '../../three/SceneManager';
 
-class ThreeContainer extends Component {
+class ThreeContainer extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -18,13 +19,17 @@ class ThreeContainer extends Component {
     this.canvas = createCanvas(this.containerRef.current);
     this.sceneManager = new SceneManager(this.canvas, this.props.store);
     this.sceneManager.init();
-
+    this.sceneManager.loadSceneModels(this.props.modelsConfig);
     this.stats = initStatsPanel(this.canvas);
 
     window.addEventListener('resize', this.onCanvasResize);
-
     this.renderFrame();
     this.onCanvasResize();
+  }
+
+  componentDidUpdate() {
+    this.sceneManager.destroySceneModels();
+    this.sceneManager.loadSceneModels(this.props.modelsConfig);
   }
 
   onCanvasResize() {
@@ -56,5 +61,23 @@ class ThreeContainer extends Component {
     );
   }
 }
+
+ThreeContainer.propTypes = {
+  store: PropTypes.instanceOf(ModelsStore),
+  modelsConfig: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      configs: PropTypes.arrayOf(
+        PropTypes.shape({
+          position: PropTypes.shape({
+            x: PropTypes.number,
+            z: PropTypes.number,
+          }),
+          rotation: PropTypes.number,
+        })
+      ),
+    })
+  ),
+};
 
 export { ThreeContainer };

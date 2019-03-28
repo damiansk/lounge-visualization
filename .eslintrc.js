@@ -23,6 +23,7 @@ module.exports = {
     'one-var-declaration-per-line': ['error', 'initializations'],
     'linebreak-style': ["error", "windows"],
     "import/prefer-default-export": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "off"
   },
 };
