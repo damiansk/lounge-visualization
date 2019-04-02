@@ -20,7 +20,7 @@ class BookcaseFactory {
     return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.125, 0.125, 0.125);
+        obj.scale.set(0.15, 0.125, 0.125);
         obj.rotateX(-90 * TMath.DEG2RAD);
         obj.castShadow = true;
         obj.name = 'Bookcase';

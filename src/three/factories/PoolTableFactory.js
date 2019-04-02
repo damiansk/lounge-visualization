@@ -19,7 +19,7 @@ class PoolTableFactory {
     return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.011, 0.011, 0.011);
+        obj.scale.set(0.016, 0.016, 0.016);
         obj.castShadow = true;
         obj.name = 'Pool table';
         return obj;
