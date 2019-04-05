@@ -14,9 +14,13 @@ class ModelsListItem extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isHovered: false
+    };
+  }
 
-    props.model
+  componentDidMount() {
+    this.props.model
       .subscribeForChanges$()
       .subscribe(({ isHovered }) => this.setState({ isHovered }));
   }
