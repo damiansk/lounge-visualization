@@ -1,5 +1,16 @@
 /* eslint-disable */
-import * as THREE from 'three';
+import {
+  LoaderUtils,
+  FileLoader,
+  FrontSide,
+  RepeatWrapping,
+  Color,
+  MeshPhongMaterial,
+  Vector2,
+  Loader,
+  DefaultLoadingManager,
+  TextureLoader,
+} from 'three';
 
 /**
  * Loads a Wavefront .mtl file specifying materials
@@ -8,7 +19,7 @@ import * as THREE from 'three';
  */
 
 var MTLLoader = function(manager) {
-  this.manager = manager !== undefined ? manager : THREE.DefaultLoadingManager;
+  this.manager = manager !== undefined ? manager : DefaultLoadingManager;
 };
 
 MTLLoader.prototype = {
@@ -32,10 +43,10 @@ MTLLoader.prototype = {
 
     var path =
       this.path === undefined
-        ? THREE.LoaderUtils.extractUrlBase(url)
+        ? LoaderUtils.extractUrlBase(url)
         : this.path;
 
-    var loader = new THREE.FileLoader(this.manager);
+    var loader = new FileLoader(this.manager);
     loader.setPath(this.path);
     loader.load(
       url,
@@ -163,9 +174,9 @@ MTLLoader.prototype = {
  * @param baseUrl - Url relative to which textures are loaded
  * @param options - Set of options on how to construct the materials
  *                  side: Which side to apply the material
- *                        THREE.FrontSide (default), THREE.BackSide, THREE.DoubleSide
+ *                        FrontSide (default), BackSide, DoubleSide
  *                  wrap: What type of wrapping to apply for textures
- *                        THREE.RepeatWrapping (default), THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping
+ *                        RepeatWrapping (default), ClampToEdgeWrapping, MirroredRepeatWrapping
  *                  normalizeRGB: RGBs need to be normalized to 0-1 from 0-255
  *                                Default: false, assumed to be already normalized
  *                  ignoreZeroRGBs: Ignore values of RGBs (Ka,Kd,Ks) that are all 0's
@@ -182,11 +193,11 @@ MTLLoader.MaterialCreator = function(baseUrl, options) {
   this.nameLookup = {};
 
   this.side =
-    this.options && this.options.side ? this.options.side : THREE.FrontSide;
+    this.options && this.options.side ? this.options.side : FrontSide;
   this.wrap =
     this.options && this.options.wrap
       ? this.options.wrap
-      : THREE.RepeatWrapping;
+      : RepeatWrapping;
 };
 
 MTLLoader.MaterialCreator.prototype = {
@@ -338,13 +349,13 @@ MTLLoader.MaterialCreator.prototype = {
         case 'kd':
           // Diffuse color (color under white light) using RGB values
 
-          params.color = new THREE.Color().fromArray(value);
+          params.color = new Color().fromArray(value);
 
           break;
 
         case 'ks':
           // Specular color (color when light is reflected from shiny surface) using RGB values
-          params.specular = new THREE.Color().fromArray(value);
+          params.specular = new Color().fromArray(value);
 
           break;
 
@@ -418,14 +429,14 @@ MTLLoader.MaterialCreator.prototype = {
       }
     }
 
-    this.materials[materialName] = new THREE.MeshPhongMaterial(params);
+    this.materials[materialName] = new MeshPhongMaterial(params);
     return this.materials[materialName];
   },
 
   getTextureParams: function(value, matParams) {
     var texParams = {
-      scale: new THREE.Vector2(1, 1),
-      offset: new THREE.Vector2(0, 0),
+      scale: new Vector2(1, 1),
+      offset: new Vector2(0, 0),
     };
 
     var items = value.split(/\s+/);
@@ -464,12 +475,12 @@ MTLLoader.MaterialCreator.prototype = {
 
   loadTexture: function(url, mapping, onLoad, onProgress, onError) {
     var texture;
-    var loader = THREE.Loader.Handlers.get(url);
+    var loader = Loader.Handlers.get(url);
     var manager =
-      this.manager !== undefined ? this.manager : THREE.DefaultLoadingManager;
+      this.manager !== undefined ? this.manager : DefaultLoadingManager;
 
     if (loader === null) {
-      loader = new THREE.TextureLoader(manager);
+      loader = new TextureLoader(manager);
     }
 
     if (loader.setCrossOrigin) loader.setCrossOrigin(this.crossOrigin);

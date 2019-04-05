@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { ObjectLoader } from 'three';
 import { bindCallback } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { OBJLoader } from '../libs/obj-loader';
@@ -39,7 +39,7 @@ class LoaderService {
   }
 
   loadJSON$(fileName) {
-    const objectLoader = new THREE.ObjectLoader(this.loadingManager);
+    const objectLoader = new ObjectLoader(this.loadingManager);
     const file = `${basePath}${fileName}.json`;
 
     return bindCallback(objectLoader.load.bind(objectLoader))(file);
