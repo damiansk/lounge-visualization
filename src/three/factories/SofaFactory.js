@@ -19,7 +19,7 @@ class SofaFactory {
     return this.loaderService.loadOBJ$(fileName).pipe(
       map(findRoot),
       map(obj => {
-        obj.scale.set(0.01, 0.01, 0.01);
+        obj.scale.set(0.020, 0.012, 0.012);
         obj.castShadow = true;
         obj.name = 'Sofa';
         return obj;
