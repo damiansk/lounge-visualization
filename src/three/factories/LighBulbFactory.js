@@ -1,6 +1,6 @@
 import { of, from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SphereGeometry, MeshBasicMaterial, Mesh, PointLight } from 'three';
+import { PointLight } from 'three';
 import { applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { LightBulb } from '../primitives';
@@ -15,16 +15,9 @@ class LightBulbFactory {
   }
 
   createLightBulb$(config) {
-    // TODO Refactor - better way to attach sphere with light
     const light = new PointLight('#ccffcc');
     light.distance = 15;
     light.castShadow = true;
-
-    const geometry = new SphereGeometry(.5, 20, 20);
-    const material = new MeshBasicMaterial({ color: 0xffffff });
-    const bulb = new Mesh(geometry, material);
-
-    // light.add(bulb);
 
     return of(light).pipe(
       map(applyConfig(config)),

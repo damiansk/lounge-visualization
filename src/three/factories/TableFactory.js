@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
-import { fixPosition, findRoot, applyConfig } from './utils';
+import { map, shareReplay } from 'rxjs/operators';
+import { findRoot, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
