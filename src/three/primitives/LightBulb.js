@@ -10,9 +10,6 @@ class LightBulb extends BaseModel {
   }
 
   setLight(lightStatus) {
-    this.mesh.children.forEach(child => {
-      child.visible = lightStatus;
-    });
     this.mesh.intensity = Number(lightStatus);
   }
 }
