@@ -8,6 +8,13 @@ class CameraControlsService {
     controls = new OrbitControls(camera, domElement);
 
     controls.enabled = true;
+
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.4;
+    
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.4;
+
     controls.minDistance = 10;
     controls.maxDistance = 30;
     controls.minPolarAngle = 0;
@@ -23,6 +30,10 @@ class CameraControlsService {
 
   static enable() {
     controls.enabled = true;
+  }
+
+  static update() {
+    controls.update();
   }
 }
 
