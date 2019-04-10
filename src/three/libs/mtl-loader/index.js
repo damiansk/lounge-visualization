@@ -42,9 +42,7 @@ MTLLoader.prototype = {
     var scope = this;
 
     var path =
-      this.path === undefined
-        ? LoaderUtils.extractUrlBase(url)
-        : this.path;
+      this.path === undefined ? LoaderUtils.extractUrlBase(url) : this.path;
 
     var loader = new FileLoader(this.manager);
     loader.setPath(this.path);
@@ -192,12 +190,9 @@ MTLLoader.MaterialCreator = function(baseUrl, options) {
   this.materialsArray = [];
   this.nameLookup = {};
 
-  this.side =
-    this.options && this.options.side ? this.options.side : FrontSide;
+  this.side = this.options && this.options.side ? this.options.side : FrontSide;
   this.wrap =
-    this.options && this.options.wrap
-      ? this.options.wrap
-      : RepeatWrapping;
+    this.options && this.options.wrap ? this.options.wrap : RepeatWrapping;
 };
 
 MTLLoader.MaterialCreator.prototype = {

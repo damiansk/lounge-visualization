@@ -15,7 +15,7 @@ class ModelsListItem extends Component {
     super(props);
 
     this.state = {
-      isHovered: false
+      isHovered: false,
     };
   }
 

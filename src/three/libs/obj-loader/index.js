@@ -315,8 +315,7 @@ var OBJLoader = (function() {
   //
 
   function OBJLoader(manager) {
-    this.manager =
-      manager !== undefined ? manager : DefaultLoadingManager;
+    this.manager = manager !== undefined ? manager : DefaultLoadingManager;
 
     this.materials = null;
   }
@@ -635,9 +634,7 @@ var OBJLoader = (function() {
           }
 
           material.flatShading = sourceMaterial.smooth ? false : true;
-          material.vertexColors = hasVertexColors
-            ? VertexColors
-            : NoColors;
+          material.vertexColors = hasVertexColors ? VertexColors : NoColors;
 
           createdMaterials.push(material);
         }

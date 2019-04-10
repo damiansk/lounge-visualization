@@ -29,14 +29,16 @@ class TableFactory {
         map(obj => {
           const clonedObj = obj.clone();
 
-          if(clonedObj.material) {
-            if(Array.isArray(clonedObj.material)) {
-              clonedObj.material = clonedObj.material.map(material => material.clone());
+          if (clonedObj.material) {
+            if (Array.isArray(clonedObj.material)) {
+              clonedObj.material = clonedObj.material.map(material =>
+                material.clone()
+              );
             } else {
               clonedObj.material = clonedObj.material.clone();
             }
           }
-          
+
           return clonedObj;
         })
       );

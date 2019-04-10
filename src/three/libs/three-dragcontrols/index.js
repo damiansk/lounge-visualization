@@ -188,13 +188,10 @@ const DragControls = function(_objects, _camera, _domElement) {
 
     if (intersects.length > 0) {
       _selected = intersects[0].object;
-      
+
       var touchPoint = intersects[0].point;
 
-      _plane.setFromNormalAndCoplanarPoint(
-        new Vector3(0, 1, 0),
-        touchPoint
-      );
+      _plane.setFromNormalAndCoplanarPoint(new Vector3(0, 1, 0), touchPoint);
 
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
         _inverseMatrix.getInverse(_selected.parent.matrixWorld);
