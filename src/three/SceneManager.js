@@ -7,6 +7,11 @@ import {
   LoadingManager,
   DirectionalLight,
   PCFSoftShadowMap,
+  SphereGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  CircleGeometry,
+  Math as TMath,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -58,7 +63,7 @@ class SceneManager {
     this.camera.lookAt(0, 0, 0);
     this.renderer.setPixelRatio(DPR);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
-    this.scene.background = new Color('#020345');
+    this.scene.background = new Color('#010113');
 
     CameraControlsService.init(this.camera, this.renderer.domElement);
     this.interactionService = new InteractionService(
@@ -106,6 +111,17 @@ class SceneManager {
       this.scene.add(model);
     });
 
+    const sphereGeometry = new SphereGeometry(60, 36, 20, 0, 6.3, 0, 1.6);
+    const shpereMaterial = new MeshBasicMaterial({wireframe: true, side: 1, color: 0xee9a00})
+    const sphere = new Mesh(sphereGeometry, shpereMaterial);
+    sphere.name = 'Sphere';
+    const planeGeometry = new CircleGeometry(60, 60);
+    const planeMaterial = new MeshBasicMaterial({wireframe: true, color: 0xee9a00});
+    const plane = new Mesh(planeGeometry, planeMaterial);
+    plane.rotateX(-90 * TMath.DEG2RAD);
+    plane.position.y = -0.1;
+    plane.name = 'Plane';
+    this.scene.add(plane, sphere);
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
