@@ -11,6 +11,8 @@ import {
   MeshBasicMaterial,
   Mesh,
   CircleGeometry,
+  PlaneBufferGeometry,
+  GridHelper,
   Math as TMath,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
@@ -70,7 +72,8 @@ class SceneManager {
       this.camera,
       this.renderer
     );
-
+    // for inspector.
+    window.scene = this.scene
     this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
@@ -110,18 +113,26 @@ class SceneManager {
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });
-
-    const sphereGeometry = new SphereGeometry(60, 36, 20, 0, 6.3, 0, 1.6);
+    /* -------- Sphere -------- */
+    // option 1 sphere
+    const sphereGeometry = new SphereGeometry(60, 36, 20, 0, 6.3, 0, (Math.PI/2));
     const shpereMaterial = new MeshBasicMaterial({wireframe: true, side: 1, color: 0xee9a00})
     const sphere = new Mesh(sphereGeometry, shpereMaterial);
     sphere.name = 'Sphere';
-    const planeGeometry = new CircleGeometry(60, 60);
+    const planeGeometry = new CircleGeometry(60, 36);
     const planeMaterial = new MeshBasicMaterial({wireframe: true, color: 0xee9a00});
     const plane = new Mesh(planeGeometry, planeMaterial);
     plane.rotateX(-90 * TMath.DEG2RAD);
     plane.position.y = -0.1;
     plane.name = 'Plane';
-    this.scene.add(plane, sphere);
+    // option 2 - grid.
+    const size = 60;
+    const divisions = 16;
+    const gridHelper = new GridHelper(size, divisions, 0xee9a00, 0xee9a00);
+    gridHelper.position.y = -0.1;
+    /* -------- end -------- */
+    this.scene.add( gridHelper );
+    // this.scene.add(plane, sphere);
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
