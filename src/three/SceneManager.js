@@ -12,6 +12,7 @@ import {
   Mesh,
   CircleGeometry,
   PlaneBufferGeometry,
+  TextureLoader,
   GridHelper,
   Math as TMath,
 } from 'three';
@@ -130,8 +131,21 @@ class SceneManager {
     const divisions = 16;
     const gridHelper = new GridHelper(size, divisions, 0xee9a00, 0xee9a00);
     gridHelper.position.y = -0.1;
+    // option 3 picture sphere
+    const textureLoader = new TextureLoader();
+    textureLoader.load('assets/panorama.jpg', (texture) => {
+      const geometry =  new SphereGeometry(60, 36, 20);
+      const material = new MeshBasicMaterial({
+        map: texture,
+        side: 2
+      })
+      geometry.scale( -1, 1, 1 );
+      const mesh = new Mesh( geometry, material );
+      this.scene.add( mesh );
+      mesh.position.set( 0, 0, 0 )
+    })
     /* -------- end -------- */
-    this.scene.add( gridHelper );
+    // this.scene.add( gridHelper );
     // this.scene.add(plane, sphere);
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
