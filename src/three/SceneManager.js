@@ -10,11 +10,7 @@ import {
   SphereGeometry,
   MeshBasicMaterial,
   Mesh,
-  CircleGeometry,
-  PlaneBufferGeometry,
   TextureLoader,
-  GridHelper,
-  Math as TMath,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -114,27 +110,9 @@ class SceneManager {
       this.interactionService.registerInterationScope(model);
       this.scene.add(model);
     });
-    /* -------- Sphere -------- */
-    // option 1 sphere
-    const sphereGeometry = new SphereGeometry(60, 36, 20, 0, 6.3, 0, (Math.PI/2));
-    const shpereMaterial = new MeshBasicMaterial({wireframe: true, side: 1, color: 0xee9a00})
-    const sphere = new Mesh(sphereGeometry, shpereMaterial);
-    sphere.name = 'Sphere';
-    const planeGeometry = new CircleGeometry(60, 36);
-    const planeMaterial = new MeshBasicMaterial({wireframe: true, color: 0xee9a00});
-    const plane = new Mesh(planeGeometry, planeMaterial);
-    plane.rotateX(-90 * TMath.DEG2RAD);
-    plane.position.y = -0.1;
-    plane.name = 'Plane';
-    // option 2 - grid.
-    const size = 60;
-    const divisions = 16;
-    const gridHelper = new GridHelper(size, divisions, 0xee9a00, 0xee9a00);
-    gridHelper.position.y = -0.1;
-    // option 3 picture sphere
     const textureLoader = new TextureLoader();
     textureLoader.load('assets/panorama.jpg', (texture) => {
-      const geometry =  new SphereGeometry(60, 36, 20);
+      const geometry =  new SphereGeometry(31, 36, 20);
       const material = new MeshBasicMaterial({
         map: texture,
         side: 2
@@ -144,9 +122,6 @@ class SceneManager {
       this.scene.add( mesh );
       mesh.position.set( 0, 0, 0 )
     })
-    /* -------- end -------- */
-    // this.scene.add( gridHelper );
-    // this.scene.add(plane, sphere);
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
