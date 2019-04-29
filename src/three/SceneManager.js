@@ -69,8 +69,6 @@ class SceneManager {
       this.camera,
       this.renderer
     );
-    // for inspector.
-    window.scene = this.scene
     this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
@@ -111,17 +109,17 @@ class SceneManager {
       this.scene.add(model);
     });
     const textureLoader = new TextureLoader();
-    textureLoader.load('assets/panorama.jpg', (texture) => {
-      const geometry =  new SphereGeometry(31, 36, 20);
+    textureLoader.load('assets/panorama.jpg', texture => {
+      const geometry = new SphereGeometry(31, 36, 20);
       const material = new MeshBasicMaterial({
         map: texture,
-        side: 2
-      })
-      geometry.scale( -1, 1, 1 );
-      const mesh = new Mesh( geometry, material );
-      this.scene.add( mesh );
-      mesh.position.set( 0, 0, 0 )
-    })
+        side: 2,
+      });
+      geometry.scale(-1, 1, 1);
+      const mesh = new Mesh(geometry, material);
+      this.scene.add(mesh);
+      mesh.position.set(0, 0, 0);
+    });
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);
