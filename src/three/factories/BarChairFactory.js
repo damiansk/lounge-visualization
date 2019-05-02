@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { findRoot, fixPosition, applyConfig } from './utils';
+import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarChair } from '../primitives';
 
-const fileName = 'bar_chair';
+const fileName = 'test.gltf';
 
 class BarChairFactory {
   constructor(loadingManager) {
@@ -18,15 +18,15 @@ class BarChairFactory {
 
   loadBarChair$() {
     if (!this.loadingBarChairCache$) {
-      this.loadingBarChairCache$ = this.loaderService.loadOBJ$(fileName).pipe(
-        map(findRoot),
-        map(obj => {
-          obj.scale.set(0.23, 0.23, 0.23);
-          obj.castShadow = true;
-          obj.name = 'Bar chair';
-          return obj;
+      this.loadingBarChairCache$ = this.loaderService.loadGLTF$(fileName).pipe(
+        map(findFirstMesh),
+        map(mesh => {
+          mesh.scale.set(0.23, 0.23, 0.23);
+          mesh.castShadow = true;
+          mesh.name = 'Bar chair';
+          return mesh;
         }),
-        map(fixPosition),
+        // map(fixPosition),
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();

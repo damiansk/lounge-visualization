@@ -4,7 +4,8 @@ import { findRoot, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
-const fileName = 'table_v3';
+// const fileName = 'table_v3';
+const fileName = 'test2.glb';
 
 class TableFactory {
   constructor(loadingManager) {
@@ -18,7 +19,7 @@ class TableFactory {
 
   loadTable$() {
     if (!this.loadingTable$) {
-      this.loadingTable$ = this.loaderService.loadOBJ$(fileName).pipe(
+      this.loadingTable$ = this.loaderService.loadGLTF$(fileName).pipe(
         map(findRoot),
         map(obj => {
           obj.castShadow = true;

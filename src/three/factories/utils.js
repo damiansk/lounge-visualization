@@ -12,6 +12,9 @@ const findRoot = model => {
   return mesh;
 };
 
+const findFirstMesh = obj =>
+  obj.scene.getObjectByProperty('type', 'Mesh');
+
 const fixPosition = mesh => {
   const boundingBox = new Box3().setFromObject(mesh);
   mesh.position.y = Math.abs(boundingBox.min.y);
@@ -33,4 +36,4 @@ const applyConfig = config => mesh => {
   return mesh;
 };
 
-export { findRoot, fixPosition, applyConfig };
+export { findRoot, fixPosition, applyConfig, findFirstMesh };
