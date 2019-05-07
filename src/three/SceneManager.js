@@ -11,6 +11,7 @@ import {
   MeshBasicMaterial,
   Mesh,
   TextureLoader,
+  FrontSide,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -113,7 +114,7 @@ class SceneManager {
       const geometry = new SphereGeometry(31, 36, 20);
       const material = new MeshBasicMaterial({
         map: texture,
-        side: 2,
+        side: FrontSide,
       });
       geometry.scale(-1, 1, 1);
       const mesh = new Mesh(geometry, material);
