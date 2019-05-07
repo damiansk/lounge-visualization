@@ -8,10 +8,8 @@ import { GLTFLoader } from '../libs/gltf-loader';
 
 const basePath = 'assets/';
 
-
-// DRACOLoader.setDecoderPath('decoder/');
-DRACOLoader.setDecoderConfig({ type: 'js' });
-// DRACOLoader.getDecoderModule();
+DRACOLoader.setDecoderPath('decoder/');
+DRACOLoader.getDecoderModule();
 
 class LoaderService {
   constructor(loadingManager) {

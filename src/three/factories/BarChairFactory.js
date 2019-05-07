@@ -4,7 +4,7 @@ import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarChair } from '../primitives';
 
-const fileName = 'test.gltf';
+const fileName = 'test3.gltf';
 
 class BarChairFactory {
   constructor(loadingManager) {
@@ -21,7 +21,7 @@ class BarChairFactory {
       this.loadingBarChairCache$ = this.loaderService.loadGLTF$(fileName).pipe(
         map(findFirstMesh),
         map(mesh => {
-          mesh.scale.set(0.23, 0.23, 0.23);
+          // mesh.scale.set(0.23, 0.23, 0.23);
           mesh.castShadow = true;
           mesh.name = 'Bar chair';
           return mesh;

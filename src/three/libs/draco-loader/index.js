@@ -29,8 +29,6 @@ import {
 // limitations under the License.
 //
 
-let DracoDecoderModule;
-
 /**
  * @param {LoadingManager} manager
  */
@@ -449,7 +447,7 @@ DRACOLoader.setDecoderConfig = function ( config ) {
 };
 
 /**
- * Releases the singleton DracoDecoderModule instance. Module will be recreated
+ * Releases the singleton window.DracoDecoderModule instance. Module will be recreated
  * with the next decoding call.
  */
 DRACOLoader.releaseDecoderModule = function () {
@@ -457,10 +455,10 @@ DRACOLoader.releaseDecoderModule = function () {
 };
 
 /**
- * Gets WebAssembly or asm.js singleton instance of DracoDecoderModule
+ * Gets WebAssembly or asm.js singleton instance of window.DracoDecoderModule
  * after testing for browser support. Returns Promise that resolves when
  * module is available.
- * @return {Promise<{decoder: DracoDecoderModule}>}
+ * @return {Promise<{decoder: window.DracoDecoderModule}>}
  */
 DRACOLoader.getDecoderModule = function () {
   var scope = this;
@@ -471,7 +469,7 @@ DRACOLoader.getDecoderModule = function () {
   if ( promise ) return promise;
 
   // Load source files.
-  if ( typeof DracoDecoderModule !== 'undefined' ) {
+  if ( typeof window.DracoDecoderModule !== 'undefined' ) {
     // Loaded externally.
     promise = Promise.resolve();
   } else if ( typeof WebAssembly !== 'object' || config.type === 'js' ) {
@@ -497,7 +495,7 @@ DRACOLoader.getDecoderModule = function () {
         // Module is Promise-like. Wrap before resolving to avoid loop.
         resolve( { decoder: decoder } );
       };
-      DracoDecoderModule( config );
+      window.DracoDecoderModule( config );
     } );
   } );
 
