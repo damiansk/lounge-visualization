@@ -75,6 +75,7 @@ class SceneManager {
   }
 
   update() {
+    CameraControlsService.update();
     this.renderer.render(this.scene, this.camera);
   }
 
