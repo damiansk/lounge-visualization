@@ -4,7 +4,7 @@ import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarChair } from '../primitives';
 
-const fileName = 'test3.gltf';
+const fileName = 'bar_chair.gltf';
 
 class BarChairFactory {
   constructor(loadingManager) {
@@ -21,12 +21,10 @@ class BarChairFactory {
       this.loadingBarChairCache$ = this.loaderService.loadGLTF$(fileName).pipe(
         map(findFirstMesh),
         map(mesh => {
-          // mesh.scale.set(0.23, 0.23, 0.23);
           mesh.castShadow = true;
           mesh.name = 'Bar chair';
           return mesh;
         }),
-        // map(fixPosition),
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();
