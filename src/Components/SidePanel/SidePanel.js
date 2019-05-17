@@ -6,7 +6,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsList } from '../ModelsList';
-import { JSONExportButton } from '../JSONExportButton';
+import { JSONExportControls } from '../JSONExportControls';
 import { JSONImportControls } from '../JSONImportControls';
 import { styles } from './styles';
 
@@ -35,7 +35,7 @@ const DrawerPanel = ({
     </div>
     <Divider />
     <List>
-      <JSONExportButton handleExportButtonClick={handleExportButtonClick} />
+      <JSONExportControls handleExportButtonClick={handleExportButtonClick} />
       <JSONImportControls loadModelsConfig={loadModelsConfig} />
     </List>
     <Divider />
