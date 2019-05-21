@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import { ModelsStore } from '../../three/store/ModelsStore';
-import { ModelsListItem } from './ModelsListItem/ModelsListItem';
+import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
 
 class ModelsList extends React.Component {
   constructor(props) {
@@ -12,7 +9,6 @@ class ModelsList extends React.Component {
 
     this.state = {
       models: props.store.getModels(),
-      open: false
     };
   }
 
@@ -25,10 +21,6 @@ class ModelsList extends React.Component {
   componentWillUnmount() {
     this.subscription.unsubscribe();
   }
-
-  handleClick = () => {
-    this.setState(state => ({ open: !state.open }));
-  };
 
   render() {
     const modelGroups = this.state.models.reduce((acc, model) => {
@@ -43,26 +35,15 @@ class ModelsList extends React.Component {
 
     return (
       <>
-        {Object.keys(modelGroups).map((modelName, i) => (
-          <>
-            <ListItem button onClick={this.handleClick}>
-              <ListItemText primary={modelName} />
-              {this.state.open ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-              <List key={i} component="div" disablePadding>
-                {modelGroups[modelName].map((model, index) => (
-                  <ModelsListItem
-                    key={index}
-                    index={index}
-                    model={model}
-                    onRemove={this.props.store.remove}
-                  />
-                ))}
-              </List>
-            </Collapse>
-          </>
-        ))}
+        {Object.keys(modelGroups).map((modelName, i) => {
+          return (
+            <ModelsListGroup
+              key={modelName}
+              modelGroup={modelGroups[modelName]}
+              modelName={modelName}
+            />
+          );
+        })}
       </>
     );
   }
