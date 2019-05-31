@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
+import { StoreContext } from '../../storeContext';
 
 class ModelsList extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class ModelsList extends React.Component {
     this.subscription = this.props.store
       .getUpdateEvent$()
       .subscribe(models => this.setState({ models }));
+      console.log(this.context);
   }
 
   componentWillUnmount() {
@@ -53,5 +55,7 @@ class ModelsList extends React.Component {
 ModelsList.propTypes = {
   store: PropTypes.instanceOf(ModelsStore),
 };
+
+ModelsList.contextType = StoreContext;
 
 export { ModelsList };
