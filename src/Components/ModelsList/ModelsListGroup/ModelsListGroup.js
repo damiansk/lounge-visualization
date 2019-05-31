@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { ModelsListItem } from '../ModelsListItem/ModelsListItem';
 
-const ModelsListGroup = ({ modelGroup, modelName }) => {
+const ModelsListGroup = ({ modelGroup, modelName, onRemove }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -21,7 +20,7 @@ const ModelsListGroup = ({ modelGroup, modelName }) => {
               key={index}
               index={index}
               model={model}
-              // onRemove={this.props.store.remove}
+              onRemove={onRemove}
             />
           ))}
         </List>

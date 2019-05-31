@@ -41,6 +41,7 @@ class ModelsList extends React.Component {
               key={modelName}
               modelGroup={modelGroups[modelName]}
               modelName={modelName}
+              onRemove={this.props.store.remove}
             />
           );
         })}
