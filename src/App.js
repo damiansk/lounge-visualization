@@ -54,23 +54,23 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-          <SidePanel
-            handleDrawerClose={this.handleDrawerClose}
-            open={open}
-            handleExportButtonClick={this.handleExportButtonClick}
-            loadModelsConfig={this.loadModelsConfig}
+        <SidePanel
+          handleDrawerClose={this.handleDrawerClose}
+          open={open}
+          handleExportButtonClick={this.handleExportButtonClick}
+          loadModelsConfig={this.loadModelsConfig}
+        />
+        <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.appBarSpacer} />
+          <ThreeContainer
+            store={this.context}
+            modelsConfig={this.state.modelsConfig}
           />
-          <main
-            className={classNames(classes.content, {
-              [classes.contentShift]: open,
-            })}
-          >
-            <div className={classes.appBarSpacer} />
-            <ThreeContainer
-              store={this.context}
-              modelsConfig={this.state.modelsConfig}
-            />
-          </main>
+        </main>
       </div>
     );
   }
