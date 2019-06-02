@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import {  findFirstMesh, applyConfig } from './utils';
+import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Chair } from '../primitives';
 

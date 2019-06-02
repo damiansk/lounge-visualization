@@ -12,8 +12,7 @@ const findRoot = model => {
   return mesh;
 };
 
-const findFirstMesh = obj =>
-  obj.scene.getObjectByProperty('type', 'Mesh');
+const findFirstMesh = obj => obj.scene.getObjectByProperty('type', 'Mesh');
 
 const fixPosition = mesh => {
   const boundingBox = new Box3().setFromObject(mesh);
