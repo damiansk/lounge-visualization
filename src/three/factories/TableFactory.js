@@ -4,8 +4,7 @@ import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
-// const fileName = 'table_v3';
-const fileName = 'test2.glb';
+const fileName = 'table.gltf';
 
 class TableFactory {
   constructor(loadingManager) {
