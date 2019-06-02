@@ -6,7 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
-import { ModelsStore } from './three/store/ModelsStore';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
 import { models as modelsConfig } from './three/config/models.json';
@@ -20,8 +19,6 @@ class App extends React.Component {
       open: false,
       modelsConfig,
     };
-
-    this.modelsStore = new ModelsStore();
 
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -38,7 +35,7 @@ class App extends React.Component {
   }
 
   handleExportButtonClick() {
-    exportToJsonFile('models', this.modelsStore.createJson());
+    exportToJsonFile('models', this.context.createJson());
   }
 
   loadModelsConfig(config) {
@@ -57,11 +54,9 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <StoreContext.Provider value={this.modelsStore}>
           <SidePanel
             handleDrawerClose={this.handleDrawerClose}
             open={open}
-            store={this.modelsStore}
             handleExportButtonClick={this.handleExportButtonClick}
             loadModelsConfig={this.loadModelsConfig}
           />
@@ -72,11 +67,10 @@ class App extends React.Component {
           >
             <div className={classes.appBarSpacer} />
             <ThreeContainer
-              store={this.modelsStore}
+              store={this.context}
               modelsConfig={this.state.modelsConfig}
             />
           </main>
-        </StoreContext.Provider>
       </div>
     );
   }
@@ -86,5 +80,7 @@ App.propTypes = {
   classes: PropTypes.object,
   theme: PropTypes.object,
 };
+
+App.contextType = StoreContext;
 
 export default withStyles(styles, { withTheme: true })(App);
