@@ -5,19 +5,12 @@ import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
 import { StoreContext } from '../../storeContext';
 
 class ModelsList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      models: props.store.getModels(),
-    };
-  }
+  state = { models: this.context.getModels() };
 
   componentDidMount() {
-    this.subscription = this.props.store
+    this.subscription = this.context
       .getUpdateEvent$()
       .subscribe(models => this.setState({ models }));
-      console.log(this.context);
   }
 
   componentWillUnmount() {
@@ -43,7 +36,7 @@ class ModelsList extends React.Component {
               key={modelName}
               modelGroup={modelGroups[modelName]}
               modelName={modelName}
-              onRemove={this.props.store.remove}
+              onRemove={this.context.remove}
             />
           );
         })}
