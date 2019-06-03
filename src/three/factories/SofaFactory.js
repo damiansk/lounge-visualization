@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { findRoot, fixPosition, applyConfig } from './utils';
+import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Sofa } from '../primitives';
 
-const fileName = 'HSM0012';
+const fileName = 'sofa.gltf';
 
 class SofaFactory {
   constructor(loadingManager) {
@@ -16,15 +16,13 @@ class SofaFactory {
   }
 
   createSofa$(config) {
-    return this.loaderService.loadOBJ$(fileName).pipe(
-      map(findRoot),
+    return this.loaderService.loadGLTF$(fileName).pipe(
+      map(findFirstMesh),
       map(obj => {
-        obj.scale.set(0.02, 0.012, 0.012);
         obj.castShadow = true;
         obj.name = 'Sofa';
         return obj;
       }),
-      map(fixPosition),
       map(applyConfig(config)),
       map(obj => new Sofa(obj))
     );
