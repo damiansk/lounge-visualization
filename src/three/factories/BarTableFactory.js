@@ -35,7 +35,7 @@ class BarTableFactory {
           //       material.clone()
           //     );
           //   } else {
-              clonedObj.material = clonedObj.material.clone();
+          clonedObj.material = clonedObj.material.clone();
           //   }
           // }
 
