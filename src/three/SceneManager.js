@@ -98,12 +98,10 @@ class SceneManager {
   }
 
   initSceneSubjects() {
-    this.factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => {
-        mesh.receiveShadow = true;
-      });
-      this.interactionService.registerInterationScope(model);
-      this.scene.add(model);
+    this.factory.createFloor$().subscribe(mesh => {
+      mesh.receiveShadow = true;
+      this.interactionService.registerInterationScope(mesh);
+      this.scene.add(mesh);
     });
 
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
