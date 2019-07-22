@@ -1,7 +1,7 @@
 import { BaseModel } from './BaseModel';
 
 class Bookcase extends BaseModel {
-  isInteractive = true;
+  isInteractive = false;
 
   type = 'bookcase';
 }
