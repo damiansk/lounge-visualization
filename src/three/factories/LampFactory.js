@@ -1,12 +1,12 @@
-import { DoubleSide } from 'three';
+import { DoubleSide, Mesh } from 'three';
 import { from } from 'rxjs';
 import { map, tap, shareReplay } from 'rxjs/operators';
-import { applyConfig, findRoot } from './utils';
+import { applyConfig, findFirstMesh } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Lamp } from '../primitives';
 import { LightBulbFactory } from './LighBulbFactory';
 
-const fileName = 'lamp_v3';
+const fileName = 'lamp.gltf';
 
 class LampFactory {
   constructor(loadingManager) {
@@ -20,17 +20,29 @@ class LampFactory {
 
   loadLamp$() {
     if (!this.loadingLamp$) {
-      this.loadingLamp$ = this.loaderService.loadOBJ$(fileName).pipe(
-        map(findRoot),
+      this.loadingLamp$ = this.loaderService.loadGLTF$(fileName).pipe(
+        map(findFirstMesh),
         map(obj => {
-          obj.name = 'Lamp';
           obj.material.side = DoubleSide;
+          // obj.castShadow = true;
+          // obj.receiveShadow = false;
+          obj.name = 'Lamp';
           return obj;
         }),
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();
-          clonedObj.material = clonedObj.material.clone();
+
+          if (clonedObj.material) {
+            if (Array.isArray(clonedObj.material)) {
+              clonedObj.material = clonedObj.material.map(material =>
+                material.clone()
+              );
+            } else {
+              clonedObj.material = clonedObj.material.clone();
+            }
+          }
+
           return clonedObj;
         })
       );
