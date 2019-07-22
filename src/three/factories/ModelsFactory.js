@@ -63,9 +63,7 @@ class ModelsFactory {
   }
 
   createFloor$() {
-    return this.loaderService.loadGLTF$('floor.gltf').pipe(
-      map(findFirstMesh)
-    );
+    return this.loaderService.loadGLTF$('floor.gltf').pipe(map(findFirstMesh));
   }
 }
 

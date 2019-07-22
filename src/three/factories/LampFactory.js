@@ -1,4 +1,4 @@
-import { DoubleSide, Mesh } from 'three';
+import { DoubleSide } from 'three';
 import { from } from 'rxjs';
 import { map, tap, shareReplay } from 'rxjs/operators';
 import { applyConfig, findFirstMesh } from './utils';
@@ -24,8 +24,6 @@ class LampFactory {
         map(findFirstMesh),
         map(obj => {
           obj.material.side = DoubleSide;
-          // obj.castShadow = true;
-          // obj.receiveShadow = false;
           obj.name = 'Lamp';
           return obj;
         }),
