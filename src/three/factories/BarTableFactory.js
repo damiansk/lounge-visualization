@@ -28,17 +28,7 @@ class BarTableFactory {
         shareReplay(1),
         map(obj => {
           const clonedObj = obj.clone();
-
-          // if (clonedObj.material) {
-          //   if (Array.isArray(clonedObj.material)) {
-          //     clonedObj.material = clonedObj.material.map(material =>
-          //       material.clone()
-          //     );
-          //   } else {
           clonedObj.material = clonedObj.material.clone();
-          //   }
-          // }
-
           return clonedObj;
         })
       );
