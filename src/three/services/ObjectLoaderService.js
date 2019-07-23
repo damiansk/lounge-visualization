@@ -7,7 +7,6 @@ import { DRACOLoader } from '../libs/draco-loader';
 import { GLTFLoader } from '../libs/gltf-loader';
 
 const basePath = 'assets/';
-const basePath2 = 'assets/';
 
 DRACOLoader.setDecoderPath('decoder/');
 DRACOLoader.getDecoderModule();
@@ -47,7 +46,7 @@ class LoaderService {
   loadGLTF$(fileName) {
     const gltfLoader = new GLTFLoader(this.loadingManager);
     gltfLoader.setDRACOLoader(new DRACOLoader());
-    gltfLoader.setPath(basePath2);
+    gltfLoader.setPath(basePath);
 
     return bindCallback(gltfLoader.load.bind(gltfLoader))(fileName);
   }
