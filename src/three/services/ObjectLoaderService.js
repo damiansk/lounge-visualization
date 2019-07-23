@@ -3,8 +3,13 @@ import { bindCallback } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { OBJLoader } from '../libs/obj-loader';
 import { MTLLoader } from '../libs/mtl-loader';
+import { DRACOLoader } from '../libs/draco-loader';
+import { GLTFLoader } from '../libs/gltf-loader';
 
 const basePath = 'assets/';
+
+DRACOLoader.setDecoderPath('decoder/');
+DRACOLoader.getDecoderModule();
 
 class LoaderService {
   constructor(loadingManager) {
@@ -36,6 +41,14 @@ class LoaderService {
     const file = `${fileName}.mtl`;
 
     return bindCallback(mtlLoader.load.bind(mtlLoader))(file);
+  }
+
+  loadGLTF$(fileName) {
+    const gltfLoader = new GLTFLoader(this.loadingManager);
+    gltfLoader.setDRACOLoader(new DRACOLoader());
+    gltfLoader.setPath(basePath);
+
+    return bindCallback(gltfLoader.load.bind(gltfLoader))(fileName);
   }
 
   loadJSON$(fileName) {
