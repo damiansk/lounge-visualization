@@ -42,9 +42,9 @@ class ThreeContainer extends PureComponent {
     this.sceneManager.onWindowResize();
   }
 
-  renderFrame() {
+  renderFrame(time) {
     this.stats.begin();
-    this.sceneManager.update();
+    this.sceneManager.update(time);
     this.stats.end();
     window.requestAnimationFrame(this.renderFrame);
   }

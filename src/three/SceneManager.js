@@ -15,6 +15,7 @@ import {
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
+import { AnimationService } from './services/AnimationService';
 import { ModelsFactory } from './factories/ModelsFactory';
 
 const nearPlane = 0.1;
@@ -66,16 +67,19 @@ class SceneManager {
     this.scene.background = new Color('#010113');
 
     CameraControlsService.init(this.camera, this.renderer.domElement);
+    this.animationService = new AnimationService();
     this.interactionService = new InteractionService(
       this.camera,
-      this.renderer
+      this.renderer,
+      this.animationService
     );
     this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
 
-  update() {
+  update(time) {
     CameraControlsService.update();
+    this.animationService.update(time);
     this.renderer.render(this.scene, this.camera);
   }
 
