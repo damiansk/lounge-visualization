@@ -75,6 +75,7 @@ class SceneManager {
   }
 
   update() {
+    CameraControlsService.update();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -102,12 +103,10 @@ class SceneManager {
   }
 
   initSceneSubjects() {
-    this.factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => {
-        mesh.receiveShadow = true;
-      });
-      this.interactionService.registerInterationScope(model);
-      this.scene.add(model);
+    this.factory.createFloor$().subscribe(mesh => {
+      mesh.receiveShadow = true;
+      this.interactionService.registerInterationScope(mesh);
+      this.scene.add(mesh);
     });
     const textureLoader = new TextureLoader();
     textureLoader.load('assets/panorama.jpg', texture => {

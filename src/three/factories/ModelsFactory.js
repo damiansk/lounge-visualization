@@ -1,6 +1,7 @@
 import { from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { findFirstMesh } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
   ChairFactory,
@@ -62,12 +63,7 @@ class ModelsFactory {
   }
 
   createFloor$() {
-    return this.loaderService.loadOBJ$('floor').pipe(
-      map(obj => {
-        obj.scale.set(3.5, 3.5, 3.5);
-        return obj;
-      })
-    );
+    return this.loaderService.loadGLTF$('floor.gltf').pipe(map(findFirstMesh));
   }
 }
 

@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { findRoot, fixPosition, applyConfig } from './utils';
+import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { PoolTable } from '../primitives';
 
-const fileName = 'pool_table';
+const fileName = 'pool_table.gltf';
 
 class PoolTableFactory {
   constructor(loadingManager) {
@@ -16,15 +16,13 @@ class PoolTableFactory {
   }
 
   createPoolTable$(config) {
-    return this.loaderService.loadOBJ$(fileName).pipe(
-      map(findRoot),
+    return this.loaderService.loadGLTF$(fileName).pipe(
+      map(findFirstMesh),
       map(obj => {
-        obj.scale.set(0.016, 0.016, 0.016);
         obj.castShadow = true;
         obj.name = 'Pool table';
         return obj;
       }),
-      map(fixPosition),
       map(applyConfig(config)),
       map(obj => new PoolTable(obj))
     );
