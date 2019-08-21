@@ -1,19 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
 import { StoreContext } from '../../storeContext';
 
 const ModelsList = () => {
   const { models, remove } = useContext(StoreContext);
 
-  const modelGroups = models.reduce((acc, model) => {
-    const modelName = model.getName();
-    if (!acc[modelName]) {
-      acc[modelName] = [];
-    }
-
-    acc[modelName].push(model);
-    return acc;
-  }, {});
+  const modelGroups = useMemo(
+    () =>
+      models.reduce((acc, model) => {
+        const modelName = model.getName();
+        if (!acc[modelName]) {
+          acc[modelName] = [];
+        }
+        acc[modelName].push(model);
+        return acc;
+      }, {}),
+    [models]
+  );
 
   return (
     <>

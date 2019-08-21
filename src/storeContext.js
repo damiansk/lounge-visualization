@@ -8,7 +8,10 @@ const store = new ModelsStore();
 const StoreContextProvider = ({ children }) => {
   const [models, setModels] = useState([]);
   useEffect(() => {
-    const subscription = store.getUpdateEvent$().subscribe(setModels);
+    // TODO: refactor getUpdateEvent$, should return new array?
+    const subscription = store
+      .getUpdateEvent$()
+      .subscribe(mod => setModels([...mod]));
     return () => {
       subscription.unsubscribe();
     };
