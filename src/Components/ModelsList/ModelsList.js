@@ -1,48 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
 import { StoreContext } from '../../storeContext';
 
-class ModelsList extends React.Component {
-  state = { models: this.context.getModels() };
+const ModelsList = () => {
+  const { models, remove } = useContext(StoreContext);
 
-  componentDidMount() {
-    this.subscription = this.context
-      .getUpdateEvent$()
-      .subscribe(models => this.setState({ models }));
-  }
+  const modelGroups = models.reduce((acc, model) => {
+    const modelName = model.getName();
+    if (!acc[modelName]) {
+      acc[modelName] = [];
+    }
 
-  componentWillUnmount() {
-    this.subscription.unsubscribe();
-  }
+    acc[modelName].push(model);
+    return acc;
+  }, {});
 
-  render() {
-    const modelGroups = this.state.models.reduce((acc, model) => {
-      const modelName = model.getName();
-      if (!acc[modelName]) {
-        acc[modelName] = [];
-      }
-
-      acc[modelName].push(model);
-      return acc;
-    }, {});
-
-    return (
-      <>
-        {Object.keys(modelGroups).map((modelName, i) => {
-          return (
-            <ModelsListGroup
-              key={modelName}
-              modelGroup={modelGroups[modelName]}
-              modelName={modelName}
-              onRemove={this.context.remove}
-            />
-          );
-        })}
-      </>
-    );
-  }
-}
-
-ModelsList.contextType = StoreContext;
+  return (
+    <>
+      {Object.keys(modelGroups).map((modelName, i) => {
+        return (
+          <ModelsListGroup
+            key={modelName}
+            modelGroup={modelGroups[modelName]}
+            modelName={modelName}
+            onRemove={remove}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 export { ModelsList };

@@ -9,7 +9,7 @@ import { SidePanel } from './Components/SidePanel';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
 import { models as modelsConfig } from './three/config/models.json';
-import { StoreContext } from './storeContext';
+import { StoreContextProvider } from './storeContext';
 
 class App extends React.Component {
   constructor(props) {
@@ -54,23 +54,22 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <SidePanel
-          handleDrawerClose={this.handleDrawerClose}
-          open={open}
-          handleExportButtonClick={this.handleExportButtonClick}
-          loadModelsConfig={this.loadModelsConfig}
-        />
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.appBarSpacer} />
-          <ThreeContainer
-            store={this.context}
-            modelsConfig={this.state.modelsConfig}
+        <StoreContextProvider>
+          <SidePanel
+            handleDrawerClose={this.handleDrawerClose}
+            open={open}
+            handleExportButtonClick={this.handleExportButtonClick}
+            loadModelsConfig={this.loadModelsConfig}
           />
-        </main>
+          <main
+            className={classNames(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            <div className={classes.appBarSpacer} />
+            <ThreeContainer modelsConfig={this.state.modelsConfig} />
+          </main>
+        </StoreContextProvider>
       </div>
     );
   }
@@ -80,7 +79,5 @@ App.propTypes = {
   classes: PropTypes.object,
   theme: PropTypes.object,
 };
-
-App.contextType = StoreContext;
 
 export default withStyles(styles, { withTheme: true })(App);
