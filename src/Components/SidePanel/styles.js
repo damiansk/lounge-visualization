@@ -7,6 +7,7 @@ export const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    height: 'auto',
   },
   drawerHeader: {
     display: 'flex',

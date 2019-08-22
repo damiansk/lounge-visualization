@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 
-const JSONExportButton = ({ handleExportButtonClick }) => (
+const JSONExportControls = ({ handleExportButtonClick }) => (
   <ListItem>
     <ListItemText primary="Save JSON" />
     <ListItemSecondaryAction>
@@ -19,8 +19,8 @@ const JSONExportButton = ({ handleExportButtonClick }) => (
   </ListItem>
 );
 
-JSONExportButton.propTypes = {
+JSONExportControls.propTypes = {
   handleExportButtonClick: PropTypes.func.isRequired,
 };
 
-export { JSONExportButton };
+export { JSONExportControls };
