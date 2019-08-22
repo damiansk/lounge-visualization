@@ -6,10 +6,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThreeContainer } from './Components/ThreeContainer';
 import { Header } from './Components/Header';
 import { SidePanel } from './Components/SidePanel';
-import { ModelsStore } from './three/store/ModelsStore';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
 import { models as modelsConfig } from './three/config/models.json';
+import { StoreContextProvider } from './storeContext';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,8 +19,6 @@ class App extends React.Component {
       open: false,
       modelsConfig,
     };
-
-    this.modelsStore = new ModelsStore();
 
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -37,7 +35,7 @@ class App extends React.Component {
   }
 
   handleExportButtonClick() {
-    exportToJsonFile('models', this.modelsStore.createJson());
+    exportToJsonFile('models', this.context.createJson());
   }
 
   loadModelsConfig(config) {
@@ -56,24 +54,22 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <SidePanel
-          handleDrawerClose={this.handleDrawerClose}
-          open={open}
-          store={this.modelsStore}
-          handleExportButtonClick={this.handleExportButtonClick}
-          loadModelsConfig={this.loadModelsConfig}
-        />
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.appBarSpacer} />
-          <ThreeContainer
-            store={this.modelsStore}
-            modelsConfig={this.state.modelsConfig}
+        <StoreContextProvider>
+          <SidePanel
+            handleDrawerClose={this.handleDrawerClose}
+            open={open}
+            handleExportButtonClick={this.handleExportButtonClick}
+            loadModelsConfig={this.loadModelsConfig}
           />
-        </main>
+          <main
+            className={classNames(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            <div className={classes.appBarSpacer} />
+            <ThreeContainer modelsConfig={this.state.modelsConfig} />
+          </main>
+        </StoreContextProvider>
       </div>
     );
   }
