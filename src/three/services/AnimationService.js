@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import { easeInOutCubic } from './utils/easing-functions';
 
-const animationTime = 10000;
+const animationTime = 1000;
 
 class AnimationService {
   constructor() {
