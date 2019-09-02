@@ -1,12 +1,7 @@
 import { Vector3 } from 'three';
+import { easeInOutCubic } from './utils/easing-functions';
 
-// Links:
-//  https://joshondesign.com/2013/03/01/improvedEasingEquations
-//  https://gist.github.com/gre/1650294
-const easeInOutCubic = t =>
-  t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-const easeInOutQuint = t =>
-  t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t;
+const animationTime = 10000;
 
 class AnimationService {
   constructor() {
@@ -15,35 +10,40 @@ class AnimationService {
 
     this.update = this.update.bind(this);
     this.animate = this.animate.bind(this);
+    this.updateAnimation = this.updateAnimation.bind(this);
   }
 
   update(time) {
     this.timeStamp = time;
-    this.animations.forEach(
-      (
-        { startTime, mesh, startPosition, directionalVector, endPosition },
-        index
-      ) => {
-        const percent = (time - startTime) / 1000;
-
-        if (percent <= 1) {
-          const { x, y, z } = startPosition
-            .clone()
-            .add(
-              directionalVector.clone().multiplyScalar(easeInOutCubic(percent))
-            );
-          mesh.position.set(x, y, z);
-        } else {
-          mesh.position.set(endPosition.x, endPosition.y, endPosition.z);
-          this.animations.splice(index, 1);
-        }
-      }
-    );
+    this.animations.forEach(this.updateAnimation);
   }
 
-  animate(mesh, endPosition) {
+  updateAnimation(animation, index) {
+    const {
+      mesh,
+      startTime,
+      startPosition,
+      displacementVector,
+      easingFunction,
+    } = animation;
+    const percent = (this.timeStamp - startTime) / animationTime;
+
+    if (percent < 1) {
+      const easedPercent = easingFunction(percent);
+      const displacement = displacementVector
+        .clone()
+        .multiplyScalar(easedPercent);
+      mesh.position.copy(displacement.add(startPosition));
+    } else {
+      mesh.position.copy(displacementVector.add(startPosition));
+      this.animations.splice(index, 1);
+    }
+  }
+
+  animate(mesh, endPosition, easingFunction = easeInOutCubic) {
+    const startTime = this.timeStamp;
     const startPosition = mesh.position.clone();
-    const directionalVector = new Vector3().subVectors(
+    const displacementVector = new Vector3().subVectors(
       endPosition,
       startPosition
     );
@@ -51,9 +51,9 @@ class AnimationService {
     this.animations.push({
       mesh,
       startPosition,
-      endPosition,
-      directionalVector,
-      startTime: this.timeStamp,
+      displacementVector,
+      startTime,
+      easingFunction,
     });
   }
 }

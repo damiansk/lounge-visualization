@@ -88,9 +88,8 @@ class InteractionService {
       this.isCollideWithAnyMesh(object) ||
       !this.isInInteractionsScope(object)
     ) {
-      this.animationService.animate(object, this.dragStartPosition.clone());
-      // const { x, y, z } = this.dragStartPosition;
-      // object.position.set(x, y, z);
+      // TODO Need to set isInteractive to false or have possibility to break animation and interact again
+      this.animationService.animate(object, this.dragStartPosition);
       this.dragStartPosition = null;
     } else {
       this.updateModelBoundingBox(object);
