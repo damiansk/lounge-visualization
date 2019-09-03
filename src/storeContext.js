@@ -7,15 +7,15 @@ const store = new ModelsStore();
 
 const StoreContextProvider = ({ children }) => {
   const [models, setModels] = useState([]);
+
   useEffect(() => {
     // TODO: refactor getUpdateEvent$, should return new array?
     const subscription = store
       .getUpdateEvent$()
       .subscribe(mod => setModels([...mod]));
-    return () => {
-      subscription.unsubscribe();
-    };
+    return subscription.unsubscribe;
   }, []);
+
   return (
     //  investigate rerenders in Threecontainer
     <StoreContext.Provider value={{ models, remove: store.remove }}>
