@@ -1,6 +1,7 @@
-import { from } from 'rxjs';
+import { TextureLoader, MeshBasicMaterial } from 'three';
+import { from, combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { delay, map, mergeAll, mergeMap, tap } from 'rxjs/operators';
 import { findFirstMesh } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
@@ -62,8 +63,40 @@ class ModelsFactory {
     );
   }
 
+  getTexture$(path) {
+    return Observable.create(observer => {
+      new TextureLoader().load(path, value => {
+        observer.next(value);
+        observer.complete();
+      });
+    });
+  }
+
   createFloor$() {
-    return this.loaderService.loadGLTF$('floor.gltf').pipe(map(findFirstMesh));
+    // return combineLatest(
+    //   this.loaderService.loadGLTF$('floor.gltf'),
+    //   this.getTexture$('assets/carpet.jpg')
+    // ).pipe(
+    //   map(([scene, texture]) =>([findFirstMesh(scene), texture])),
+    //   delay(1000),
+    //   tap(console.log),
+    //   map(([model, texture]) => {
+    //     model.material.map = texture;
+    //     model.material.needsUpdate = true;
+
+    //     return model;
+    //   })
+    // );
+    return this.loaderService.loadGLTF$('floor.gltf').pipe(
+      map(findFirstMesh),
+      map(model => {
+        const texture = new TextureLoader().load('assets/carpet.jpg');
+        model.material.map = texture;
+        model.material.needsUpdate = true;
+
+        return model;
+      })
+    );
   }
 }
 
