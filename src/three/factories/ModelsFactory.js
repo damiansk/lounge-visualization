@@ -1,7 +1,14 @@
-import { TextureLoader, MeshBasicMaterial } from 'three';
-import { from, combineLatest } from 'rxjs';
+import { combineLatest, from } from 'rxjs';
+import {
+  TextureLoader,
+  Mesh,
+  DoubleSide,
+  RepeatWrapping,
+  PlaneGeometry,
+  MeshBasicMaterial
+} from 'three';
 import { Observable } from 'rxjs/Observable';
-import { delay, map, mergeAll, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeAll, mergeMap } from 'rxjs/operators';
 import { findFirstMesh } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
@@ -84,17 +91,15 @@ class ModelsFactory {
     //     model.material.map = texture;
     //     model.material.needsUpdate = true;
 
-    //     return model;
-    //   })
-    // );
-    return this.loaderService.loadGLTF$('floor.gltf').pipe(
-      map(findFirstMesh),
-      map(model => {
-        const texture = new TextureLoader().load('assets/carpet.jpg');
-        model.material.map = texture;
-        model.material.needsUpdate = true;
+        // TARGET FLOOR GEOMETRY - to check ho to properly display the texture
+        // const geometry = model.geometry;
 
-        return model;
+        // TEMP GEOMETRY - erase when solved proper floor model texture display
+        const geometry = new PlaneGeometry(20, 40, 30);
+        const mesh = new Mesh(geometry, new MeshBasicMaterial({ map: texture, side: DoubleSide }));
+        mesh.rotateX(Math.PI/2); //ONLY TEMPORARILY - WITH THE PLANE
+
+        return mesh;
       })
     );
   }
