@@ -2,9 +2,7 @@ import { combineLatest, from } from 'rxjs';
 import {
   TextureLoader,
   Mesh,
-  DoubleSide,
-  RepeatWrapping,
-  PlaneGeometry,
+  NearestFilter,
   MeshBasicMaterial
 } from 'three';
 import { Observable } from 'rxjs/Observable';
@@ -70,30 +68,31 @@ class ModelsFactory {
     );
   }
 
-  getTexture$(path) {
+  static getTexture$(path) {
     return Observable.create(observer => {
       new TextureLoader().load(path, texture => {
         observer.next(texture);
-        observer.complete();
       });
     });
   }
 
   createFloor$() {
     return combineLatest(
-      this.loaderService.loadGLTF$('floor.gltf'),
-      this.getTexture$('assets/carpet.jpg')
+      this.loaderService.loadGLTF$('floor2.gltf'),
+      ModelsFactory.getTexture$('assets/carpet.jpg')
     ).pipe(
       map(([scene, texture]) =>({ model: findFirstMesh(scene), texture})),
       map((res) => {
         const { model, texture } = res;
-        // TARGET FLOOR GEOMETRY - to check ho to properly display the texture
-        // const geometry = model.geometry;
-
-        // TEMP GEOMETRY - erase when solved proper floor model texture display
-        const geometry = new PlaneGeometry(20, 40, 30);
-        const mesh = new Mesh(geometry, new MeshBasicMaterial({ map: texture, side: DoubleSide }));
-        mesh.rotateX(Math.PI/2); //ONLY TEMPORARILY - WITH THE PLANE
+        const geometry = model.geometry.clone();
+        // texture.wrapS = RepeatWrapping;
+        // texture.wrapT = RepeatWrapping;
+        // texture.repeat.set(20,20);
+        texture.minMFilter = NearestFilter;
+        texture.maxFilter = NearestFilter;
+        console.log(geometry);
+        const mesh = new Mesh(geometry, new MeshBasicMaterial({ map: texture }));
+        mesh.rotateX(Math.PI/2);
 
         return mesh;
       })
