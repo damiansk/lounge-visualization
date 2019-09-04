@@ -10,6 +10,7 @@ class ModelsStore {
 
     this.add = this.add.bind(this);
     this.remove = this.remove.bind(this);
+    this.changeName = this.changeName.bind(this);
     this.getUpdateEvent$ = this.getUpdateEvent$.bind(this);
     this.getAddEvent$ = this.getAddEvent$.bind(this);
     this.getRemoveEvent$ = this.getRemoveEvent$.bind(this);
@@ -60,6 +61,17 @@ class ModelsStore {
     this.models = this.models.filter(m => !model.isEqual(m));
     this.updateModelsSubject$.next(this.models);
     this.removeModelsSubject$.next(model);
+  }
+
+  changeName(model, newName) {
+    const found = this.models.indexOf(model);
+    const matchModel = this.models[found];
+
+    if (found !== -1 && matchModel) {
+      matchModel.mesh.name = newName;
+
+      this.updateModelsSubject$.next(this.models);
+    }
   }
 }
 

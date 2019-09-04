@@ -3,7 +3,7 @@ import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
 import { StoreContext } from '../../storeContext';
 
 const ModelsList = () => {
-  const { models, remove } = useContext(StoreContext);
+  const { models, remove, applyChangeName } = useContext(StoreContext);
 
   const modelGroups = useMemo(
     () =>
@@ -27,6 +27,7 @@ const ModelsList = () => {
             modelGroup={modelGroups[modelName]}
             modelName={modelName}
             onRemove={remove}
+            onApplyChangeName={applyChangeName}
           />
         );
       })}
