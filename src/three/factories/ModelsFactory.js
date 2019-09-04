@@ -72,25 +72,21 @@ class ModelsFactory {
 
   getTexture$(path) {
     return Observable.create(observer => {
-      new TextureLoader().load(path, value => {
-        observer.next(value);
+      new TextureLoader().load(path, texture => {
+        observer.next(texture);
         observer.complete();
       });
     });
   }
 
   createFloor$() {
-    // return combineLatest(
-    //   this.loaderService.loadGLTF$('floor.gltf'),
-    //   this.getTexture$('assets/carpet.jpg')
-    // ).pipe(
-    //   map(([scene, texture]) =>([findFirstMesh(scene), texture])),
-    //   delay(1000),
-    //   tap(console.log),
-    //   map(([model, texture]) => {
-    //     model.material.map = texture;
-    //     model.material.needsUpdate = true;
-
+    return combineLatest(
+      this.loaderService.loadGLTF$('floor.gltf'),
+      this.getTexture$('assets/carpet.jpg')
+    ).pipe(
+      map(([scene, texture]) =>({ model: findFirstMesh(scene), texture})),
+      map((res) => {
+        const { model, texture } = res;
         // TARGET FLOOR GEOMETRY - to check ho to properly display the texture
         // const geometry = model.geometry;
 
