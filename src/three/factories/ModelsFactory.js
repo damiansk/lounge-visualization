@@ -4,6 +4,7 @@ import {
   Mesh,
   NearestFilter,
   RepeatWrapping,
+  LinearMipMapLinearFilter,
   MeshStandardMaterial
 } from 'three';
 import { Observable } from 'rxjs/Observable';
@@ -94,10 +95,12 @@ class ModelsFactory {
         // texture.repeat.set(20, 20);
         bumpMap.wrapS = RepeatWrapping;
         bumpMap.wrapT = RepeatWrapping;
-        bumpMap.repeat.set(50,30);
+        texture.minFilter = LinearMipMapLinearFilter;
+        texture.maxFilter = LinearMipMapLinearFilter;
+        bumpMap.repeat.set(50,50);
 
 
-        texture.maxFilter = NearestFilter;
+        texture.minFilter = NearestFilter;
         texture.maxFilter = NearestFilter;
         const mesh = new Mesh(geometry, new MeshStandardMaterial({ map: texture, bumpMap, bumpScale: .01 }));
         mesh.rotateX(Math.PI/2);
