@@ -3,7 +3,8 @@ import {
   TextureLoader,
   Mesh,
   NearestFilter,
-  MeshBasicMaterial
+  RepeatWrapping,
+  MeshStandardMaterial
 } from 'three';
 import { Observable } from 'rxjs/Observable';
 import { map, mergeAll, mergeMap } from 'rxjs/operators';
@@ -79,19 +80,26 @@ class ModelsFactory {
   createFloor$() {
     return combineLatest(
       this.loaderService.loadGLTF$('floor2.gltf'),
+      ModelsFactory.getTexture$('assets/noise.jpg'),
       ModelsFactory.getTexture$('assets/carpet.jpg')
     ).pipe(
-      map(([scene, texture]) =>({ model: findFirstMesh(scene), texture})),
+      map(([scene, bumpMap, texture]) =>({ model: findFirstMesh(scene), texture, bumpMap})),
       map((res) => {
-        const { model, texture } = res;
+        const { model, texture, bumpMap } = res;
         const geometry = model.geometry.clone();
+
+        // Bring this back to tile the carpet on the floor (repeat the pattern)
         // texture.wrapS = RepeatWrapping;
         // texture.wrapT = RepeatWrapping;
-        // texture.repeat.set(20,20);
-        texture.minMFilter = NearestFilter;
+        // texture.repeat.set(20, 20);
+        bumpMap.wrapS = RepeatWrapping;
+        bumpMap.wrapT = RepeatWrapping;
+        bumpMap.repeat.set(50,30);
+
+
         texture.maxFilter = NearestFilter;
-        console.log(geometry);
-        const mesh = new Mesh(geometry, new MeshBasicMaterial({ map: texture }));
+        texture.maxFilter = NearestFilter;
+        const mesh = new Mesh(geometry, new MeshStandardMaterial({ map: texture, bumpMap, bumpScale: .01 }));
         mesh.rotateX(Math.PI/2);
 
         return mesh;
