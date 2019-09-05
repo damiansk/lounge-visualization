@@ -84,7 +84,11 @@ class ModelsFactory {
       ModelsFactory.getTexture$('assets/noise.jpg'),
       ModelsFactory.getTexture$('assets/carpet.jpg')
     ).pipe(
-      map(([scene, bumpMap, texture]) =>({ model: findFirstMesh(scene), texture, bumpMap})),
+      map(([scene, bumpMap, texture]) =>({
+        model: findFirstMesh(scene),
+        texture,
+        bumpMap,
+      })),
       map((res) => {
         const { model, texture, bumpMap } = res;
         const geometry = model.geometry.clone();
@@ -97,12 +101,17 @@ class ModelsFactory {
         bumpMap.wrapT = RepeatWrapping;
         texture.minFilter = LinearMipMapLinearFilter;
         texture.maxFilter = LinearMipMapLinearFilter;
-        bumpMap.repeat.set(50,50);
+        bumpMap.repeat.set(10,10);
 
 
         texture.minFilter = NearestFilter;
         texture.maxFilter = NearestFilter;
-        const mesh = new Mesh(geometry, new MeshStandardMaterial({ map: texture, bumpMap, bumpScale: .01 }));
+        const mesh = new Mesh(geometry, new MeshStandardMaterial({
+          map: texture,
+          bumpMap,
+          bumpScale: .01,
+          roughness: .8,
+        }));
         mesh.rotateX(Math.PI/2);
 
         return mesh;
