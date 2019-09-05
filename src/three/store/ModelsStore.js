@@ -64,10 +64,10 @@ class ModelsStore {
   }
 
   changeName(model, newName) {
-    const found = this.models.indexOf(model);
-    const matchModel = this.models[found];
+    const modelIndex = this.models.indexOf(model);
+    const matchModel = this.models[modelIndex];
 
-    if (found !== -1 && matchModel) {
+    if (modelIndex !== -1 && matchModel) {
       matchModel.mesh.name = newName;
 
       this.updateModelsSubject$.next(this.models);

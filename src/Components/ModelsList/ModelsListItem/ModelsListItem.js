@@ -10,6 +10,7 @@ import {
   Button
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { BaseModel } from '../../../three/primitives';
 
 const DEFAULT_NEW_MODEL = 'Hail to the duke!'
@@ -46,10 +47,10 @@ class ModelsListItem extends Component {
     this.props.onApplyChangeName(this.props.model, this.state.newModelName);
   }
 
-  showRenamePanel() {
+  toggleRenamePanel() {
     this.setState({
       ...this.state,
-      clicked: true
+      clicked: !this.state.clicked
     });
   }
 
@@ -57,11 +58,10 @@ class ModelsListItem extends Component {
     const { index, model, onRemove } = this.props;
 
     return (
-      <div>
+      <>
         <ListItem
           key={index}
           button
-          onClick={this.showRenamePanel.bind(this)}
           onMouseOver={() => model.setHover(true)}
           onMouseOut={() => model.setHover(false)}
           selected={this.state.isHovered}
@@ -74,16 +74,19 @@ class ModelsListItem extends Component {
                 onChange={event => model.checkbox.callback(event.target.checked)}
               />
             ) : null}
+            <IconButton aria-label="Edit" onClick={this.toggleRenamePanel.bind(this)}>
+              <EditIcon />
+            </IconButton>
             <IconButton aria-label="Delete" onClick={() => onRemove(model)}>
               <DeleteIcon />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-        {this.state.clicked && <div>
+        {this.state.clicked && <>
           <TextField fullWidth={true} variant="filled" value={this.state.newModelName} label="Rename the item" onChange={this.onNameChangeInput.bind(this)} />
           <Button variant="contained" color="secondary" size="small" onClick={this.applyNameChange.bind(this)}>OK</Button>
-        </div>}
-      </div>
+        </>}
+      </>
     );
   }
 }
