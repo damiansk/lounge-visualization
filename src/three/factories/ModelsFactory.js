@@ -5,7 +5,8 @@ import {
   NearestFilter,
   RepeatWrapping,
   LinearMipMapLinearFilter,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  MeshBasicMaterial
 } from 'three';
 import { Observable } from 'rxjs/Observable';
 import { map, mergeAll, mergeMap } from 'rxjs/operators';
@@ -70,6 +71,7 @@ class ModelsFactory {
     );
   }
 
+  // move to loader service
   static getTexture$(path) {
     return Observable.create(observer => {
       new TextureLoader().load(path, texture => {
@@ -84,37 +86,30 @@ class ModelsFactory {
       ModelsFactory.getTexture$('assets/noise.jpg'),
       ModelsFactory.getTexture$('assets/carpet.jpg')
     ).pipe(
-      map(([scene, bumpMap, texture]) =>({
+      map(([ scene, bumpMap, texture ]) =>({
         model: findFirstMesh(scene),
-        texture,
         bumpMap,
+        texture
       })),
       map((res) => {
-        const { model, texture, bumpMap } = res;
-        const geometry = model.geometry.clone();
+        const { model, bumpMap, texture } = res;
 
         // Bring this back to tile the carpet on the floor (repeat the pattern)
-        // texture.wrapS = RepeatWrapping;
-        // texture.wrapT = RepeatWrapping;
-        // texture.repeat.set(20, 20);
+        texture.wrapS = RepeatWrapping;
+        texture.wrapT = RepeatWrapping;
+        texture.repeat.set(20, 20);
         bumpMap.wrapS = RepeatWrapping;
         bumpMap.wrapT = RepeatWrapping;
         texture.minFilter = LinearMipMapLinearFilter;
         texture.maxFilter = LinearMipMapLinearFilter;
         bumpMap.repeat.set(10,10);
 
-
         texture.minFilter = NearestFilter;
         texture.maxFilter = NearestFilter;
-        const mesh = new Mesh(geometry, new MeshStandardMaterial({
-          map: texture,
-          bumpMap,
-          bumpScale: .01,
-          roughness: .8,
-        }));
-        mesh.rotateX(Math.PI/2);
 
-        return mesh;
+        model.material.copy(new MeshStandardMaterial({ map: texture, bumpMap, bumpMapScale: .01, roughness: 0.8 }));
+
+        return model;
       })
     );
   }
