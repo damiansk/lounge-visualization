@@ -9,7 +9,8 @@ class BaseModel {
     this.isInteractive = true;
     this.isHovered = false;
     this.type = 'base_model';
-    this.updateSubject$ = new BehaviorSubject({ isHovered: this.isHovered });
+
+    this.updateSubject$ = new BehaviorSubject({ isHovered: this.isHovered, isInteractive: this.isInteractive });
 
     this.isEqual = this.isEqual.bind(this);
     this.setHover = this.setHover.bind(this);
@@ -52,7 +53,11 @@ class BaseModel {
       this.mesh.material.color.set(this.color);
     }
 
-    this.updateSubject$.next({ isHovered });
+    this.updateSubject$.next({ ...this.updateSubject$.value(), isHovered });
+  }
+
+  getHover() {
+    return this.updateSubject$.value()
   }
 
   subscribeForChanges$() {

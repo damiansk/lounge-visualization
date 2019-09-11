@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ListItem,
@@ -7,95 +7,118 @@ import {
   IconButton,
   Switch,
   TextField,
-  Button
+  Button,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { BaseModel } from '../../../three/primitives';
 
-const DEFAULT_NEW_MODEL = 'Hail to the duke!'
+const DEFAULT_NEW_MODEL = 'Hail to the duke!';
 
-class ModelsListItem extends Component {
-  constructor(props) {
-    super(props);
+const Item = ({ index, model, onRemove, onApplyChangeName }) => {
+  const [isHovered, setIsHovered] = useState();
+  const [isOpen, setIsOpen] = useState();
+  const [newModelName, setNewModelName] = useState(DEFAULT_NEW_MODEL);
 
-    this.state = {
-      isHovered: false,
-      clicked: false,
-      newModelName: DEFAULT_NEW_MODEL
-    };
-  }
+  useEffect(
+    () => {
+      const subscription = model
+        .subscribeForChanges$()
+        .subscribe(({ isHovered: newIsHovered }) => setIsHovered(newIsHovered));
 
-  componentDidMount() {
-    this.props.model
-      .subscribeForChanges$()
-      .subscribe(({ isHovered }) => this.setState({ isHovered }));
-  }
+      return () => subscription.unsubscribe();
+    },
+    [model]
+  );
 
-  onNameChangeInput(event) {
-    this.setState({
-      ...this.state,
-      newModelName: event.target.value
-    });
-  }
+  const handleOnMouseOver = useCallback(
+    () => {
+      model.setHover(true);
+    },
+    [model]
+  );
 
-  applyNameChange() {
-    this.setState({
-      newModelName: DEFAULT_NEW_MODEL,
-      clicked: false
-    });
-    this.props.onApplyChangeName(this.props.model, this.state.newModelName);
-  }
+  const handleOnMouseOut = useCallback(
+    () => {
+      model.setHover(false);
+    },
+    [model]
+  );
 
-  toggleRenamePanel() {
-    this.setState({
-      ...this.state,
-      clicked: !this.state.clicked
-    });
-  }
+  const handleRemove = useCallback(
+    () => {
+      onRemove(model);
+    },
+    [onRemove, model]
+  );
 
-  render() {
-    const { index, model, onRemove } = this.props;
+  const onNameChangeInput = event => {
+    setNewModelName(event.target.value);
+  };
 
-    return (
-      <>
-        <ListItem
-          key={index}
-          button
-          onMouseOver={() => model.setHover(true)}
-          onMouseOut={() => model.setHover(false)}
-          selected={this.state.isHovered}
-        >
-          <ListItemText primary={`${index + 1}) ${model.getName()}`} />
-          <ListItemSecondaryAction>
-            {model.checkbox ? (
-              <Switch
-                defaultChecked={model.checkbox.initialValue}
-                onChange={event => model.checkbox.callback(event.target.checked)}
-              />
-            ) : null}
-            <IconButton aria-label="Edit" onClick={this.toggleRenamePanel.bind(this)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton aria-label="Delete" onClick={() => onRemove(model)}>
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-        {this.state.clicked && <>
-          <TextField fullWidth={true} variant="filled" value={this.state.newModelName} label="Rename the item" onChange={this.onNameChangeInput.bind(this)} />
-          <Button variant="contained" color="secondary" size="small" onClick={this.applyNameChange.bind(this)}>OK</Button>
-        </>}
-      </>
-    );
-  }
-}
+  const applyNameChange = () => {
+    setIsOpen(false);
+    setNewModelName(DEFAULT_NEW_MODEL);
+    onApplyChangeName(model, newModelName);
+  };
 
-ModelsListItem.propTypes = {
+  const toggleRenamePanel = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <>
+      <ListItem
+        key={index}
+        button
+        onMouseOver={handleOnMouseOver}
+        onMouseOut={handleOnMouseOut}
+        selected={isHovered}
+      >
+        <ListItemText primary={`${index + 1}) ${model.getName()}`} />
+        <ListItemSecondaryAction>
+          {model.checkbox ? (
+            <Switch
+              defaultChecked={model.checkbox.initialValue}
+              onChange={event => model.checkbox.callback(event.target.checked)}
+            />
+          ) : null}
+          <IconButton aria-label="Edit" onClick={toggleRenamePanel}>
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="Delete" onClick={handleRemove}>
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+      {isOpen && (
+        <>
+          <TextField
+            fullWidth
+            variant="filled"
+            value={newModelName}
+            label="Rename the item"
+            onChange={onNameChangeInput}
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={applyNameChange}
+          >
+            OK
+          </Button>
+        </>
+      )}
+    </>
+  );
+};
+
+Item.propTypes = {
   index: PropTypes.number.isRequired,
   model: PropTypes.instanceOf(BaseModel).isRequired,
   onRemove: PropTypes.func.isRequired,
-  onApplyChangeName: PropTypes.func.isRequired
+  onApplyChangeName: PropTypes.func.isRequired,
 };
 
-export { ModelsListItem };
+export { Item as ModelsListItem };

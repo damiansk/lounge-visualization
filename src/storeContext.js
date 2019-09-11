@@ -18,7 +18,13 @@ const StoreContextProvider = ({ children }) => {
 
   return (
     //  investigate rerenders in Threecontainer
-    <StoreContext.Provider value={{ models, remove: store.remove, applyChangeName: store.changeName }}>
+    <StoreContext.Provider
+      value={{
+        models,
+        remove: store.remove,
+        applyChangeName: store.changeName,
+      }}
+    >
       {children}
     </StoreContext.Provider>
   );
