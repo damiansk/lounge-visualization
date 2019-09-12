@@ -1,72 +1,55 @@
-import { distinctUntilChanged } from "rxjs/operators";
-import { Subscription } from "rxjs";
+import { Subscription, BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
-class A {
-  constructor(model) {
-    this.model = model;
-    this.attribues = {
-      isInteractive: true,
-      isHovered: false,
+const attributes = {
+  isHovered: Symbol('isHovered'),
+  isInteractive: Symbol('isInteractive'),
+};
+
+class BaseModel {
+  constructor(mesh) {
+    this.mesh = mesh;
+    this.type = 'base_model';
+    this.attributes = {
+      [attributes.isInteractive]: false,
+      [attributes.isHovered]: false,
     };
 
-    this.updateSubject$ = new BehaviorSubject(this.attribues);
-
-    this.updateSubject$.subscribe(newReactiveAttributes =>
-        this.reactiveAttribues = newReactiveAttributes);
+    this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
+    this.handleAttributesChanges();
   }
 
-  attributesSubscribe$() {
-    return this.updateSubject$.asObservable();
-  }
-
-  setAttribute(name, value) {
-    switch(name) {
-      case 'isHovered': updateIsHovered(value)
-    }
-    this.updateSubject$.next({ ...this.attribues, [name]: value });
-  }
-}
-
-
-class Base {
-  constructor() {
-    this.behavSub$ = new BehaviorSubject(this.attribues);
-    this.handleAttributesChanges()
-    this.subscriptions = new Subscription()
-  }
-
+  // TODO make methods private
   handleAttributesChanges() {
-    this.subscriptions.add(this.getAttribute$('isHovered').subscribe(this.handleIsHoveredChanged))
-    this.subscriptions.add(this.getAttribute$('isInteractive').subscribe())
+    this.reactiveAttributeSubscriptions = new Subscription();
+
+    // Subscriptions for side effects
+    this.subscriptions.add(
+      this.getAttribute$('isHovered').subscribe(this.handleIsHoveredChanged)
+    );
   }
 
   updateSubject() {
-    // zbiera wszystkie atrybuty
-    const newAttributes = this.attribues;
-    this.behavSub$.next(newAttributes);
+    this.reactiveAttributes$.next(this.attributes);
   }
 
-  // distinct until change
-  getAttribute$(name) {
-    return this.behavSub$.pipe(
-      map(attributes => attributes[name]),
-      // distinctUntilKeyChanged
+  getAttribute$(key) {
+    return this.reactiveAttributes$.pipe(
+      map(reactiveAttributes => reactiveAttributes[key]),
       distinctUntilChanged()
-    )
+    );
   }
 
-
-
-  // if name === isHovered
-  // this.mesh.material.color.set(hoverColor);
-
-  // isInteractive
-  setAttribute(name, value) {
-    this.attribues[name] = value;
+  setAttribute(key, value) {
+    this.attribues[key] = value;
     this.updateSubject();
   }
-  
-  unsubscribe() {
-    this.subscription.unsubscribe();
+
+  subscribeForChanges$() {
+    return this.reactiveAttributes$.asObservable();
+  }
+
+  destroy() {
+    this.reactiveAttributeSubscriptions.unsubscribe();
   }
 }
