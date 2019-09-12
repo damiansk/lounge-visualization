@@ -7,9 +7,15 @@ import {
   LoadingManager,
   DirectionalLight,
   PCFSoftShadowMap,
+  SphereGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  TextureLoader,
+  FrontSide,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
+import { AnimationService } from './services/AnimationService';
 import { ModelsFactory } from './factories/ModelsFactory';
 
 const nearPlane = 0.1;
@@ -58,19 +64,22 @@ class SceneManager {
     this.camera.lookAt(0, 0, 0);
     this.renderer.setPixelRatio(DPR);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
-    this.scene.background = new Color('#020345');
+    this.scene.background = new Color('#010113');
 
     CameraControlsService.init(this.camera, this.renderer.domElement);
+    this.animationService = new AnimationService();
     this.interactionService = new InteractionService(
       this.camera,
-      this.renderer
+      this.renderer,
+      this.animationService
     );
-
     this.subscribeForStoreEvents();
     this.initSceneSubjects();
   }
 
-  update() {
+  update(time) {
+    CameraControlsService.update();
+    this.animationService.update(time);
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -98,14 +107,23 @@ class SceneManager {
   }
 
   initSceneSubjects() {
-    this.factory.createFloor$().subscribe(model => {
-      model.traverse(mesh => {
-        mesh.receiveShadow = true;
-      });
-      this.interactionService.registerInterationScope(model);
-      this.scene.add(model);
+    this.factory.createFloor$().subscribe(mesh => {
+      mesh.receiveShadow = true;
+      this.interactionService.registerInterationScope(mesh);
+      this.scene.add(mesh);
     });
-
+    const textureLoader = new TextureLoader();
+    textureLoader.load('assets/panorama.jpg', texture => {
+      const geometry = new SphereGeometry(31, 36, 20);
+      const material = new MeshBasicMaterial({
+        map: texture,
+        side: FrontSide,
+      });
+      geometry.scale(-1, 1, 1);
+      const mesh = new Mesh(geometry, material);
+      this.scene.add(mesh);
+      mesh.position.set(0, 0, 0);
+    });
     const directionalLight = new DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 90, -60);
     this.scene.add(directionalLight);

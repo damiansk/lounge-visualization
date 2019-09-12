@@ -1,59 +1,37 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { List } from '@material-ui/core';
-import { ModelsStore } from '../../three/store/ModelsStore';
-import { ModelsListItem } from './ModelsListItem/ModelsListItem';
+import React, { useContext, useMemo } from 'react';
+import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
+import { StoreContext } from '../../storeContext';
 
-class ModelsList extends React.Component {
-  constructor(props) {
-    super(props);
+const ModelsList = () => {
+  const { models, remove } = useContext(StoreContext);
 
-    this.state = {
-      models: props.store.getModels(),
-    };
-  }
+  const modelGroups = useMemo(
+    () =>
+      models.reduce((acc, model) => {
+        const modelName = model.getName();
+        if (!acc[modelName]) {
+          acc[modelName] = [];
+        }
+        acc[modelName].push(model);
+        return acc;
+      }, {}),
+    [models]
+  );
 
-  componentDidMount() {
-    this.subscription = this.props.store
-      .getUpdateEvent$()
-      .subscribe(models => this.setState({ models }));
-  }
-
-  componentWillUnmount() {
-    this.subscription.unsubscribe();
-  }
-
-  render() {
-    const modelGroups = this.state.models.reduce((acc, model) => {
-      if (!acc[model.name]) {
-        acc[model.name] = [];
-      }
-
-      acc[model.name].push(model);
-      return acc;
-    }, {});
-
-    return (
-      <>
-        {Object.keys(modelGroups).map((modelName, i) => (
-          <List key={i} component="div" disablePadding>
-            {modelGroups[modelName].map((model, index) => (
-              <ModelsListItem
-                key={index}
-                index={index}
-                model={model}
-                onRemove={this.props.store.remove}
-              />
-            ))}
-          </List>
-        ))}
-      </>
-    );
-  }
-}
-
-ModelsList.propTypes = {
-  store: PropTypes.instanceOf(ModelsStore),
+  return (
+    <>
+      {Object.keys(modelGroups).map((modelName, i) => {
+        return (
+          <ModelsListGroup
+            key={modelName}
+            modelGroup={modelGroups[modelName]}
+            modelName={modelName}
+            onRemove={remove}
+          />
+        );
+      })}
+    </>
+  );
 };
 
 export { ModelsList };

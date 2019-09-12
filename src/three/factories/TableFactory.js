@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { findRoot, applyConfig } from './utils';
+import { findFirstMesh, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 
-const fileName = 'table_v3';
+const fileName = 'table.gltf';
 
 class TableFactory {
   constructor(loadingManager) {
@@ -18,8 +18,8 @@ class TableFactory {
 
   loadTable$() {
     if (!this.loadingTable$) {
-      this.loadingTable$ = this.loaderService.loadOBJ$(fileName).pipe(
-        map(findRoot),
+      this.loadingTable$ = this.loaderService.loadGLTF$(fileName).pipe(
+        map(findFirstMesh),
         map(obj => {
           obj.castShadow = true;
           obj.name = 'Table';

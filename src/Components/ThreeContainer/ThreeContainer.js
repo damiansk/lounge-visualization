@@ -1,8 +1,8 @@
 import React, { createRef, PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { ModelsStore } from '../../three/store/ModelsStore';
 import { createCanvas, initStatsPanel } from './utils';
 import SceneManager from '../../three/SceneManager';
+import { store } from '../../storeContext';
 
 class ThreeContainer extends PureComponent {
   constructor(props) {
@@ -17,7 +17,7 @@ class ThreeContainer extends PureComponent {
 
   componentDidMount() {
     this.canvas = createCanvas(this.containerRef.current);
-    this.sceneManager = new SceneManager(this.canvas, this.props.store);
+    this.sceneManager = new SceneManager(this.canvas, store);
     this.sceneManager.init();
     this.sceneManager.loadSceneModels(this.props.modelsConfig);
     this.stats = initStatsPanel(this.canvas);
@@ -42,9 +42,9 @@ class ThreeContainer extends PureComponent {
     this.sceneManager.onWindowResize();
   }
 
-  renderFrame() {
+  renderFrame(time) {
     this.stats.begin();
-    this.sceneManager.update();
+    this.sceneManager.update(time);
     this.stats.end();
     window.requestAnimationFrame(this.renderFrame);
   }
@@ -63,7 +63,6 @@ class ThreeContainer extends PureComponent {
 }
 
 ThreeContainer.propTypes = {
-  store: PropTypes.instanceOf(ModelsStore),
   modelsConfig: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,

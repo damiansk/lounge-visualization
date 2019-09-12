@@ -3,12 +3,13 @@ import { DragControls } from '../libs/three-dragcontrols';
 import { CameraControlsService } from './CameraControlsService';
 
 class InteractionService {
-  constructor(camera, renderer) {
+  constructor(camera, renderer, animationService) {
     this.interactiveMeshes = [];
     this.staticMeshes = [];
     this.dragStartPosition = null;
     this.prevHoverOnMesh = null;
 
+    this.animationService = animationService;
     this.raycaster = new Raycaster();
 
     this.dragControls = new DragControls(
@@ -87,8 +88,8 @@ class InteractionService {
       this.isCollideWithAnyMesh(object) ||
       !this.isInInteractionsScope(object)
     ) {
-      const { x, y, z } = this.dragStartPosition;
-      object.position.set(x, y, z);
+      // TODO Need to set isInteractive to false or have possibility to break animation and interact again
+      this.animationService.animate(object, this.dragStartPosition);
       this.dragStartPosition = null;
     } else {
       this.updateModelBoundingBox(object);
@@ -172,9 +173,7 @@ class InteractionService {
     const isAnyPointOutsideTheScope = points.some(point => {
       this.raycaster.set(point, direction);
 
-      const collisions = this.raycaster.intersectObjects(
-        this.interactionScope.children
-      );
+      const collisions = this.raycaster.intersectObject(this.interactionScope);
 
       return collisions.length === 0;
     });

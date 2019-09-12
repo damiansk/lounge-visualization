@@ -4,9 +4,8 @@ import { Drawer, Divider, IconButton, List } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { ModelsStore } from '../../three/store/ModelsStore';
 import { ModelsList } from '../ModelsList';
-import { JSONExportButton } from '../JSONExportButton';
+import { JSONExportControls } from '../JSONExportControls';
 import { JSONImportControls } from '../JSONImportControls';
 import { styles } from './styles';
 
@@ -15,7 +14,6 @@ const DrawerPanel = ({
   theme,
   open,
   handleDrawerClose,
-  store,
   handleExportButtonClick,
   loadModelsConfig,
 }) => (
@@ -35,16 +33,15 @@ const DrawerPanel = ({
     </div>
     <Divider />
     <List>
-      <JSONExportButton handleExportButtonClick={handleExportButtonClick} />
+      <JSONExportControls handleExportButtonClick={handleExportButtonClick} />
       <JSONImportControls loadModelsConfig={loadModelsConfig} />
     </List>
     <Divider />
-    <ModelsList store={store} />
+    <ModelsList />
   </Drawer>
 );
 
 DrawerPanel.propTypes = {
-  store: PropTypes.instanceOf(ModelsStore),
   classes: PropTypes.object,
   theme: PropTypes.object,
   open: PropTypes.bool,

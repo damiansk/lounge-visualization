@@ -36,7 +36,7 @@ class ModelsListItem extends Component {
         onMouseOut={() => model.setHover(false)}
         selected={this.state.isHovered}
       >
-        <ListItemText primary={`${index}) ${model.getName()}`} />
+        <ListItemText primary={`${index + 1}) ${model.getName()}`} />
         <ListItemSecondaryAction>
           {model.checkbox ? (
             <Switch

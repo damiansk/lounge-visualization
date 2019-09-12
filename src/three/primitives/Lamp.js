@@ -1,7 +1,7 @@
 import { BaseModel } from './BaseModel';
 
 class Lamp extends BaseModel {
-  isInteractive = false;
+  isInteractive = true;
 
   type = 'lamp';
 

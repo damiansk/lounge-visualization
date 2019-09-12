@@ -7,9 +7,9 @@
     "@material-ui/icons": "^3.0.1",
     "classnames": "^2.2.6",
     "prop-types": "^15.6.2",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
-    "react-scripts": "^2.1.8",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
     "stats.js": "^0.17.0",
@@ -24,8 +24,51 @@
     "format": "prettier --write src/*.js src/**/*.js"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "root": true,
+    "extends": [
+      "airbnb-base",
+      "plugin:react/recommended",
+      "react-app",
+      "prettier"
+    ],
+    "plugins": [
+      "import"
+    ],
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true,
+      "jest": true
+    },
+    "parser": "babel-eslint",
+    "rules": {
+      "no-plusplus": "off",
+      "default-case": "off",
+      "consistent-return": "off",
+      "class-methods-use-this": "off",
+      "one-var": [
+        "error",
+        {
+          "initialized": "never"
+        }
+      ],
+      "one-var-declaration-per-line": [
+        "error",
+        "initializations"
+      ],
+      "linebreak-style": [
+        "error",
+        "windows"
+      ],
+      "import/prefer-default-export": "off",
+      "no-underscore-dangle": "off",
+      "no-param-reassign": "off"
+    }
   },
+  "eslintIgnore": [
+    "src/serviceWorker.js",
+    "*.css"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
