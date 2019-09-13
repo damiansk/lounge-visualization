@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect, useState } from 'react';
+import React, { Component, useCallback, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   ListItem,
@@ -15,35 +15,36 @@ import { BaseModel } from '../../../three/primitives';
 
 const DEFAULT_NEW_MODEL = 'Hail to the duke!';
 
+const useModelReactiveHover = model => {
+  // Getting static `isHovered` value to init the state
+  const [isHovered, setIsHovered] = useState(model.isHovered);
+
+  useEffect(() => {
+    const subscription = model
+      // TODO Change string to Symbol
+      .getAttribute$('isHovered')
+      .subscribe(setIsHovered);
+
+    return () => subscription.unsubscribe();
+  }, [model]);
+
+  const onMouseOver = useCallback(() => {
+    // TODO Change string to Symbol
+    model.setAttribute$('isHovered', true);
+  }, [model]);
+
+  const onMouseOut = useCallback(() => {
+    // TODO Change string to Symbol
+    model.setAttribute$('isHovered', false);
+  }, [model]);
+
+  return [isHovered, onMouseOver, onMouseOut];
+}
+
 const Item = ({ index, model, onRemove, onApplyChangeName }) => {
-  const [isHovered, setIsHovered] = useState();
   const [isOpen, setIsOpen] = useState();
   const [newModelName, setNewModelName] = useState(DEFAULT_NEW_MODEL);
-
-  useEffect(
-    () => {
-      const subscription = model
-        .subscribeForChanges$()
-        .subscribe(({ isHovered: newIsHovered }) => setIsHovered(newIsHovered));
-
-      return () => subscription.unsubscribe();
-    },
-    [model]
-  );
-
-  const handleOnMouseOver = useCallback(
-    () => {
-      model.setHover(true);
-    },
-    [model]
-  );
-
-  const handleOnMouseOut = useCallback(
-    () => {
-      model.setHover(false);
-    },
-    [model]
-  );
+  const [isHovered, handleOnMouseOver, handleOnMouseOut] = useModelReactiveHover(model);
 
   const handleRemove = useCallback(
     () => {

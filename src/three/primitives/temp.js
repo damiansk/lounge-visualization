@@ -1,3 +1,4 @@
+import { Math as TMath } from 'three';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
@@ -10,21 +11,16 @@ class BaseModel {
   constructor(mesh) {
     this.mesh = mesh;
     this.type = 'base_model';
-    this.attributes = {
-      [attributes.isInteractive]: false,
-      [attributes.isHovered]: false,
-    };
+    this.attributes = {};
 
     this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
-    this.handleAttributesChanges();
+    this.reactiveAttributeSubscriptions = new Subscription();
   }
 
   // TODO make methods private
   handleAttributesChanges() {
-    this.reactiveAttributeSubscriptions = new Subscription();
-
     // Subscriptions for side effects
-    this.subscriptions.add(
+    this.reactiveAttributeSubscriptions.add(
       this.getAttribute$('isHovered').subscribe(this.handleIsHoveredChanged)
     );
   }
@@ -53,3 +49,10 @@ class BaseModel {
     this.reactiveAttributeSubscriptions.unsubscribe();
   }
 }
+
+class ReactiveIsHovered {
+
+}
+
+export { BaseModel };
+
