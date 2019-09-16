@@ -6,10 +6,10 @@ import {
   RepeatWrapping,
   LinearMipMapLinearFilter,
   MeshStandardMaterial,
-  MeshBasicMaterial
+  MeshBasicMaterial,
 } from 'three';
 import { Observable } from 'rxjs/Observable';
-import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
 import { findFirstMesh } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
@@ -80,38 +80,59 @@ class ModelsFactory {
     });
   }
 
+  static loadTexture(path) {
+    const textureLoader = new TextureLoader();
+
+    return textureLoader.load(path);
+  }
+
   createFloor$() {
-    return combineLatest(
-      this.loaderService.loadGLTF$('floor2.gltf'),
-      ModelsFactory.getTexture$('assets/noise.jpg'),
-      ModelsFactory.getTexture$('assets/carpet.jpg')
-    ).pipe(
-      map(([ scene, bumpMap, texture ]) =>({
-        model: findFirstMesh(scene),
-        bumpMap,
-        texture
-      })),
-      map((res) => {
-        const { model, bumpMap, texture } = res;
+    return this.loaderService.loadGLTF$('floor2.gltf').pipe(
+      map(findFirstMesh),
+      tap(mesh => {
+        const material = new MeshStandardMaterial({
+          map: ModelsFactory.loadTexture('assets/carpet.jpg'),
+          bumpMap: ModelsFactory.loadTexture('assets/noise.jpg'),
+          bumpMapScale: 0.01,
+          roughness: 0.8,
+        });
 
-        // Bring this back to tile the carpet on the floor (repeat the pattern)
-        texture.wrapS = RepeatWrapping;
-        texture.wrapT = RepeatWrapping;
-        texture.repeat.set(20, 20);
-        bumpMap.wrapS = RepeatWrapping;
-        bumpMap.wrapT = RepeatWrapping;
-        texture.minFilter = LinearMipMapLinearFilter;
-        texture.maxFilter = LinearMipMapLinearFilter;
-        bumpMap.repeat.set(10,10);
-
-        texture.minFilter = NearestFilter;
-        texture.maxFilter = NearestFilter;
-
-        model.material.copy(new MeshStandardMaterial({ map: texture, bumpMap, bumpMapScale: .01, roughness: 0.8 }));
-
-        return model;
+        mesh.material.clone(material);
+        mesh.material.needsUpdate = true;
       })
     );
+    // return combineLatest(
+    //   this.loaderService.loadGLTF$('floor2.gltf'),
+    //   ModelsFactory.getTexture$('assets/noise.jpg'),
+    //   ModelsFactory.getTexture$('assets/carpet.jpg')
+    // ).pipe(
+    //   map(([ scene, bumpMap, texture ]) =>({
+    //     model: findFirstMesh(scene),
+    //     bumpMap,
+    //     texture
+    //   })),
+    //   map((res) => {
+    //     const { model, bumpMap, texture } = res;
+
+    //     // Bring this back to tile the carpet on the floor (repeat the pattern)
+    //     texture.wrapS = RepeatWrapping;
+    //     texture.wrapT = RepeatWrapping;
+    //     texture.repeat.set(10, 10);
+    //     bumpMap.wrapS = RepeatWrapping;
+    //     bumpMap.wrapT = RepeatWrapping;
+    //     texture.minFilter = LinearMipMapLinearFilter;
+    //     texture.maxFilter = LinearMipMapLinearFilter;
+    //     bumpMap.repeat.set(10,10);
+
+    //     texture.minFilter = NearestFilter;
+    //     texture.maxFilter = NearestFilter;
+
+    //     const material = new MeshStandardMaterial({ map: texture, bumpMap, bumpMapScale: .01, roughness: 0.8 })
+    //     model.material.copy(material);
+
+    //     return model;
+    //   })
+    // );
   }
 }
 
