@@ -84,10 +84,11 @@ class ModelsFactory {
       map(res => {
         const { model, texture } = res;
 
-        texture.wrapS = RepeatWrapping;
-        texture.wrapT = RepeatWrapping;
-        texture.minFilter = NearestFilter;
-        texture.maxFilter = NearestFilter;
+        // For repeat strategy
+        // texture.wrapS = RepeatWrapping;
+        // texture.wrapT = RepeatWrapping;
+        // texture.minFilter = NearestFilter;
+        // texture.maxFilter = NearestFilter;
 
         const material = new MeshStandardMaterial({
           map: texture,
@@ -103,6 +104,7 @@ class ModelsFactory {
   }
 
   createEnvironment$() {
+    // TODO Refactor
     return this.loaderService.loadTexture$('assets/panorama.jpg').pipe(
       map(texture => {
         const geometry = new SphereGeometry(31, 36, 20);
