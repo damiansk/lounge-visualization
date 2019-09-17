@@ -1,17 +1,18 @@
 import { combineLatest, from } from 'rxjs';
 import {
-  TextureLoader,
-  Mesh,
   NearestFilter,
   RepeatWrapping,
-  LinearMipMapLinearFilter,
   MeshStandardMaterial,
+  SphereGeometry,
   MeshBasicMaterial,
+  Mesh,
+  DirectionalLight,
+  FrontSide,
 } from 'three';
 import { Observable } from 'rxjs/Observable';
-import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeAll, mergeMap } from 'rxjs/operators';
 import { findFirstMesh } from './utils';
-import { LoaderService } from '../services/ObjectLoaderService';
+import { LoaderService } from '../services/LoaderService';
 import {
   ChairFactory,
   TableFactory,
@@ -71,68 +72,53 @@ class ModelsFactory {
     );
   }
 
-  // move to loader service
-  static getTexture$(path) {
-    return Observable.create(observer => {
-      new TextureLoader().load(path, texture => {
-        observer.next(texture);
-      });
-    });
-  }
-
-  static loadTexture(path) {
-    const textureLoader = new TextureLoader();
-
-    return textureLoader.load(path);
-  }
-
   createFloor$() {
-    return this.loaderService.loadGLTF$('floor2.gltf').pipe(
-      map(findFirstMesh),
-      tap(mesh => {
+    return combineLatest(
+      this.loaderService.loadGLTF$('floor2.gltf'),
+      this.loaderService.loadTexture$('assets/carpet.jpg')
+    ).pipe(
+      map(([scene, texture]) => ({
+        model: findFirstMesh(scene),
+        texture,
+      })),
+      map(res => {
+        const { model, texture } = res;
+
+        texture.wrapS = RepeatWrapping;
+        texture.wrapT = RepeatWrapping;
+        texture.minFilter = NearestFilter;
+        texture.maxFilter = NearestFilter;
+
         const material = new MeshStandardMaterial({
-          map: ModelsFactory.loadTexture('assets/carpet.jpg'),
-          bumpMap: ModelsFactory.loadTexture('assets/noise.jpg'),
-          bumpMapScale: 0.01,
+          map: texture,
           roughness: 0.8,
         });
 
-        mesh.material.clone(material);
-        mesh.material.needsUpdate = true;
+        model.material = material;
+        model.material.needsUpdate = true;
+
+        return model;
       })
     );
-    // return combineLatest(
-    //   this.loaderService.loadGLTF$('floor2.gltf'),
-    //   ModelsFactory.getTexture$('assets/noise.jpg'),
-    //   ModelsFactory.getTexture$('assets/carpet.jpg')
-    // ).pipe(
-    //   map(([ scene, bumpMap, texture ]) =>({
-    //     model: findFirstMesh(scene),
-    //     bumpMap,
-    //     texture
-    //   })),
-    //   map((res) => {
-    //     const { model, bumpMap, texture } = res;
+  }
 
-    //     // Bring this back to tile the carpet on the floor (repeat the pattern)
-    //     texture.wrapS = RepeatWrapping;
-    //     texture.wrapT = RepeatWrapping;
-    //     texture.repeat.set(10, 10);
-    //     bumpMap.wrapS = RepeatWrapping;
-    //     bumpMap.wrapT = RepeatWrapping;
-    //     texture.minFilter = LinearMipMapLinearFilter;
-    //     texture.maxFilter = LinearMipMapLinearFilter;
-    //     bumpMap.repeat.set(10,10);
+  createEnvironment$() {
+    return this.loaderService.loadTexture$('assets/panorama.jpg').pipe(
+      map(texture => {
+        const geometry = new SphereGeometry(31, 36, 20);
+        const material = new MeshBasicMaterial({
+          map: texture,
+          side: FrontSide,
+        });
+        geometry.scale(-1, 1, 1);
+        const sphere = new Mesh(geometry, material);
 
-    //     texture.minFilter = NearestFilter;
-    //     texture.maxFilter = NearestFilter;
+        const directionalLight = new DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(0, 90, -60);
 
-    //     const material = new MeshStandardMaterial({ map: texture, bumpMap, bumpMapScale: .01, roughness: 0.8 })
-    //     model.material.copy(material);
-
-    //     return model;
-    //   })
-    // );
+        return [sphere, directionalLight];
+      })
+    );
   }
 }
 

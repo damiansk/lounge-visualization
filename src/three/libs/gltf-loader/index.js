@@ -184,7 +184,7 @@ const Loader = (function() {
           }
         }
       }
-      debugger;
+
       var parser = new GLTFParser(json, extensions, {
         path: path || this.resourcePath || '',
         crossOrigin: this.crossOrigin,
