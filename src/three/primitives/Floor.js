@@ -1,7 +1,9 @@
 import { BaseModel } from './BaseModel';
 
 class Floor extends BaseModel {
-  isInteractive = false;
+  constructor(mesh) {
+    super(mesh, { isInteractive: false });
+  }
 }
 
 export { Floor };

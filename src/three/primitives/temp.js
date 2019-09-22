@@ -1,32 +1,16 @@
-import { Math as TMath } from 'three';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-const attributes = {
-  isHovered: Symbol('isHovered'),
-  isInteractive: Symbol('isInteractive'),
-};
-
-class BaseModel {
-  constructor(mesh) {
+class Base {
+  constructor(mesh, attributes) {
     this.mesh = mesh;
     this.type = 'base_model';
-    this.attributes = {};
+    this.attributes = attributes;
 
     this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
     this.reactiveAttributeSubscriptions = new Subscription();
-  }
 
-  // TODO make methods private
-  handleAttributesChanges() {
-    // Subscriptions for side effects
-    this.reactiveAttributeSubscriptions.add(
-      this.getAttribute$('isHovered').subscribe(this.handleIsHoveredChanged)
-    );
-  }
-
-  updateSubject() {
-    this.reactiveAttributes$.next(this.attributes);
+    this.handleAttributesChanges(Object.keys(attributes));
   }
 
   getAttribute$(key) {
@@ -41,8 +25,20 @@ class BaseModel {
     this.updateSubject();
   }
 
+  updateSubject() {
+    this.reactiveAttributes$.next(this.attributes);
+  }
+
   subscribeForChanges$() {
     return this.reactiveAttributes$.asObservable();
+  }
+
+  handleAttributesChanges(attributes) {
+    attributes.forEach(attribute => {
+      this.reactiveAttributeSubscriptions.add(
+        this.getAttribute$(attribute).subscribe(/* TODO */)
+      );
+    });
   }
 
   destroy() {
@@ -50,9 +46,4 @@ class BaseModel {
   }
 }
 
-class ReactiveIsHovered {
-
-}
-
 export { BaseModel };
-

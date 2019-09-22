@@ -1,4 +1,10 @@
-import React, { Component, useCallback, useEffect, useState, useMemo } from 'react';
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   ListItem,
@@ -19,32 +25,45 @@ const useModelReactiveHover = model => {
   // Getting static `isHovered` value to init the state
   const [isHovered, setIsHovered] = useState(model.isHovered);
 
-  useEffect(() => {
-    const subscription = model
+  useEffect(
+    () => {
+      const subscription = model
+        // TODO Change string to Symbol
+        .getAttribute$('isHovered')
+        .subscribe(setIsHovered);
+
+      return () => subscription.unsubscribe();
+    },
+    [model]
+  );
+
+  const onMouseOver = useCallback(
+    () => {
       // TODO Change string to Symbol
-      .getAttribute$('isHovered')
-      .subscribe(setIsHovered);
+      model.setAttribute$('isHovered', true);
+    },
+    [model]
+  );
 
-    return () => subscription.unsubscribe();
-  }, [model]);
-
-  const onMouseOver = useCallback(() => {
-    // TODO Change string to Symbol
-    model.setAttribute$('isHovered', true);
-  }, [model]);
-
-  const onMouseOut = useCallback(() => {
-    // TODO Change string to Symbol
-    model.setAttribute$('isHovered', false);
-  }, [model]);
+  const onMouseOut = useCallback(
+    () => {
+      // TODO Change string to Symbol
+      model.setAttribute$('isHovered', false);
+    },
+    [model]
+  );
 
   return [isHovered, onMouseOver, onMouseOut];
-}
+};
 
 const Item = ({ index, model, onRemove, onApplyChangeName }) => {
   const [isOpen, setIsOpen] = useState();
   const [newModelName, setNewModelName] = useState(DEFAULT_NEW_MODEL);
-  const [isHovered, handleOnMouseOver, handleOnMouseOut] = useModelReactiveHover(model);
+  const [
+    isHovered,
+    handleOnMouseOver,
+    handleOnMouseOut,
+  ] = useModelReactiveHover(model);
 
   const handleRemove = useCallback(
     () => {

@@ -5,57 +5,31 @@ import { Math as TMath } from 'three';
 const hoverColor = 0x808080;
 
 // TODO Use it instead of strings
-const attributes = {
-  isHovered: Symbol('isHovered'),
-  isInteractive: Symbol('isInteractive'),
-};
-
+// const attributes = {
+//   isHovered: Symbol('isHovered'),
+//   isInteractive: Symbol('isInteractive'),
+// };
 
 class BaseModel {
-  constructor(mesh) {
-    this.isInteractive = true;
-    this.isHovered = false;
-
-    this.updateSubject$ = new BehaviorSubject({ isHovered: this.isHovered });
-
-    this.isEqual = this.isEqual.bind(this);
-    this.setHover = this.setHover.bind(this);
-    this.subscribeForChanges$ = this.subscribeForChanges$.bind(this);
-
-
+  constructor(mesh, attributes) {
     this.mesh = mesh;
     this.type = 'base_model';
-    this.attributes = {
-      isInteractive: false,
-      isHovered: false,
-    };
 
+    this.attributes = {
+      // isInteractive: true,
+      // isHovered: false,
+      ...attributes,
+    };
+    this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
+
+    this.isEqual = this.isEqual.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+    this.subscribeForChanges$ = this.subscribeForChanges$.bind(this);
     this.getAttribute$ = this.getAttribute$.bind(this);
     this.setAttribute$ = this.setAttribute$.bind(this);
 
-    this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
     this.handleAttributesChanges();
   }
-
-  setHover(isHovered) {
-    this.isHovered = isHovered;
-
-    if (isHovered) {
-      this.color = this.mesh.material.color.clone();
-      this.mesh.material.color.set(hoverColor);
-    } else {
-      this.mesh.material.color.set(this.color);
-    }
-
-    this.updateSubject$.next({ isHovered });
-  }
-
-  subscribeForChanges$() {
-    return this.updateSubject$.asObservable();
-  }
-
-
-
 
   getConfig() {
     return {
@@ -83,17 +57,20 @@ class BaseModel {
     return model.mesh === this.mesh;
   }
 
+  updateSubject() {
+    this.reactiveAttributes$.next(this.attributes);
+  }
+
   handleAttributesChanges() {
     this.reactiveAttributeSubscriptions = new Subscription();
 
-    // Subscriptions for side effects
     this.reactiveAttributeSubscriptions.add(
-      this.getAttribute$('isHovered').subscribe(this.setHover)
+      this.getAttribute$('isHovered').subscribe(this.handleHover)
     );
   }
 
-  updateSubject() {
-    this.reactiveAttributes$.next(this.attributes);
+  subscribeForChanges$() {
+    return this.reactiveAttributes$.asObservable();
   }
 
   getAttribute$(key) {
@@ -104,12 +81,17 @@ class BaseModel {
   }
 
   setAttribute$(key, value) {
-    this.attribues[key] = value;
+    this.attributes[key] = value;
     this.updateSubject();
   }
 
-  subscribeForChanges$() {
-    return this.reactiveAttributes$.asObservable();
+  handleHover(isHovered) {
+    if (isHovered) {
+      this.color = this.mesh.material.color.clone();
+      this.mesh.material.color.set(hoverColor);
+    } else {
+      this.mesh.material.color.set(this.color);
+    }
   }
 
   destroy() {

@@ -1,13 +1,11 @@
 import { BaseModel } from './BaseModel';
 
 class Lamp extends BaseModel {
-  isInteractive = true;
-
   type = 'lamp';
 
-  constructor(args) {
-    super(args);
-    this.setHover = this.setHover.bind(this);
+  constructor(mesh) {
+    super(mesh, { isInteractive: false });
+    this.handleHover = this.handleHover.bind(this);
     this.setLight = this.setLight.bind(this);
 
     this.checkbox = {
@@ -16,7 +14,7 @@ class Lamp extends BaseModel {
     };
   }
 
-  setHover() {}
+  handleHover() {}
 
   addLight(light) {
     this.light = light;
