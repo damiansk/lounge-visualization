@@ -1,15 +1,15 @@
 import { BaseModel } from './BaseModel';
 
-class LightBulb extends BaseModel {
-  isInteractive = false;
+const type = Symbol('Light bulb');
 
+class LightBulb extends BaseModel {
   constructor(mesh) {
-    super(mesh, { isInteractive: false });
+    super(mesh);
+
+    this.type = type;
 
     this.setLight = this.setLight.bind(this);
   }
-
-  handleHover() {}
 
   setLight(lightStatus) {
     this.mesh.intensity = Number(lightStatus);

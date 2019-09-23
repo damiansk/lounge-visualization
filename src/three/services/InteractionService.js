@@ -109,21 +109,15 @@ class InteractionService {
 
   hoverOnHandler({ object: mesh }) {
     if (!!this.prevHoverOnMesh && this.prevHoverOnMesh !== mesh) {
-      // this.modelsWeakMap.get(this.prevHoverOnMesh).setHover(false);
-      debugger;
       this.modelsWeakMap
         .get(this.prevHoverOnMesh)
         .setAttribute$('isHovered', false);
     }
     this.prevHoverOnMesh = mesh;
-    // this.modelsWeakMap.get(mesh).setHover(true);
-    debugger;
     this.modelsWeakMap.get(mesh).setAttribute$('isHovered', true);
   }
 
   hoverOffHandler({ object: mesh }) {
-    // this.modelsWeakMap.get(mesh).setHover(false);
-    debugger;
     this.modelsWeakMap.get(mesh).setAttribute$('isHovered', false);
     this.prevHoverOnMesh = null;
   }
