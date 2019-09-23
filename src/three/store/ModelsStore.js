@@ -61,6 +61,7 @@ class ModelsStore {
     this.models = this.models.filter(m => !model.isEqual(m));
     this.updateModelsSubject$.next(this.models);
     this.removeModelsSubject$.next(model);
+    model.destroy();
   }
 
   changeName(model, newName) {
