@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ListItem,
@@ -11,38 +11,8 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import { useModelAttribute, useInput } from '../../../hooks';
 import { BaseModel } from '../../../three/primitives';
-
-const useInput = initialValue => {
-  const [value, setValue] = useState(initialValue);
-
-  const handleChange = useCallback(event => setValue(event.target.value), []);
-
-  return [value, handleChange];
-};
-
-const useModelAttribute = (model, attributeName) => {
-  // TODO Init state from "attributes" or create something more independent from model structure?
-  const [attribute, setAttribute] = useState(model.attributes[attributeName]);
-
-  useEffect(
-    () => {
-      const subscription = model
-        .getAttribute$(attributeName)
-        .subscribe(setAttribute);
-
-      return () => subscription.unsubscribe();
-    },
-    [attributeName, model]
-  );
-
-  const setModelAttribute = useCallback(
-    value => model.setAttribute$(attributeName, value),
-    [attributeName, model]
-  );
-
-  return [attribute, setModelAttribute];
-};
 
 const Item = ({ index, model, onRemove }) => {
   const [isHovered, setIsHovered] = useModelAttribute(model, 'isHovered');
