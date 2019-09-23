@@ -4,7 +4,7 @@ import { Math as TMath } from 'three';
 
 const hoverColor = 0x808080;
 
-const type = Symbol('Base model');
+const type = 'Base model';
 
 class BaseModel {
   constructor(mesh, attributes = {}) {
@@ -46,6 +46,7 @@ class BaseModel {
   }
 
   setAttribute$(key, value) {
+    debugger;
     this.attributes[key] = value;
     this.updateSubject();
   }

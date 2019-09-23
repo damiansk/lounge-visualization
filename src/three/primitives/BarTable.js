@@ -1,15 +1,14 @@
 import { BaseModel } from './BaseModel';
 
-const type = Symbol('Bar table');
-
-const defaultAttributes = {
-  isHovered: false,
-  isInteractive: true,
-};
+const type = 'Bar table';
 
 class BarTable extends BaseModel {
   constructor(mesh) {
-    super(mesh, defaultAttributes);
+    super(mesh, {
+      isHovered: false,
+      isInteractive: true,
+      name: 'Bar table',
+    });
 
     this.type = type;
 

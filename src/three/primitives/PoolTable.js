@@ -1,10 +1,12 @@
 import { BaseModel } from './BaseModel';
 
-const type = Symbol('Pool table');
+const type = 'Pool table';
 
 class PoolTable extends BaseModel {
   constructor(mesh) {
-    super(mesh);
+    super(mesh, {
+      name: 'Pool table',
+    });
 
     this.type = type;
   }

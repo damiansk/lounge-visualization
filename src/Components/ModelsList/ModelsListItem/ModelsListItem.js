@@ -13,68 +13,58 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { BaseModel } from '../../../three/primitives';
 
-const DEFAULT_NEW_MODEL = 'Hail to the duke!';
+const useInput = initialValue => {
+  const [value, setValue] = useState(initialValue);
 
-const useModelReactiveHover = model => {
-  // Getting static `isHovered` value to init the state
-  const [isHovered, setIsHovered] = useState(model.isHovered);
+  const handleChange = useCallback(event => setValue(event.target.value), []);
+
+  return [value, handleChange];
+};
+
+const useModelAttribute = (model, attributeName) => {
+  // TODO Init state from "attributes" or create something more independent from model structure?
+  const [attribute, setAttribute] = useState(model.attributes[attributeName]);
 
   useEffect(
     () => {
       const subscription = model
-        // TODO Change string to Symbol
-        .getAttribute$('isHovered')
-        .subscribe(setIsHovered);
+        .getAttribute$(attributeName)
+        .subscribe(setAttribute);
 
       return () => subscription.unsubscribe();
     },
-    [model]
+    [attributeName, model]
   );
 
-  const onMouseOver = useCallback(
-    () => {
-      // TODO Change string to Symbol
-      model.setAttribute$('isHovered', true);
-    },
-    [model]
+  const setModelAttribute = useCallback(
+    value => model.setAttribute$(attributeName, value),
+    [attributeName, model]
   );
 
-  const onMouseOut = useCallback(
-    () => {
-      // TODO Change string to Symbol
-      model.setAttribute$('isHovered', false);
-    },
-    [model]
-  );
-
-  return [isHovered, onMouseOver, onMouseOut];
+  return [attribute, setModelAttribute];
 };
 
-const Item = ({ index, model, onRemove, onApplyChangeName }) => {
-  const [isOpen, setIsOpen] = useState();
-  const [newModelName, setNewModelName] = useState(DEFAULT_NEW_MODEL);
-  const [
-    isHovered,
-    handleOnMouseOver,
-    handleOnMouseOut,
-  ] = useModelReactiveHover(model);
+const Item = ({ index, model, onRemove }) => {
+  const [isHovered, setIsHovered] = useModelAttribute(model, 'isHovered');
+  const [name, setName] = useModelAttribute(model, 'name');
+  const [nameInputValue, handleNameInputValueChange] = useInput(name);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleRemove = useCallback(
+  const handleMouseOver = useCallback(() => setIsHovered(true), [setIsHovered]);
+  const handleMouseOut = useCallback(() => setIsHovered(false), [setIsHovered]);
+  const handleSaveModelName = useCallback(
+    () => {
+      setName(nameInputValue);
+      setIsOpen(false);
+    },
+    [setName, nameInputValue]
+  );
+  const handleRemoveModel = useCallback(
     () => {
       onRemove(model);
     },
     [onRemove, model]
   );
-
-  const onNameChangeInput = event => {
-    setNewModelName(event.target.value);
-  };
-
-  const applyNameChange = () => {
-    setIsOpen(false);
-    setNewModelName(DEFAULT_NEW_MODEL);
-    onApplyChangeName(model, newModelName);
-  };
 
   const toggleRenamePanel = () => {
     setIsOpen(!isOpen);
@@ -85,11 +75,11 @@ const Item = ({ index, model, onRemove, onApplyChangeName }) => {
       <ListItem
         key={index}
         button
-        onMouseOver={handleOnMouseOver}
-        onMouseOut={handleOnMouseOut}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
         selected={isHovered}
       >
-        <ListItemText primary={`${index + 1}) ${model.getName()}`} />
+        <ListItemText primary={`${index + 1}) ${name}`} />
         <ListItemSecondaryAction>
           {model.checkbox ? (
             <Switch
@@ -100,7 +90,7 @@ const Item = ({ index, model, onRemove, onApplyChangeName }) => {
           <IconButton aria-label="Edit" onClick={toggleRenamePanel}>
             <EditIcon />
           </IconButton>
-          <IconButton aria-label="Delete" onClick={handleRemove}>
+          <IconButton aria-label="Delete" onClick={handleRemoveModel}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -110,15 +100,15 @@ const Item = ({ index, model, onRemove, onApplyChangeName }) => {
           <TextField
             fullWidth
             variant="filled"
-            value={newModelName}
+            value={nameInputValue}
             label="Rename the item"
-            onChange={onNameChangeInput}
+            onChange={handleNameInputValueChange}
           />
           <Button
             variant="contained"
             color="secondary"
             size="small"
-            onClick={applyNameChange}
+            onClick={handleSaveModelName}
           >
             OK
           </Button>

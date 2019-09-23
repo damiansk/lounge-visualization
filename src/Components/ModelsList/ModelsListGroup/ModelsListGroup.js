@@ -6,7 +6,7 @@ import { ModelsListItem } from '../ModelsListItem/ModelsListItem';
 
 const ModelsListGroup = ({
   modelGroup,
-  modelName,
+  modelType,
   onRemove,
   onApplyChangeName,
 }) => {
@@ -15,11 +15,11 @@ const ModelsListGroup = ({
   return (
     <>
       <ListItem button onClick={() => setIsOpen(!isOpen)}>
-        <ListItemText primary={modelName} />
+        <ListItemText primary={modelType} />
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <List key={modelName} component="div" disablePadding>
+        <List component="div" disablePadding>
           {modelGroup.map((model, index) => (
             <ModelsListItem
               key={index}
