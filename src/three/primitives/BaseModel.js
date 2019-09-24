@@ -46,7 +46,6 @@ class BaseModel {
   }
 
   setAttribute$(key, value) {
-    debugger;
     this.attributes[key] = value;
     this.updateSubject();
   }

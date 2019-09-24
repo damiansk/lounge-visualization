@@ -17,6 +17,7 @@ import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
 import { AnimationService } from './services/AnimationService';
 import { ModelsFactory } from './factories/ModelsFactory';
+import { FloorBuilderService } from './services/FloorBuilderService';
 
 const nearPlane = 0.1;
 const farPlane = 4000;
@@ -73,8 +74,16 @@ class SceneManager {
       this.renderer,
       this.animationService
     );
+
+    this.floorBuilder = new FloorBuilderService(
+      this.canvas,
+      this.scene,
+      this.camera
+    );
+
     this.subscribeForStoreEvents();
-    this.initSceneSubjects();
+    this.initEnvironment();
+    // this.initSceneSubjects();
   }
 
   update(time) {
@@ -106,12 +115,7 @@ class SceneManager {
     });
   }
 
-  initSceneSubjects() {
-    this.factory.createFloor$().subscribe(mesh => {
-      mesh.receiveShadow = true;
-      this.interactionService.registerInterationScope(mesh);
-      this.scene.add(mesh);
-    });
+  initEnvironment() {
     const textureLoader = new TextureLoader();
     textureLoader.load('assets/panorama.jpg', texture => {
       const geometry = new SphereGeometry(31, 36, 20);
@@ -129,10 +133,18 @@ class SceneManager {
     this.scene.add(directionalLight);
   }
 
+  initSceneSubjects() {
+    this.factory.createFloor$().subscribe(mesh => {
+      mesh.receiveShadow = true;
+      this.interactionService.registerInterationScope(mesh);
+      this.scene.add(mesh);
+    });
+  }
+
   loadSceneModels(config) {
-    this.factory
-      .createModels$(config)
-      .subscribe(model => this.store.add(model));
+    // this.factory
+    //   .createModels$(config)
+    //   .subscribe(model => this.store.add(model));
   }
 
   destroySceneModels() {
