@@ -1,18 +1,8 @@
-import { combineLatest, from } from 'rxjs';
-import {
-  NearestFilter,
-  RepeatWrapping,
-  MeshStandardMaterial,
-  SphereGeometry,
-  MeshBasicMaterial,
-  Mesh,
-  DirectionalLight,
-  FrontSide,
-} from 'three';
+import { from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { map, mergeAll, mergeMap } from 'rxjs/operators';
-import { findFirstMesh } from './utils';
-import { LoaderService } from '../services/LoaderService';
+import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
+import { findAllMeshes, findFirstMesh } from './utils';
+import { LoaderService } from '../services/ObjectLoaderService';
 import {
   ChairFactory,
   TableFactory,
@@ -73,54 +63,7 @@ class ModelsFactory {
   }
 
   createFloor$() {
-    return combineLatest(
-      this.loaderService.loadGLTF$('floor2.gltf'),
-      this.loaderService.loadTexture$('assets/carpet.jpg')
-    ).pipe(
-      map(([scene, texture]) => ({
-        model: findFirstMesh(scene),
-        texture,
-      })),
-      map(res => {
-        const { model, texture } = res;
-
-        // For repeat strategy
-        // texture.wrapS = RepeatWrapping;
-        // texture.wrapT = RepeatWrapping;
-        // texture.minFilter = NearestFilter;
-        // texture.maxFilter = NearestFilter;
-
-        const material = new MeshStandardMaterial({
-          map: texture,
-          roughness: 0.8,
-        });
-
-        model.material = material;
-        model.material.needsUpdate = true;
-
-        return model;
-      })
-    );
-  }
-
-  createEnvironment$() {
-    // TODO Refactor
-    return this.loaderService.loadTexture$('assets/panorama.jpg').pipe(
-      map(texture => {
-        const geometry = new SphereGeometry(31, 36, 20);
-        const material = new MeshBasicMaterial({
-          map: texture,
-          side: FrontSide,
-        });
-        geometry.scale(-1, 1, 1);
-        const sphere = new Mesh(geometry, material);
-
-        const directionalLight = new DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(0, 90, -60);
-
-        return [sphere, directionalLight];
-      })
-    );
+    return this.loaderService.loadGLTF$('floor_new.gltf');
   }
 }
 

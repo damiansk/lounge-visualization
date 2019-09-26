@@ -13,6 +13,7 @@ const findRoot = model => {
 };
 
 const findFirstMesh = obj => obj.scene.getObjectByProperty('type', 'Mesh');
+const findAllMeshes = obj => obj.scene.children;
 
 const fixPosition = mesh => {
   const boundingBox = new Box3().setFromObject(mesh);
@@ -22,7 +23,7 @@ const fixPosition = mesh => {
 };
 
 const applyConfig = config => mesh => {
-  if (config.position) {
+  if (config.position && mesh) {
     mesh.position.x = config.position.x || mesh.position.x;
     mesh.position.z = config.position.z || mesh.position.z;
     mesh.position.y = config.position.y || mesh.position.y;
@@ -35,4 +36,4 @@ const applyConfig = config => mesh => {
   return mesh;
 };
 
-export { findRoot, fixPosition, applyConfig, findFirstMesh };
+export { findRoot, fixPosition, applyConfig, findFirstMesh, findAllMeshes };
