@@ -5,7 +5,13 @@ import {
   PerspectiveCamera,
   Color,
   LoadingManager,
+  DirectionalLight,
   PCFSoftShadowMap,
+  SphereGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  TextureLoader,
+  FrontSide,
 } from 'three';
 import { CameraControlsService } from './services/CameraControlsService';
 import { InteractionService } from './services/InteractionService';
@@ -102,13 +108,30 @@ class SceneManager {
 
   initSceneSubjects() {
     this.factory.createFloor$().subscribe(mesh => {
-      mesh.receiveShadow = true;
-      this.interactionService.registerInterationScope(mesh);
+      const meshes = mesh.scene.children;
+
+      meshes.forEach(mesh => {
+        mesh.receiveShadow = true;
+        this.interactionService.registerInterationScope(mesh);
+        this.scene.add(mesh);
+      });
+    });
+
+    const textureLoader = new TextureLoader();
+    textureLoader.load('assets/panorama.jpg', texture => {
+      const geometry = new SphereGeometry(31, 36, 20);
+      const material = new MeshBasicMaterial({
+        map: texture,
+        side: FrontSide,
+      });
+      geometry.scale(-1, 1, 1);
+      const mesh = new Mesh(geometry, material);
       this.scene.add(mesh);
+      mesh.position.set(0, 0, 0);
     });
-    this.factory.createEnvironment$().subscribe(meshes => {
-      meshes.forEach(mesh => this.scene.add(mesh));
-    });
+    const directionalLight = new DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(0, 90, -60);
+    this.scene.add(directionalLight);
   }
 
   loadSceneModels(config) {
