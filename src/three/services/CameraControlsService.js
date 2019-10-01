@@ -9,7 +9,7 @@ class CameraControlsService {
 
     controls.enabled = true;
 
-    controls.autoRotate = true;
+    controls.autoRotate = false;
     controls.autoRotateSpeed = 0.2;
 
     controls.enableDamping = true;
