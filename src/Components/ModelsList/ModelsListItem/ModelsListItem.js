@@ -11,11 +11,17 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import { useModelAttribute, useInput } from '../../../hooks';
 import { BaseModel } from '../../../three/primitives';
 
 const Item = ({ index, model, onRemove }) => {
   const [isHovered, setIsHovered] = useModelAttribute(model, 'isHovered');
+  const [isInteractive, setIsInteractive] = useModelAttribute(
+    model,
+    'isInteractive'
+  );
   const [name, setName] = useModelAttribute(model, 'name');
   const [nameInputValue, handleNameInputValueChange] = useInput(name);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +40,12 @@ const Item = ({ index, model, onRemove }) => {
       onRemove(model);
     },
     [onRemove, model]
+  );
+  const handleInteractiveToggle = useCallback(
+    () => {
+      setIsInteractive(!isInteractive);
+    },
+    [setIsInteractive, isInteractive]
   );
 
   const toggleRenamePanel = () => {
@@ -62,6 +74,9 @@ const Item = ({ index, model, onRemove }) => {
           </IconButton>
           <IconButton aria-label="Delete" onClick={handleRemoveModel}>
             <DeleteIcon />
+          </IconButton>
+          <IconButton aria-label="Disable" onClick={handleInteractiveToggle}>
+            {isInteractive ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
