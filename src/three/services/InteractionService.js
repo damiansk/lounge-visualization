@@ -159,7 +159,6 @@ class InteractionService {
 
   isCollideWithAnyMesh(object) {
     const boundingBox = new Box3().setFromObject(object);
-    // HERE
     const meshes = this.interactiveMeshes.concat(this.staticMeshes);
     for (let i = meshes.length - 1; i >= 0; i--) {
       const tempBoundingBox = this.getModelBoundingBox(meshes[i]);
