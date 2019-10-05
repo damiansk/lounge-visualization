@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
+import { Group } from './Group/Group';
 import { StoreContext } from '../../storeContext';
 
 const ModelsList = () => {
@@ -22,7 +22,7 @@ const ModelsList = () => {
     <>
       {Object.keys(modelGroups).map((modelType, i) => {
         return (
-          <ModelsListGroup
+          <Group
             key={modelType}
             modelGroup={modelGroups[modelType]}
             modelType={modelType}

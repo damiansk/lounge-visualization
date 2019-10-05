@@ -110,4 +110,4 @@ Item.propTypes = {
   onRemove: PropTypes.func.isRequired,
 };
 
-export { Item as ModelsListItem };
+export { Item };
