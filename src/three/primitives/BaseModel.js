@@ -38,6 +38,7 @@ class BaseModel {
     return this.reactiveAttributes$.asObservable();
   }
 
+  // TODO will be usefull to have `getter` for static attribute value
   getAttribute$(key) {
     return this.reactiveAttributes$.pipe(
       map(reactiveAttributes => reactiveAttributes[key]),
