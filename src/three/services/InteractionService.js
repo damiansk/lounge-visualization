@@ -51,17 +51,22 @@ class InteractionService {
     this.modelsWeakMap.set(model.mesh, model);
     this.updateModelBoundingBox(model.mesh);
 
-    model.getAttribute$('isInteractive').subscribe(isInteractive => {
-      const { mesh } = model;
+    // TODO Unsubscribe during removing model or destructing instance
+    model
+      .getAttribute$('isInteractive')
+      .subscribe(isInteractive => this.update(model, isInteractive));
+  }
 
-      this.remove(model);
+  update(model, isInteractive) {
+    const { mesh } = model;
 
-      if (isInteractive) {
-        this.interactiveMeshes.push(mesh);
-      } else {
-        this.staticMeshes.push(mesh);
-      }
-    });
+    this.remove(model);
+
+    if (isInteractive) {
+      this.interactiveMeshes.push(mesh);
+    } else {
+      this.staticMeshes.push(mesh);
+    }
   }
 
   remove({ mesh }) {
