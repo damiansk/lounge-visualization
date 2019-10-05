@@ -63,6 +63,7 @@ const Item = ({ index, model, onRemove }) => {
       >
         <ListItemText primary={`${index + 1}) ${name}`} />
         <ListItemSecondaryAction>
+          {/* TODO Make it reactive (for now there is only the light but in the future who knows...) */}
           {model.checkbox ? (
             <Switch
               defaultChecked={model.checkbox.initialValue}
@@ -107,7 +108,6 @@ Item.propTypes = {
   index: PropTypes.number.isRequired,
   model: PropTypes.instanceOf(BaseModel).isRequired,
   onRemove: PropTypes.func.isRequired,
-  onApplyChangeName: PropTypes.func.isRequired,
 };
 
 export { Item as ModelsListItem };

@@ -4,12 +4,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { ModelsListItem } from '../ModelsListItem/ModelsListItem';
 
-const ModelsListGroup = ({
-  modelGroup,
-  modelType,
-  onRemove,
-  onApplyChangeName,
-}) => {
+const ModelsListGroup = ({ modelGroup, modelType, onRemove }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -26,7 +21,6 @@ const ModelsListGroup = ({
               index={index}
               model={model}
               onRemove={onRemove}
-              onApplyChangeName={onApplyChangeName}
             />
           ))}
         </List>
