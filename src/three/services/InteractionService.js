@@ -173,7 +173,7 @@ class InteractionService {
     const isAnyPointOutsideTheScope = points.some(point => {
       this.raycaster.set(point, direction);
 
-      const collisions = this.raycaster.intersectObject(this.interactionScope);
+      const collisions = this.raycaster.intersectObject(this.interactionScope, true);
 
       return collisions.length === 0;
     });
