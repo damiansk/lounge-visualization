@@ -1,10 +1,10 @@
 import { from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
-import { findAllMeshes, findFirstMesh } from './utils';
+import { map, mergeAll, mergeMap } from 'rxjs/operators';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
   ChairFactory,
+  CouchFactory,
   TableFactory,
   BarTableFactory,
   PoolTableFactory,
@@ -20,6 +20,7 @@ class ModelsFactory {
     this.loaderService = new LoaderService(this.loadingManager);
 
     this.barChairFactory = new BarChairFactory(this.loadingManager);
+    this.couchFactory = new CouchFactory(this.loadingManager);
     this.chairFactory = new ChairFactory(this.loadingManager);
     this.poolTableFactory = new PoolTableFactory(this.loadingManager);
     this.tableFactory = new TableFactory(this.loadingManager);
@@ -38,6 +39,8 @@ class ModelsFactory {
         switch (type) {
           case 'chair':
             return this.chairFactory.createChairs$(configs);
+          case 'couch':
+            return this.couchFactory.createCouches$(configs);
           case 'table':
             return this.tableFactory.createTables$(configs);
           case 'bar_table':

@@ -1,5 +1,6 @@
 export * from './BarChair';
 export * from './Chair';
+export * from './Couch';
 export * from './Floor';
 export * from './Table';
 export * from './BarTable';

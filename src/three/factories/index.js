@@ -1,4 +1,5 @@
 export * from './BarChairFactory';
+export * from './CouchFactory';
 export * from './ChairFactory';
 export * from './ModelsFactory';
 export * from './PoolTableFactory';
