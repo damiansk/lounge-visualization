@@ -1,19 +1,75 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Math as TMath } from 'three';
 
 const hoverColor = 0x808080;
 
+const type = 'Base model';
+
 class BaseModel {
-  constructor(mesh) {
+  constructor(mesh, attributes = {}) {
     this.mesh = mesh;
-    this.isInteractive = true;
-    this.isHovered = false;
-    this.type = 'base_model';
-    this.updateSubject$ = new BehaviorSubject({ isHovered: this.isHovered });
+    this.type = type;
+
+    this.cache = {};
+    this.attributes = attributes;
+    this.reactiveAttributeSubscriptions = new Subscription();
+    this.reactiveAttributes$ = new BehaviorSubject(this.attributes);
+
+    this.subscribeForChanges$ = this.subscribeForChanges$.bind(this);
+    this.getAttribute$ = this.getAttribute$.bind(this);
+    this.setAttribute$ = this.setAttribute$.bind(this);
+    this.handleAttributesChange = this.handleAttributesChange.bind(this);
 
     this.isEqual = this.isEqual.bind(this);
-    this.setHover = this.setHover.bind(this);
-    this.subscribeForChanges$ = this.subscribeForChanges$.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+    this.getConfig = this.getConfig.bind(this);
+    this.getId = this.getId.bind(this);
+    this.getName = this.getName.bind(this);
+    this.getType = this.getType.bind(this);
+    this.destroy = this.destroy.bind(this);
+  }
+
+  updateSubject() {
+    this.reactiveAttributes$.next(this.attributes);
+  }
+
+  subscribeForChanges$() {
+    return this.reactiveAttributes$.asObservable();
+  }
+
+  // TODO will be usefull to have `getter` for static attribute value
+  getAttribute$(key) {
+    return this.reactiveAttributes$.pipe(
+      map(reactiveAttributes => reactiveAttributes[key]),
+      distinctUntilChanged()
+    );
+  }
+
+  setAttribute$(key, value) {
+    this.attributes[key] = value;
+    this.updateSubject();
+  }
+
+  handleAttributesChange(handlers) {
+    Object.entries(handlers).forEach(([attribute, handler]) =>
+      this.reactiveAttributeSubscriptions.add(
+        this.getAttribute$(attribute).subscribe(handler)
+      )
+    );
+  }
+
+  isEqual(model) {
+    return model.mesh === this.mesh;
+  }
+
+  handleHover(isHovered) {
+    if (isHovered) {
+      this.cache.color = this.mesh.material.color.clone();
+      this.mesh.material.color.set(hoverColor);
+    } else {
+      this.mesh.material.color.set(this.cache.color);
+    }
   }
 
   getConfig() {
@@ -38,25 +94,8 @@ class BaseModel {
     return this.type;
   }
 
-  isEqual(model) {
-    return model.mesh === this.mesh;
-  }
-
-  setHover(isHovered) {
-    this.isHovered = isHovered;
-
-    if (isHovered) {
-      this.color = this.mesh.material.color.clone();
-      this.mesh.material.color.set(hoverColor);
-    } else {
-      this.mesh.material.color.set(this.color);
-    }
-
-    this.updateSubject$.next({ isHovered });
-  }
-
-  subscribeForChanges$() {
-    return this.updateSubject$.asObservable();
+  destroy() {
+    this.reactiveAttributeSubscriptions.unsubscribe();
   }
 }
 

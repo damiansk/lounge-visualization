@@ -1,9 +1,15 @@
 import { BaseModel } from './BaseModel';
 
-class Bookcase extends BaseModel {
-  isInteractive = false;
+const type = 'Bookcase';
 
-  type = 'bookcase';
+class Bookcase extends BaseModel {
+  constructor(mesh) {
+    super(mesh, {
+      name: 'Bookcase',
+    });
+
+    this.type = type;
+  }
 }
 
 export { Bookcase };
