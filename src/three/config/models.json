@@ -348,6 +348,18 @@
       ]
     },
     {
+      "type": "couch",
+      "configs": [
+        {
+          "position": {
+            "x": 3.6359100101263797,
+            "z": 12.821988095293417
+          },
+          "rotation": -90
+        }
+      ]
+    },
+    {
       "type": "bookcase",
       "configs": [
         {

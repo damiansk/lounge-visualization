@@ -3,7 +3,7 @@ import { map, shareReplay, tap } from 'rxjs/operators';
 import { getMeshOrGroup, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
-import { Group } from "three";
+import { Group } from 'three';
 
 const fileName = 'table.gltf';
 
