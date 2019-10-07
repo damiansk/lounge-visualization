@@ -1,6 +1,6 @@
 import { from, of } from 'rxjs';
-import { flatMap, map, mergeAll, mergeMap, shareReplay, tap } from 'rxjs/operators';
-import { findFirstMesh, applyConfig } from './utils';
+import { map, shareReplay, tap } from 'rxjs/operators';
+import { getMeshOrGroup, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
 import { Group } from "three";
