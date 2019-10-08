@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { ModelsListGroup } from './ModelsListGroup/ModelsListGroup';
+import { Group } from './Group/Group';
 import { StoreContext } from '../../storeContext';
 
 const ModelsList = () => {
@@ -8,11 +8,11 @@ const ModelsList = () => {
   const modelGroups = useMemo(
     () =>
       models.reduce((acc, model) => {
-        const modelName = model.getName();
-        if (!acc[modelName]) {
-          acc[modelName] = [];
+        const modelType = model.type;
+        if (!acc[modelType]) {
+          acc[modelType] = [];
         }
-        acc[modelName].push(model);
+        acc[modelType].push(model);
         return acc;
       }, {}),
     [models]
@@ -20,12 +20,12 @@ const ModelsList = () => {
 
   return (
     <>
-      {Object.keys(modelGroups).map((modelName, i) => {
+      {Object.keys(modelGroups).map((modelType, i) => {
         return (
-          <ModelsListGroup
-            key={modelName}
-            modelGroup={modelGroups[modelName]}
-            modelName={modelName}
+          <Group
+            key={modelType}
+            modelGroup={modelGroups[modelType]}
+            modelType={modelType}
             onRemove={remove}
           />
         );

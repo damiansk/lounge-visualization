@@ -1,22 +1,22 @@
 import { BaseModel } from './BaseModel';
 
+const type = 'Lamp';
+
 class Lamp extends BaseModel {
-  isInteractive = true;
+  constructor(mesh) {
+    super(mesh, {
+      name: 'Lamp',
+    });
 
-  type = 'lamp';
+    this.type = type;
 
-  constructor(args) {
-    super(args);
-    this.setHover = this.setHover.bind(this);
     this.setLight = this.setLight.bind(this);
-
+    // TODO Handle this via reactive attribute `light`
     this.checkbox = {
       initialValue: true,
       callback: this.setLight,
     };
   }
-
-  setHover() {}
 
   addLight(light) {
     this.light = light;

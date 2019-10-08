@@ -1,7 +1,15 @@
 import { BaseModel } from './BaseModel';
 
+const type = 'Floor';
+
 class Floor extends BaseModel {
-  isInteractive = false;
+  constructor(mesh) {
+    super(mesh, {
+      name: 'Floor',
+    });
+
+    this.type = type;
+  }
 }
 
 export { Floor };

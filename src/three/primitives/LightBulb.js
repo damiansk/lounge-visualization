@@ -1,10 +1,14 @@
 import { BaseModel } from './BaseModel';
 
-class LightBulb extends BaseModel {
-  isInteractive = false;
+const type = 'Light bulb';
 
-  constructor(props) {
-    super(props);
+class LightBulb extends BaseModel {
+  constructor(mesh) {
+    super(mesh, {
+      name: 'Light bulb',
+    });
+
+    this.type = type;
 
     this.setLight = this.setLight.bind(this);
   }
