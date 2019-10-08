@@ -1,4 +1,4 @@
-import { Mesh, Box3, Math as TMath } from 'three';
+import { Mesh, Box3, Math as TMath, Group } from 'three';
 
 const findRoot = model => {
   let mesh;
@@ -21,6 +21,11 @@ const getMeshOrGroup = ({ scene }) => {
   if (children.length === 1) {
     return children[0];
   }
+
+  const group = new Group();
+  group.add(...children);
+
+  return group;
 };
 
 const fixPosition = mesh => {

@@ -17,11 +17,7 @@ class CouchFactory {
 
   createCouch$(config) {
     return this.loaderService.loadGLTF$(fileName).pipe(
-      map(scene => {
-        debugger;
-        const mesh = findFirstMesh(scene);
-        return mesh;
-      }),
+      map(getMeshOrGroup),
       map(obj => {
         obj.castShadow = true;
         obj.name = 'Couch';
