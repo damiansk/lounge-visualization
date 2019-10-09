@@ -1,6 +1,7 @@
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Math as TMath, Group } from 'three';
+import { Math as TMath } from 'three';
+import { updateMeshOrGroup } from '../utils/model';
 
 const hoverColor = 0x808080;
 
@@ -64,18 +65,15 @@ class BaseModel {
   }
 
   handleHover(isHovered) {
-    if(this.mesh instanceof Group) {
-      console.log('TODO');
-      
-      return;
-    }
-
-    if (isHovered) {
-      this.cache.color = this.mesh.material.color.clone();
-      this.mesh.material.color.set(hoverColor);
-    } else {
-      this.mesh.material.color.set(this.cache.color);
-    }
+    updateMeshOrGroup(this.mesh, mesh => {
+      if (isHovered) {
+        // TODO Handle cache better
+        mesh.userData.color = mesh.material.color.clone();
+        mesh.material.color.set(hoverColor);
+      } else {
+        mesh.material.color.set(mesh.userData.color);
+      }
+    });
   }
 
   getConfig() {
