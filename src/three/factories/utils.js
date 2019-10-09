@@ -47,7 +47,11 @@ const applyConfig = config => mesh => {
   }
 
   if (mesh instanceof Group) {
-    mesh.name = mesh.children.every(child => child.name === mesh.children[0].name) ? mesh.children[0].name : '';
+    mesh.name = mesh.children.every(
+      child => child.name === mesh.children[0].name
+    )
+      ? mesh.children[0].name
+      : '';
   }
 
   return mesh;

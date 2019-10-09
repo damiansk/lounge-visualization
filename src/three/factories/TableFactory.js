@@ -3,7 +3,7 @@ import { map, shareReplay, tap } from 'rxjs/operators';
 import { applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
-import { ModelsFactory } from "./ModelsFactory";
+import { ModelsFactory } from './ModelsFactory';
 
 const fileName = 'table.gltf';
 

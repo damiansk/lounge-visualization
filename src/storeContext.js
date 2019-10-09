@@ -22,6 +22,7 @@ const StoreContextProvider = ({ children }) => {
       value={{
         models,
         remove: store.remove,
+        createJson: store.createJson,
       }}
     >
       {children}

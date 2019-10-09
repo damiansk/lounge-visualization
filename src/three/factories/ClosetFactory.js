@@ -2,9 +2,9 @@ import { from, of } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { applyConfig, getMeshOrGroup } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
-import { SimpleCloset } from "../primitives/SimpleCloset";
-import { SinkCloset } from "../primitives/SinkCloset";
-import { DishwasherCloset } from "../primitives/DishwasherCloset";
+import { SimpleCloset } from '../primitives/SimpleCloset';
+import { SinkCloset } from '../primitives/SinkCloset';
+import { DishwasherCloset } from '../primitives/DishwasherCloset';
 
 const simpleClosetFileName = 'closet_simple.gltf';
 const closetWithSinkFileName = 'closet_sink.gltf';
@@ -17,10 +17,14 @@ class ClosetFactory {
 
     this.createSimpleClosets$ = this.createSimpleClosets$.bind(this);
     this.createClosetsWithSink$ = this.createClosetsWithSink$.bind(this);
-    this.createClosetsWithDishwasher$ = this.createClosetsWithDishwasher$.bind(this);
+    this.createClosetsWithDishwasher$ = this.createClosetsWithDishwasher$.bind(
+      this
+    );
     this.createSimpleCloset$ = this.createSimpleCloset$.bind(this);
     this.createClosetWithSink$ = this.createClosetWithSink$.bind(this);
-    this.createClosetWithDishwasher$ = this.createClosetWithDishwasher$.bind(this);
+    this.createClosetWithDishwasher$ = this.createClosetWithDishwasher$.bind(
+      this
+    );
   }
 
   createSimpleCloset$(config) {
@@ -34,7 +38,7 @@ class ClosetFactory {
       }),
       shareReplay(1),
       map(applyConfig(config)),
-      map(obj => new SimpleCloset(obj)),
+      map(obj => new SimpleCloset(obj))
     );
   }
 

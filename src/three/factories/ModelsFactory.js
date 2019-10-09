@@ -12,9 +12,9 @@ import {
   LampFactory,
   BookcaseFactory,
   SofaFactory,
-  ClosetFactory
+  ClosetFactory,
 } from './index';
-import { Group } from "three";
+import { Group } from 'three';
 
 class ModelsFactory {
   static modelsToGroup(meshes) {

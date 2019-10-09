@@ -3,7 +3,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { applyConfig, getMeshOrGroup } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Couch } from '../primitives';
-import { ModelsFactory } from "./ModelsFactory";
+import { ModelsFactory } from './ModelsFactory';
 
 const fileName = 'couch.gltf';
 

@@ -9,9 +9,11 @@ import { SidePanel } from './Components/SidePanel';
 import { exportToJsonFile } from './utils';
 import { styles } from './styles';
 import { models as modelsConfig } from './three/config/models.json';
-import { StoreContextProvider } from './storeContext';
+import { StoreContext } from './storeContext';
 
 class App extends React.Component {
+  static contextType = StoreContext;
+
   constructor(props) {
     super(props);
 
@@ -54,22 +56,20 @@ class App extends React.Component {
           open={open}
           handleDrawerOpen={this.handleDrawerOpen}
         />
-        <StoreContextProvider>
-          <SidePanel
-            handleDrawerClose={this.handleDrawerClose}
-            open={open}
-            handleExportButtonClick={this.handleExportButtonClick}
-            loadModelsConfig={this.loadModelsConfig}
-          />
-          <main
-            className={classNames(classes.content, {
-              [classes.contentShift]: open,
-            })}
-          >
-            <div className={classes.appBarSpacer} />
-            <ThreeContainer modelsConfig={this.state.modelsConfig} />
-          </main>
-        </StoreContextProvider>
+        <SidePanel
+          handleDrawerClose={this.handleDrawerClose}
+          open={open}
+          handleExportButtonClick={this.handleExportButtonClick}
+          loadModelsConfig={this.loadModelsConfig}
+        />
+        <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.appBarSpacer} />
+          <ThreeContainer modelsConfig={this.state.modelsConfig} />
+        </main>
       </div>
     );
   }
