@@ -10,3 +10,4 @@ export * from './PoolTable';
 export * from './Bookcase';
 export * from './BaseModel';
 export * from './Sofa';
+export * from './Couch';

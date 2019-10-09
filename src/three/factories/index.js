@@ -8,3 +8,5 @@ export * from './BarTableFactory';
 export * from './LampFactory';
 export * from './BookcaseFactory';
 export * from './SofaFactory';
+export * from './CouchFactory';
+export * from './ClosetFactory';

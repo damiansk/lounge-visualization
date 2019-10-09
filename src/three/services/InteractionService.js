@@ -106,7 +106,8 @@ class InteractionService {
   dragHandler(event) {
     const { object } = event;
     if (
-      this.isCollideWithAnyMesh(object) ||
+      this.isCollideWithAnyMesh(object)
+      ||
       !this.isInInteractionsScope(object)
     ) {
       updateMeshOrGroup(object, mesh => {
@@ -128,7 +129,8 @@ class InteractionService {
 
     // TODO Improvement - isCollideWithAnyMesh && isInInteractionsScope calculating object bounding Box
     if (
-      this.isCollideWithAnyMesh(object) ||
+      this.isCollideWithAnyMesh(object)
+      ||
       !this.isInInteractionsScope(object)
     ) {
       // TODO Need to set isInteractive to false or have possibility to break animation and interact again

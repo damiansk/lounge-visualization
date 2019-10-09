@@ -12,9 +12,33 @@ import {
   LampFactory,
   BookcaseFactory,
   SofaFactory,
+  ClosetFactory
 } from './index';
+import { Group } from "three";
 
 class ModelsFactory {
+  static modelsToGroup(meshes) {
+    const group = new Group();
+
+    meshes.map(obj => {
+      const clonedObj = obj.clone();
+
+      if (clonedObj.material) {
+        if (Array.isArray(clonedObj.material)) {
+          clonedObj.material = clonedObj.material.map(material =>
+            material.clone()
+          );
+        } else {
+          clonedObj.material = clonedObj.material.clone();
+        }
+      }
+
+      group.add(clonedObj);
+    });
+
+    return group;
+  }
+
   constructor(loadingManager) {
     this.loadingManager = loadingManager;
     this.loaderService = new LoaderService(this.loadingManager);
@@ -28,6 +52,8 @@ class ModelsFactory {
     this.lampFactory = new LampFactory(this.loadingManager);
     this.bookcaseFactory = new BookcaseFactory(this.loadingManager);
     this.sofaFactory = new SofaFactory(this.loadingManager);
+    this.couchFactory = new CouchFactory(this.loadingManager);
+    this.closetFactory = new ClosetFactory(this.loadingManager);
 
     this.createModels$ = this.createModels$.bind(this);
     this.createFloor$ = this.createFloor$.bind(this);
@@ -55,6 +81,14 @@ class ModelsFactory {
             return this.bookcaseFactory.createBookcases$(configs);
           case 'sofa':
             return this.sofaFactory.createSofas$(configs);
+          case 'couch':
+            return this.couchFactory.createCouches$(configs);
+          case 'closet_simple':
+            return this.closetFactory.createSimpleClosets$(configs);
+          case 'closet_with_sink':
+            return this.closetFactory.createClosetsWithSink$(configs);
+          case 'closet_dishwasher':
+            return this.closetFactory.createClosetsWithDishwasher$(configs);
           default:
             return Observable.create();
         }

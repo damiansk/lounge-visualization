@@ -1,6 +1,166 @@
 {
   "models": [
     {
+      "type": "closet_simple",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": -2.6
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": -1.8
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": -1
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": 3.6
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -2.6
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -1.8
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -1
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 3.6
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "closet_with_sink",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": 0.4
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": 2.8
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 0.4
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 2.8
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "type": "closet_dishwasher",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": 1.2
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 1.2
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "couch",
+      "configs": [
+        {
+          "position": {
+            "x": -0.1,
+            "z": -0.2
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -0.1,
+            "z": -3.50
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -0.1,
+            "z": -6.8
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 1.55,
+            "z": 30.7
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 1.55,
+            "z": 27.4
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 1.55,
+            "z": 24.1
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
       "type": "table",
       "configs": [
         {
@@ -155,20 +315,6 @@
         },
         {
           "position": {
-            "x": 6,
-            "z": 8.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 9.2
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
             "x": 4.2,
             "z": 11.2
           },
@@ -180,20 +326,6 @@
             "z": 11.9
           },
           "rotation": 90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 11.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 12.2
-          },
-          "rotation": -90
         },
         {
           "position": {
@@ -211,20 +343,6 @@
         },
         {
           "position": {
-            "x": 6,
-            "z": 14.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 15.2
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
             "x": -2.5,
             "z": 8.5
           },
@@ -239,34 +357,6 @@
         },
         {
           "position": {
-            "x": -4.5,
-            "z": 8.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 8.9
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 11.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 11.9
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
             "x": -2.5,
             "z": 11.5
           },
@@ -278,20 +368,6 @@
             "z": 12.2
           },
           "rotation": -90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 14.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 14.9
-          },
-          "rotation": 90
         },
         {
           "position": {

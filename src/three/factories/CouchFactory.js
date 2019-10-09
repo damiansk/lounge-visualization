@@ -1,8 +1,9 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { findFirstMesh, applyConfig, getMeshOrGroup } from './utils';
+import { applyConfig, getMeshOrGroup } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Couch } from '../primitives';
+import { ModelsFactory } from "./ModelsFactory";
 
 const fileName = 'couch.gltf';
 
@@ -17,12 +18,17 @@ class CouchFactory {
 
   createCouch$(config) {
     return this.loaderService.loadGLTF$(fileName).pipe(
-      map(getMeshOrGroup),
-      map(obj => {
-        obj.castShadow = true;
-        obj.name = 'Couch';
-        return obj;
+      map(obj => obj.scene.children),
+      map(meshes => {
+        meshes.forEach(obj => {
+          obj.castShadow = true;
+          obj.name = 'Couch';
+        });
+        return meshes;
       }),
+      shareReplay(1),
+      map(ModelsFactory.modelsToGroup),
+      // tap(console.log),
       map(applyConfig(config)),
       map(obj => new Couch(obj))
     );
