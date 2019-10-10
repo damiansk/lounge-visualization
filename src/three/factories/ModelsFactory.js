@@ -15,6 +15,7 @@ import {
   ClosetFactory,
 } from './index';
 import { Group } from 'three';
+import { FridgeFactory } from "./FridgeFactory";
 
 class ModelsFactory {
   static modelsToGroup(meshes) {
@@ -54,6 +55,7 @@ class ModelsFactory {
     this.sofaFactory = new SofaFactory(this.loadingManager);
     this.couchFactory = new CouchFactory(this.loadingManager);
     this.closetFactory = new ClosetFactory(this.loadingManager);
+    this.fridgeFactory = new FridgeFactory(this.loadingManager);
 
     this.createModels$ = this.createModels$.bind(this);
     this.createFloor$ = this.createFloor$.bind(this);
@@ -89,6 +91,8 @@ class ModelsFactory {
             return this.closetFactory.createClosetsWithSink$(configs);
           case 'closet_dishwasher':
             return this.closetFactory.createClosetsWithDishwasher$(configs);
+          case 'big_fridge':
+            return this.fridgeFactory.createFridges$(configs);
           default:
             return Observable.create();
         }

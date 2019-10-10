@@ -1,13 +1,12 @@
 import { BaseModel } from './BaseModel';
+const type = 'Big Fridge';
 
-const type = 'Couch';
-
-class Couch extends BaseModel {
+class BigFridge extends BaseModel {
   constructor(mesh) {
     super(mesh, {
       isHovered: false,
       isInteractive: false,
-      name: 'Couch',
+      name: 'Big Fridge',
     });
 
     this.type = type;
@@ -18,4 +17,4 @@ class Couch extends BaseModel {
   }
 }
 
-export { Couch };
+export { BigFridge };
