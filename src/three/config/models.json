@@ -13,6 +13,42 @@
       ]
     },
     {
+      "type": "sodas_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.8,
+            "z": 4.58
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "thin_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.7,
+            "z": -3.93
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "sodas_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.8,
+            "z": -5.0
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
       "type": "closet_simple",
       "configs": [
         {

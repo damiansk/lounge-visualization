@@ -1,6 +1,7 @@
 import { from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { Group } from 'three';
 import { LoaderService } from '../services/ObjectLoaderService';
 import {
   ChairFactory,
@@ -14,7 +15,6 @@ import {
   SofaFactory,
   ClosetFactory,
 } from './index';
-import { Group } from 'three';
 import { FridgeFactory } from "./FridgeFactory";
 
 class ModelsFactory {
@@ -92,7 +92,11 @@ class ModelsFactory {
           case 'closet_dishwasher':
             return this.closetFactory.createClosetsWithDishwasher$(configs);
           case 'big_fridge':
-            return this.fridgeFactory.createFridges$(configs);
+            return this.fridgeFactory.createBigFridges$(configs);
+          case 'sodas_fridge':
+            return this.fridgeFactory.createSodasFridges$(configs);
+          case 'thin_fridge':
+            return this.fridgeFactory.createThinFridges$(configs);
           default:
             return Observable.create();
         }
