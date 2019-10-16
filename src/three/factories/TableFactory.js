@@ -1,5 +1,5 @@
 import { from } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';

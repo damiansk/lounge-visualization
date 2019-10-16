@@ -83,8 +83,6 @@ class ModelsFactory {
             return this.bookcaseFactory.createBookcases$(configs);
           case 'sofa':
             return this.sofaFactory.createSofas$(configs);
-          case 'couch':
-            return this.couchFactory.createCouches$(configs);
           case 'closet_simple':
             return this.closetFactory.createSimpleClosets$(configs);
           case 'closet_with_sink':

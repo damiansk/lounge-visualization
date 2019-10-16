@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { applyConfig, getMeshOrGroup } from './utils';
+import { applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Couch } from '../primitives';
 import { ModelsFactory } from './ModelsFactory';

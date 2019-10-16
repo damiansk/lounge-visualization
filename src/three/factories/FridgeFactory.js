@@ -1,5 +1,5 @@
 import { from } from "rxjs";
-import { map, shareReplay, tap } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 import { LoaderService } from "../services/ObjectLoaderService";
 import { applyConfig, getMeshOrGroup } from "./utils";
 
@@ -43,6 +43,13 @@ class FridgeFactory {
       map(group => {
         group.castShadow = true;
         group.name = 'Sodas Fridge';
+
+        const glass = group.children.find(child => child.name === 'glass');
+
+        glass.material.transparent = true;
+        glass.material.opacity = 0.6;
+        glass.material.refractionRatio = 0.9;
+
         return group;
       }),
       shareReplay(1),
@@ -57,6 +64,7 @@ class FridgeFactory {
       map(group => {
         group.castShadow = true;
         group.name = 'Thin Fridge';
+
         return group;
       }),
       shareReplay(1),

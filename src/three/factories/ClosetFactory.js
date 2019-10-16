@@ -1,5 +1,5 @@
-import { from, of } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 import { applyConfig, getMeshOrGroup } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { SimpleCloset } from '../primitives/SimpleCloset';
