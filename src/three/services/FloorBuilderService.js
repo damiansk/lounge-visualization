@@ -1,9 +1,6 @@
 import {
   GridHelper,
-  Color,
-  Plane,
   PlaneGeometry,
-  Material,
   MeshBasicMaterial,
   Mesh,
   Vector2,
@@ -18,6 +15,34 @@ const GRID_DIVISIONS = GRID_SIZE / SQUARE_SIZE;
 const PRIMARY_COLOR = 0xffffff;
 const SECONDARY_COLOR = 0x00ff00;
 
+const DEFAULT_COLOR = 0xffffff;
+const HOVER_COLOR = 0x00ff00;
+const CLICK_COLOR = 0xffff00;
+
+const setFacesColor = (faces, color) => {
+  faces.forEach(face => face.color.setHex(color));
+}
+
+const findSecondaryFace = faceIndex => {
+  if (!(faceIndex % 2)) {
+    return faceIndex + 1;
+  }
+  return faceIndex -1;
+}
+
+const getIntersectedFaces = plane => {
+  const secondaryFaceIndex = findSecondaryFace(plane.faceIndex);
+
+  const primaryFace = plane.object.geometry.faces[plane.faceIndex];
+  const secondaryFace = plane.object.geometry.faces[secondaryFaceIndex];
+
+  return [primaryFace, secondaryFace];
+}
+
+const getFacesColor = faces => {
+  return faces[0].color.getHex();
+}
+
 class FloorBuilderService {
   constructor(canvas, scene, camera) {
     CameraControlsService.disable();
@@ -29,37 +54,65 @@ class FloorBuilderService {
     this.raycaster = new Raycaster();
 
     this.plane = null;
-
     this.drawStart = false;
+    this.prevHoverFaces = [];
 
     this.buildGrid();
     this.buildPlane();
     this.initRaycaster();
+    this.initListeners();
+  }
 
-    canvas.addEventListener(
+  initListeners() {
+    this.canvas.addEventListener(
       'mousemove',
-      this.getClientMousePosition.bind(this)
+      this.onMouseMove.bind(this)
     );
 
-    canvas.addEventListener(
+    this.canvas.addEventListener(
       'mousedown',
-      this.onMouseClick.bind(this)
+      this.onMouseDown.bind(this)
     );
 
-    canvas.addEventListener(
+    this.canvas.addEventListener(
       'mouseup',
-      this.onMouseRelease.bind(this)
+      this.onMouseUp.bind(this)
+    );
+
+    this.canvas.addEventListener(
+      'mouseup',
+      this.onMouseUp.bind(this)
     );
   }
 
-  onMouseClick() {
-    this.drawStart = true;
+  onMouseDown() {
+    const plane = this.getIntersectPlane();
 
-    this.initRaycaster();
-    this.detectMouseIntersectWithPlane();
+    if(plane) {
+      const clickedFaces = getIntersectedFaces(plane);
+
+      const color = getFacesColor(clickedFaces);
+
+      // TODO Use this in mouseMove
+      let targetColor = color;
+
+      switch(color) {
+        case DEFAULT_COLOR: 
+        case HOVER_COLOR: 
+          targetColor = CLICK_COLOR;
+          break;
+        case CLICK_COLOR:
+          targetColor = DEFAULT_COLOR
+          break;
+      }
+
+      setFacesColor(clickedFaces, targetColor);
+
+      plane.object.geometry.colorsNeedUpdate = true;
+    }
   }
 
-  onMouseRelease() {
+  onMouseUp() {
     this.drawStart = false;
   }
 
@@ -91,42 +144,35 @@ class FloorBuilderService {
     this.scene.add(plane);
   }
 
-  // TODO: Create separate global method for receiving mouse position
-  getClientMousePosition({ clientX, clientY, target }) {
+  onMouseMove({ clientX, clientY, target }) {
     const { left: x, top: y } = target.getBoundingClientRect();
+    
 
     this.mousePos.set(
       (clientX - x)/this.canvas.clientWidth * 2 - 1,
       - (clientY - y)/this.canvas.clientHeight * 2 + 1
     );
 
-    if(this.drawStart) {
-      this.initRaycaster();
-      this.detectMouseIntersectWithPlane();
+    const plane = this.getIntersectPlane();
+
+    if(plane) {
+      const hoveredFaces = getIntersectedFaces(plane);
+
+      setFacesColor(this.prevHoverFaces, DEFAULT_COLOR);
+      setFacesColor(hoveredFaces, HOVER_COLOR);
+
+      this.prevHoverFaces = hoveredFaces;
+      plane.object.geometry.colorsNeedUpdate = true;
     }
+  }
+
+  getIntersectPlane() {
+    this.raycaster.setFromCamera(this.mousePos, this.camera);
+    return this.raycaster.intersectObject(this.plane)[0];
   }
 
   initRaycaster() {
     this.raycaster.setFromCamera(this.mousePos, this.camera);
-  }
-
-  findSecondaryFace(faceIndex) {
-    if (!(faceIndex % 2)) {
-      return faceIndex + 1;
-    }
-    else {
-      return faceIndex -1;
-    }
-  }
-
-  paintSquare(planeIntersect) {
-    const secondaryFace = this.findSecondaryFace(planeIntersect.faceIndex);
-    const secondFaceToPaint = planeIntersect.object.geometry.faces[secondaryFace];
-    
-    planeIntersect.object.geometry.colorsNeedUpdate = true;
-      
-    planeIntersect.face.color.setHex(SECONDARY_COLOR);
-    secondFaceToPaint.color.setHex(SECONDARY_COLOR);
   }
 
   detectMouseIntersectWithPlane() {
