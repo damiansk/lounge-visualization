@@ -18,17 +18,18 @@ const SECONDARY_COLOR = 0x00ff00;
 const DEFAULT_COLOR = 0xffffff;
 const HOVER_COLOR = 0x00ff00;
 const CLICK_COLOR = 0xffff00;
+const WARNING_COLOR = 0xff0000;
 
 const setFacesColor = (faces, color) => {
   faces.forEach(face => face.color.setHex(color));
-}
+};
 
 const findSecondaryFace = faceIndex => {
   if (!(faceIndex % 2)) {
     return faceIndex + 1;
   }
-  return faceIndex -1;
-}
+  return faceIndex - 1;
+};
 
 const getIntersectedFaces = plane => {
   const secondaryFaceIndex = findSecondaryFace(plane.faceIndex);
@@ -37,11 +38,14 @@ const getIntersectedFaces = plane => {
   const secondaryFace = plane.object.geometry.faces[secondaryFaceIndex];
 
   return [primaryFace, secondaryFace];
-}
+};
 
 const getFacesColor = faces => {
   return faces[0].color.getHex();
-}
+};
+
+const isTheSameFace = ({ a: a1, b: b1, c: c1 }, { a: a2, b: b2, c: c2 }) =>
+  a1 === a2 && b1 === b2 && c1 === c2;
 
 class FloorBuilderService {
   constructor(canvas, scene, camera) {
@@ -64,31 +68,22 @@ class FloorBuilderService {
   }
 
   initListeners() {
-    this.canvas.addEventListener(
-      'mousemove',
-      this.onMouseMove.bind(this)
-    );
+    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
 
-    this.canvas.addEventListener(
-      'mousedown',
-      this.onMouseDown.bind(this)
-    );
+    this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
 
-    this.canvas.addEventListener(
-      'mouseup',
-      this.onMouseUp.bind(this)
-    );
+    this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
 
-    this.canvas.addEventListener(
-      'mouseup',
-      this.onMouseUp.bind(this)
-    );
+    // this.canvas.addEventListener(
+    //   'mouseup',
+    //   this.onMouseUp.bind(this)
+    // );
   }
 
   onMouseDown() {
     const plane = this.getIntersectPlane();
 
-    if(plane) {
+    if (plane) {
       const clickedFaces = getIntersectedFaces(plane);
 
       const color = getFacesColor(clickedFaces);
@@ -96,13 +91,13 @@ class FloorBuilderService {
       // TODO Use this in mouseMove
       let targetColor = color;
 
-      switch(color) {
-        case DEFAULT_COLOR: 
-        case HOVER_COLOR: 
+      switch (color) {
+        case DEFAULT_COLOR:
+        case HOVER_COLOR:
           targetColor = CLICK_COLOR;
           break;
-        case CLICK_COLOR:
-          targetColor = DEFAULT_COLOR
+        case WARNING_COLOR:
+          targetColor = DEFAULT_COLOR;
           break;
       }
 
@@ -146,20 +141,44 @@ class FloorBuilderService {
 
   onMouseMove({ clientX, clientY, target }) {
     const { left: x, top: y } = target.getBoundingClientRect();
-    
 
     this.mousePos.set(
-      (clientX - x)/this.canvas.clientWidth * 2 - 1,
-      - (clientY - y)/this.canvas.clientHeight * 2 + 1
+      ((clientX - x) / this.canvas.clientWidth) * 2 - 1,
+      (-(clientY - y) / this.canvas.clientHeight) * 2 + 1
     );
 
     const plane = this.getIntersectPlane();
 
-    if(plane) {
+    if (plane) {
       const hoveredFaces = getIntersectedFaces(plane);
+      if (
+        this.prevHoverFaces.length &&
+        !(
+          isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
+          isTheSameFace(hoveredFaces[0], this.prevHoverFaces[1])
+        )
+      ) {
+        const color = getFacesColor(hoveredFaces);
 
-      setFacesColor(this.prevHoverFaces, DEFAULT_COLOR);
-      setFacesColor(hoveredFaces, HOVER_COLOR);
+        switch (color) {
+          case DEFAULT_COLOR:
+            setFacesColor(hoveredFaces, HOVER_COLOR);
+            break;
+          case CLICK_COLOR:
+            setFacesColor(hoveredFaces, WARNING_COLOR);
+            break;
+        }
+
+        const prevColor = getFacesColor(this.prevHoverFaces);
+        switch (prevColor) {
+          case HOVER_COLOR:
+            setFacesColor(this.prevHoverFaces, DEFAULT_COLOR);
+            break;
+          case WARNING_COLOR:
+            setFacesColor(this.prevHoverFaces, CLICK_COLOR);
+            break;
+        }
+      }
 
       this.prevHoverFaces = hoveredFaces;
       plane.object.geometry.colorsNeedUpdate = true;
