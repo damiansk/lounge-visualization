@@ -20,6 +20,18 @@ const HOVER_COLOR = 0x00ff00;
 const CLICK_COLOR = 0xffff00;
 const WARNING_COLOR = 0xff0000;
 
+function getTile([col, row], grid) {
+  return row * grid[0] + col;
+}
+function getColumnAndRow(index, grid) {
+  const col = index % grid[1];
+  const row = Math.floor(index / grid[0]);
+  return [col, row];
+}
+function printTile(index) {
+  console.log(index);
+}
+
 const setFacesColor = (faces, color) => {
   faces.forEach(face => face.color.setHex(color));
 };
@@ -58,7 +70,7 @@ class FloorBuilderService {
     this.raycaster = new Raycaster();
 
     this.plane = null;
-    this.drawStart = false;
+    this.drawStartFaceIndex = false;
     this.prevHoverFaces = [];
 
     this.buildGrid();
@@ -73,11 +85,6 @@ class FloorBuilderService {
     this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
 
     this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
-
-    // this.canvas.addEventListener(
-    //   'mouseup',
-    //   this.onMouseUp.bind(this)
-    // );
   }
 
   onMouseDown() {
@@ -85,6 +92,7 @@ class FloorBuilderService {
 
     if (plane) {
       const clickedFaces = getIntersectedFaces(plane);
+      this.drawStartFaceIndex = plane.faceIndex;
 
       const color = getFacesColor(clickedFaces);
 
@@ -108,7 +116,8 @@ class FloorBuilderService {
   }
 
   onMouseUp() {
-    this.drawStart = false;
+    this.drawStartFaceIndex = null;
+    this.drawEndFaceIndex = null;
   }
 
   buildGrid() {
@@ -151,7 +160,36 @@ class FloorBuilderService {
 
     if (plane) {
       const hoveredFaces = getIntersectedFaces(plane);
+
+      if (!!this.drawStartFaceIndex) {
+        this.drawEndFaceIndex = plane.faceIndex;
+
+        const facesInRow = GRID_SIZE * 2;
+        const GRID = [facesInRow, facesInRow];
+        
+        const drawStart = this.drawStartFaceIndex;
+        const drawEnd = this.drawEndFaceIndex;
+
+        const [x1, y1] = getColumnAndRow(drawStart, GRID);
+        const [x2, y2] = getColumnAndRow(drawEnd, GRID);
+
+        const minX = Math.min(x1, x2);
+        const maxX = Math.max(x1, x2);
+        const minY = Math.min(y1, y2);
+        const maxY = Math.max(y1, y2);
+
+        for (let j = minY; j <= maxY; j++) {
+          for (let i = minX; i <= maxX; i++) {
+            const tileFaceIndex = getTile([i, j], GRID);
+            plane.object.geometry.faces[tileFaceIndex].color.setHex(HOVER_COLOR);
+            const secondFace = findSecondaryFace(tileFaceIndex);
+            plane.object.geometry.faces[secondFace].color.setHex(HOVER_COLOR);
+          }
+        }
+      }
+
       if (
+        false &&
         this.prevHoverFaces.length &&
         !(
           isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
