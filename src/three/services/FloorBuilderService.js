@@ -93,6 +93,12 @@ class FloorBuilderService {
     if (plane) {
       const clickedFaces = getIntersectedFaces(plane);
       this.drawStartFaceIndex = plane.faceIndex;
+      // this.facesCache = plane.object.geometry.clone().faces;
+      this.geometryCache = plane.object.geometry.clone();
+
+      // this.facesCache.forEach((face, index) => {
+      //   console.log(plane.object.geometry[index] === face)
+      // })
 
       const color = getFacesColor(clickedFaces);
 
@@ -163,6 +169,9 @@ class FloorBuilderService {
 
       if (!!this.drawStartFaceIndex) {
         this.drawEndFaceIndex = plane.faceIndex;
+        // const facesClone = this.facesCache.map(face => face.clone());
+
+        plane.object.geometry.copy(this.geometryCache);
 
         const facesInRow = GRID_SIZE * 2;
         const GRID = [facesInRow, facesInRow];
@@ -186,6 +195,8 @@ class FloorBuilderService {
             plane.object.geometry.faces[secondFace].color.setHex(HOVER_COLOR);
           }
         }
+
+        plane.object.geometry.elementsNeedUpdate = true;
       }
 
       if (
