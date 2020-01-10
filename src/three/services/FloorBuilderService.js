@@ -14,7 +14,6 @@ const SQUARE_SIZE = 1;
 const GRID_DIVISIONS = GRID_SIZE / SQUARE_SIZE;
 const PRIMARY_COLOR = 0xffffff;
 const SECONDARY_COLOR = 0x00ff00;
-
 const DEFAULT_COLOR = 0xffffff;
 const HOVER_COLOR = 0x00ff00;
 const CLICK_COLOR = 0xffff00;
@@ -28,15 +27,12 @@ function getColumnAndRow(index, grid) {
   const row = Math.floor(index / grid[0]);
   return [col, row];
 }
-function printTile(index) {
-  console.log(index);
-}
 
 const setFacesColor = (faces, color) => {
   faces.forEach(face => face.color.setHex(color));
 };
 
-const findSecondaryFace = faceIndex => {
+const getSecondaryFaceIndex = faceIndex => {
   if (!(faceIndex % 2)) {
     return faceIndex + 1;
   }
@@ -44,7 +40,7 @@ const findSecondaryFace = faceIndex => {
 };
 
 const getIntersectedFaces = plane => {
-  const secondaryFaceIndex = findSecondaryFace(plane.faceIndex);
+  const secondaryFaceIndex = getSecondaryFaceIndex(plane.faceIndex);
 
   const primaryFace = plane.object.geometry.faces[plane.faceIndex];
   const secondaryFace = plane.object.geometry.faces[secondaryFaceIndex];
@@ -79,12 +75,57 @@ class FloorBuilderService {
     this.initListeners();
   }
 
+  buildGrid() {
+    const grid = new GridHelper(GRID_SIZE, GRID_DIVISIONS, PRIMARY_COLOR);
+
+    this.scene.add(grid);
+  }
+
+  buildPlane() {
+    const planeGeom = new PlaneGeometry(
+      GRID_SIZE,
+      GRID_SIZE,
+      GRID_DIVISIONS,
+      GRID_DIVISIONS
+    );
+
+    planeGeom.rotateX(-Math.PI / 2);
+
+    const planeMat = new MeshBasicMaterial({
+      color: 0xe6e6e6,
+      transparent: true,
+      opacity: 0.3,
+      vertexColors: FaceColors,
+    });
+    const plane = new Mesh(planeGeom, planeMat);
+
+    this.plane = plane;
+    this.scene.add(plane);
+  }
+
+  initRaycaster() {
+    this.raycaster.setFromCamera(this.mousePos, this.camera);
+  }
+
   initListeners() {
     this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
-
     this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
-
     this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
+  }
+
+  getIntersectPlane() {
+    this.raycaster.setFromCamera(this.mousePos, this.camera);
+    return this.raycaster.intersectObject(this.plane)[0];
+  }
+
+  detectMouseIntersectWithPlane() {
+    if (this.plane) {
+      const onPlane = this.raycaster.intersectObject(this.plane)[0];
+
+      if (onPlane) {
+        this.paintSquare(onPlane);
+      }
+    }
   }
 
   onMouseDown() {
@@ -124,34 +165,7 @@ class FloorBuilderService {
   onMouseUp() {
     this.drawStartFaceIndex = null;
     this.drawEndFaceIndex = null;
-  }
-
-  buildGrid() {
-    const grid = new GridHelper(GRID_SIZE, GRID_DIVISIONS, PRIMARY_COLOR);
-
-    this.scene.add(grid);
-  }
-
-  buildPlane() {
-    const planeGeom = new PlaneGeometry(
-      GRID_SIZE,
-      GRID_SIZE,
-      GRID_DIVISIONS,
-      GRID_DIVISIONS
-    );
-
-    planeGeom.rotateX(-Math.PI / 2);
-
-    const planeMat = new MeshBasicMaterial({
-      color: 0xe6e6e6,
-      transparent: true,
-      opacity: 0.3,
-      vertexColors: FaceColors,
-    });
-    const plane = new Mesh(planeGeom, planeMat);
-
-    this.plane = plane;
-    this.scene.add(plane);
+    this.geometryCache = null;
   }
 
   onMouseMove({ clientX, clientY, target }) {
@@ -167,9 +181,8 @@ class FloorBuilderService {
     if (plane) {
       const hoveredFaces = getIntersectedFaces(plane);
 
-      if (!!this.drawStartFaceIndex) {
+      if (typeof this.drawStartFaceIndex === 'number') {
         this.drawEndFaceIndex = plane.faceIndex;
-        // const facesClone = this.facesCache.map(face => face.clone());
 
         plane.object.geometry.copy(this.geometryCache);
 
@@ -191,7 +204,7 @@ class FloorBuilderService {
           for (let i = minX; i <= maxX; i++) {
             const tileFaceIndex = getTile([i, j], GRID);
             plane.object.geometry.faces[tileFaceIndex].color.setHex(HOVER_COLOR);
-            const secondFace = findSecondaryFace(tileFaceIndex);
+            const secondFace = getSecondaryFaceIndex(tileFaceIndex);
             plane.object.geometry.faces[secondFace].color.setHex(HOVER_COLOR);
           }
         }
@@ -200,8 +213,7 @@ class FloorBuilderService {
       }
 
       if (
-        false &&
-        this.prevHoverFaces.length &&
+        this.drawStartFaceIndex && this.prevHoverFaces.length &&
         !(
           isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
           isTheSameFace(hoveredFaces[0], this.prevHoverFaces[1])
@@ -231,25 +243,6 @@ class FloorBuilderService {
 
       this.prevHoverFaces = hoveredFaces;
       plane.object.geometry.colorsNeedUpdate = true;
-    }
-  }
-
-  getIntersectPlane() {
-    this.raycaster.setFromCamera(this.mousePos, this.camera);
-    return this.raycaster.intersectObject(this.plane)[0];
-  }
-
-  initRaycaster() {
-    this.raycaster.setFromCamera(this.mousePos, this.camera);
-  }
-
-  detectMouseIntersectWithPlane() {
-    if (this.plane) {
-      const onPlane = this.raycaster.intersectObject(this.plane)[0];
-
-      if (onPlane) {
-        this.paintSquare(onPlane);
-      }
     }
   }
 }
