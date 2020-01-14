@@ -29,7 +29,13 @@ function getColumnAndRow(index, grid) {
 }
 
 const setFacesColor = (faces, color) => {
-  faces.forEach(face => face.color.setHex(color));
+  const temp = faces.forEach(face => face.color.setHex(color));
+
+  if(color ===undefined) {
+    debugger;
+  }
+
+  return temp;
 };
 
 const getSecondaryFaceIndex = faceIndex => {
@@ -148,6 +154,9 @@ class FloorBuilderService {
         return DEFAULT_COLOR;
       case WARNING_COLOR:
         return CLICK_COLOR;
+        // TODO fix other cases
+      default:
+        return prevColor;
     }
   }
 
@@ -257,16 +266,18 @@ class FloorBuilderService {
     const plane = this.getIntersectPlane();
 
     if (plane) {
-      const hoveredFaces = getIntersectedFaces(plane);
 
       if (this.drawingStarted) {
         this.handleDragPainting(plane);
       }
       else {
+        const hoveredFaces = getIntersectedFaces(plane);
+
         this.handleHoverPainting(hoveredFaces);
+        
+        this.prevHoverFaces = hoveredFaces;
       }
 
-      this.prevHoverFaces = hoveredFaces;
       plane.object.geometry.colorsNeedUpdate = true;
     }
   }
