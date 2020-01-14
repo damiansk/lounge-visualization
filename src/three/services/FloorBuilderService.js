@@ -15,8 +15,8 @@ const GRID_DIVISIONS = GRID_SIZE / SQUARE_SIZE;
 const PRIMARY_COLOR = 0xffffff;
 const SECONDARY_COLOR = 0x00ff00;
 const DEFAULT_COLOR = 0xffffff;
-const HOVER_COLOR = 0x00ff00;
-const CLICK_COLOR = 0xffff00;
+const CLICK_COLOR = 0x00ff00;
+const HOVER_COLOR = 0xffff00;
 const WARNING_COLOR = 0xff0000;
 
 function getTile([col, row], grid) {
@@ -111,6 +111,7 @@ class FloorBuilderService {
     this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
     this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
+    this.canvas.addEventListener('click', console.log);
   }
 
   getIntersectPlane() {
@@ -128,33 +129,109 @@ class FloorBuilderService {
     }
   }
 
+  detectClickPaintingColor(color) {
+    switch (color) {
+      case DEFAULT_COLOR:
+      case HOVER_COLOR:
+        return CLICK_COLOR;
+      case CLICK_COLOR:
+      case WARNING_COLOR:
+        return DEFAULT_COLOR;
+      default:
+          return color;
+    }
+  }
+
+  detectPreviouslyHoveredPaintingColor(prevColor) {
+    switch (prevColor) {
+      case HOVER_COLOR:
+        return DEFAULT_COLOR;
+      case WARNING_COLOR:
+        return CLICK_COLOR;
+    }
+  }
+
+  handleHoverPainting(hoveredFaces) {
+    if (this.prevHoverFaces.length &&
+      !(
+        isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
+        isTheSameFace(hoveredFaces[0], this.prevHoverFaces[1])
+      )
+    ) {
+      const color = getFacesColor(hoveredFaces);
+
+      setFacesColor(hoveredFaces, this.detectHoverPaintingColor(color));
+
+      const prevColor = getFacesColor(this.prevHoverFaces);
+      
+      setFacesColor(this.prevHoverFaces, this.detectPreviouslyHoveredPaintingColor(prevColor));
+    }
+  }
+
+  detectHoverPaintingColor(color) {
+    switch (color) {
+      case DEFAULT_COLOR:
+        return HOVER_COLOR;
+      case CLICK_COLOR:
+        return WARNING_COLOR;
+      default:
+          return color;
+    }
+  }
+
+  handleDragPainting(plane) {
+    if (typeof this.drawStartFaceIndex === 'number') {
+      this.drawEndFaceIndex = plane.faceIndex;
+
+      plane.object.geometry.copy(this.geometryCache);
+
+      const facesInRow = GRID_SIZE * 2;
+      const GRID = [facesInRow, facesInRow];
+      
+      const drawStart = this.drawStartFaceIndex;
+      const drawEnd = this.drawEndFaceIndex;
+
+      const [x1, y1] = getColumnAndRow(drawStart, GRID);
+      const [x2, y2] = getColumnAndRow(drawEnd, GRID);
+
+      const minX = Math.min(x1, x2);
+      const maxX = Math.max(x1, x2);
+      const minY = Math.min(y1, y2);
+      const maxY = Math.max(y1, y2);
+
+      const firstFaceColor = getFacesColor([plane.object.geometry.faces[this.drawStartFaceIndex]]);
+      const targetColor = this.detectDragPaintingColor(firstFaceColor);
+
+      for (let j = minY; j <= maxY; j++) {
+        for (let i = minX; i <= maxX; i++) {
+          const tileFaceIndex = getTile([i, j], GRID);
+          plane.object.geometry.faces[tileFaceIndex].color.setHex(targetColor);
+          const secondFace = getSecondaryFaceIndex(tileFaceIndex);
+          plane.object.geometry.faces[secondFace].color.setHex(targetColor);
+        }
+      }
+
+      plane.object.geometry.elementsNeedUpdate = true;
+    }
+  }
+
+  detectDragPaintingColor(color) {
+    return this.detectClickPaintingColor(color);
+  }
+
   onMouseDown() {
     const plane = this.getIntersectPlane();
+    this.drawingStarted = true;
 
     if (plane) {
       const clickedFaces = getIntersectedFaces(plane);
       this.drawStartFaceIndex = plane.faceIndex;
-      // this.facesCache = plane.object.geometry.clone().faces;
       this.geometryCache = plane.object.geometry.clone();
-
-      // this.facesCache.forEach((face, index) => {
-      //   console.log(plane.object.geometry[index] === face)
-      // })
 
       const color = getFacesColor(clickedFaces);
 
       // TODO Use this in mouseMove
-      let targetColor = color;
-
-      switch (color) {
-        case DEFAULT_COLOR:
-        case HOVER_COLOR:
-          targetColor = CLICK_COLOR;
-          break;
-        case WARNING_COLOR:
-          targetColor = DEFAULT_COLOR;
-          break;
-      }
+      const targetColor = this.detectClickPaintingColor(color);
 
       setFacesColor(clickedFaces, targetColor);
 
@@ -166,6 +243,7 @@ class FloorBuilderService {
     this.drawStartFaceIndex = null;
     this.drawEndFaceIndex = null;
     this.geometryCache = null;
+    this.drawingStarted = false;
   }
 
   onMouseMove({ clientX, clientY, target }) {
@@ -181,64 +259,11 @@ class FloorBuilderService {
     if (plane) {
       const hoveredFaces = getIntersectedFaces(plane);
 
-      if (typeof this.drawStartFaceIndex === 'number') {
-        this.drawEndFaceIndex = plane.faceIndex;
-
-        plane.object.geometry.copy(this.geometryCache);
-
-        const facesInRow = GRID_SIZE * 2;
-        const GRID = [facesInRow, facesInRow];
-        
-        const drawStart = this.drawStartFaceIndex;
-        const drawEnd = this.drawEndFaceIndex;
-
-        const [x1, y1] = getColumnAndRow(drawStart, GRID);
-        const [x2, y2] = getColumnAndRow(drawEnd, GRID);
-
-        const minX = Math.min(x1, x2);
-        const maxX = Math.max(x1, x2);
-        const minY = Math.min(y1, y2);
-        const maxY = Math.max(y1, y2);
-
-        for (let j = minY; j <= maxY; j++) {
-          for (let i = minX; i <= maxX; i++) {
-            const tileFaceIndex = getTile([i, j], GRID);
-            plane.object.geometry.faces[tileFaceIndex].color.setHex(HOVER_COLOR);
-            const secondFace = getSecondaryFaceIndex(tileFaceIndex);
-            plane.object.geometry.faces[secondFace].color.setHex(HOVER_COLOR);
-          }
-        }
-
-        plane.object.geometry.elementsNeedUpdate = true;
+      if (this.drawingStarted) {
+        this.handleDragPainting(plane);
       }
-
-      if (
-        this.drawStartFaceIndex && this.prevHoverFaces.length &&
-        !(
-          isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
-          isTheSameFace(hoveredFaces[0], this.prevHoverFaces[1])
-        )
-      ) {
-        const color = getFacesColor(hoveredFaces);
-
-        switch (color) {
-          case DEFAULT_COLOR:
-            setFacesColor(hoveredFaces, HOVER_COLOR);
-            break;
-          case CLICK_COLOR:
-            setFacesColor(hoveredFaces, WARNING_COLOR);
-            break;
-        }
-
-        const prevColor = getFacesColor(this.prevHoverFaces);
-        switch (prevColor) {
-          case HOVER_COLOR:
-            setFacesColor(this.prevHoverFaces, DEFAULT_COLOR);
-            break;
-          case WARNING_COLOR:
-            setFacesColor(this.prevHoverFaces, CLICK_COLOR);
-            break;
-        }
+      else {
+        this.handleHoverPainting(hoveredFaces);
       }
 
       this.prevHoverFaces = hoveredFaces;
