@@ -1,9 +1,9 @@
-import { from } from "rxjs";
-import { map, shareReplay } from "rxjs/operators";
-import { LoaderService } from "../services/ObjectLoaderService";
-import { applyConfig, getMeshOrGroup } from "./utils";
+import { from } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { LoaderService } from '../services/ObjectLoaderService';
+import { applyConfig, getMeshOrGroup } from './utils';
 
-import { BigFridge } from "../primitives/BigFridge";
+import { BigFridge } from '../primitives/BigFridge';
 import { SodasFridge } from '../primitives/SodasFridge';
 import { ThinFridge } from '../primitives/ThinFridge';
 
@@ -28,8 +28,8 @@ class FridgeFactory {
     return this.loaderService.loadGLTF$(bigFridgeFileName).pipe(
       map(getMeshOrGroup),
       map(group => {
-          group.castShadow = true;
-          group.name = 'Big Fridge';
+        group.castShadow = true;
+        group.name = 'Big Fridge';
         return group;
       }),
       map(applyConfig(config)),

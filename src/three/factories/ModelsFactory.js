@@ -15,7 +15,7 @@ import {
   SofaFactory,
   ClosetFactory,
 } from './index';
-import { FridgeFactory } from "./FridgeFactory";
+import { FridgeFactory } from './FridgeFactory';
 
 class ModelsFactory {
   static modelsToGroup(meshes) {
