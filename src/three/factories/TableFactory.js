@@ -1,8 +1,9 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { findFirstMesh, applyConfig } from './utils';
+import { applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Table } from '../primitives';
+import { ModelsFactory } from './ModelsFactory';
 
 const fileName = 'table.gltf';
 
@@ -19,28 +20,17 @@ class TableFactory {
   loadTable$() {
     if (!this.loadingTable$) {
       this.loadingTable$ = this.loaderService.loadGLTF$(fileName).pipe(
-        map(findFirstMesh),
-        map(obj => {
-          obj.castShadow = true;
-          obj.name = 'Table';
-          return obj;
+        map(obj => obj.scene.children),
+        map(meshes => {
+          meshes.forEach(obj => {
+            obj.castShadow = true;
+            obj.name = 'Table';
+          });
+          return meshes;
         }),
+        // mergeAll(),
         shareReplay(1),
-        map(obj => {
-          const clonedObj = obj.clone();
-
-          if (clonedObj.material) {
-            if (Array.isArray(clonedObj.material)) {
-              clonedObj.material = clonedObj.material.map(material =>
-                material.clone()
-              );
-            } else {
-              clonedObj.material = clonedObj.material.clone();
-            }
-          }
-
-          return clonedObj;
-        })
+        map(ModelsFactory.modelsToGroup)
       );
     }
 

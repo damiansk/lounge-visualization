@@ -8,6 +8,7 @@ import {
   Vector3,
   Camera,
   Matrix4,
+  Group,
 } from 'three';
 
 /*
@@ -90,10 +91,12 @@ const DragControls = function(_objects, _camera, _domElement) {
 
     _raycaster.setFromCamera(_mouse, _camera);
 
-    var intersects = _raycaster.intersectObjects(_objects);
+    var intersects = _raycaster.intersectObjects(_objects, true);
 
     if (intersects.length > 0) {
-      var object = intersects[0].object;
+      const intersect = intersects[0].object;
+      var object =
+        intersect.parent instanceof Group ? intersect.parent : intersect;
       var touchPoint = intersects[0].point;
 
       _plane.setFromNormalAndCoplanarPoint(new Vector3(0, 1, 0), touchPoint);
@@ -119,10 +122,12 @@ const DragControls = function(_objects, _camera, _domElement) {
 
     _raycaster.setFromCamera(_mouse, _camera);
 
-    var intersects = _raycaster.intersectObjects(_objects);
+    var intersects = _raycaster.intersectObjects(_objects, true);
 
     if (intersects.length > 0) {
-      _selected = intersects[0].object;
+      const intersect = intersects[0].object;
+      _selected =
+        intersect.parent instanceof Group ? intersect.parent : intersect;
 
       if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
         _inverseMatrix.getInverse(_selected.parent.matrixWorld);
@@ -184,10 +189,12 @@ const DragControls = function(_objects, _camera, _domElement) {
 
     _raycaster.setFromCamera(_mouse, _camera);
 
-    var intersects = _raycaster.intersectObjects(_objects);
+    var intersects = _raycaster.intersectObjects(_objects, true);
 
     if (intersects.length > 0) {
-      _selected = intersects[0].object;
+      const intersect = intersects[0].object;
+      _selected =
+        intersect.parent instanceof Group ? intersect.parent : intersect;
 
       var touchPoint = intersects[0].point;
 

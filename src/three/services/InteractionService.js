@@ -1,4 +1,5 @@
 import { Box3, Vector3, Raycaster } from 'three';
+import { updateMeshOrGroup } from '../utils/model';
 import { DragControls } from '../libs/three-dragcontrols';
 import { CameraControlsService } from './CameraControlsService';
 
@@ -69,7 +70,9 @@ class InteractionService {
     }
   }
 
-  remove({ mesh }) {
+  remove(model) {
+    const { mesh } = model;
+
     const interactiveMeshIndex = this.interactiveMeshes.indexOf(mesh);
     if (interactiveMeshIndex >= 0) {
       this.interactiveMeshes.splice(interactiveMeshIndex, 1);
@@ -87,19 +90,41 @@ class InteractionService {
 
   dragStartHandler(event) {
     const { object } = event;
-    object.userData.interactionService = {
-      material: object.material.clone(),
-    };
-    object.material.color.set(0x808080);
-    object.material.transparent = true;
-    object.material.opacity = 0.6;
+
+    updateMeshOrGroup(object, mesh => {
+      mesh.userData.interactionService = {
+        material: mesh.material.clone(),
+      };
+      mesh.material.color.set(0x808080);
+      mesh.material.transparent = true;
+      mesh.material.opacity = 0.6;
+    });
 
     this.dragStartPosition = object.position.clone();
   }
 
+  dragHandler(event) {
+    const { object } = event;
+    if (
+      this.isCollideWithAnyMesh(object) ||
+      !this.isInInteractionsScope(object)
+    ) {
+      updateMeshOrGroup(object, mesh => {
+        mesh.material.color.set(0xff0000);
+      });
+    } else {
+      updateMeshOrGroup(object, mesh => {
+        mesh.material.color.set(0x808080);
+      });
+    }
+  }
+
   dragEndHandler(event) {
     const { object } = event;
-    object.material = object.userData.interactionService.material;
+
+    updateMeshOrGroup(object, mesh => {
+      mesh.material = mesh.userData.interactionService.material;
+    });
 
     // TODO Improvement - isCollideWithAnyMesh && isInInteractionsScope calculating object bounding Box
     if (
@@ -114,29 +139,24 @@ class InteractionService {
     }
   }
 
-  dragHandler({ object }) {
-    if (
-      this.isCollideWithAnyMesh(object) ||
-      !this.isInInteractionsScope(object)
-    ) {
-      object.material.color.set(0xff0000);
-    } else {
-      object.material.color.set(0x808080);
-    }
-  }
+  hoverOnHandler(event) {
+    const { object } = event;
 
-  hoverOnHandler({ object: mesh }) {
-    if (!!this.prevHoverOnMesh && this.prevHoverOnMesh !== mesh) {
+    if (!!this.prevHoverOnMesh && this.prevHoverOnMesh !== object) {
       this.modelsWeakMap
         .get(this.prevHoverOnMesh)
         .setAttribute$('isHovered', false);
     }
-    this.prevHoverOnMesh = mesh;
-    this.modelsWeakMap.get(mesh).setAttribute$('isHovered', true);
+    this.prevHoverOnMesh = object;
+
+    this.modelsWeakMap.get(object).setAttribute$('isHovered', true);
   }
 
-  hoverOffHandler({ object: mesh }) {
-    this.modelsWeakMap.get(mesh).setAttribute$('isHovered', false);
+  hoverOffHandler(event) {
+    const { object } = event;
+
+    this.modelsWeakMap.get(object).setAttribute$('isHovered', false);
+
     this.prevHoverOnMesh = null;
   }
 
@@ -193,7 +213,10 @@ class InteractionService {
     const isAnyPointOutsideTheScope = points.some(point => {
       this.raycaster.set(point, direction);
 
-      const collisions = this.raycaster.intersectObject(this.interactionScope);
+      const collisions = this.raycaster.intersectObject(
+        this.interactionScope,
+        true
+      );
 
       return collisions.length === 0;
     });

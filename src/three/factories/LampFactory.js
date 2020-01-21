@@ -1,7 +1,7 @@
 import { DoubleSide } from 'three';
 import { from } from 'rxjs';
 import { map, tap, shareReplay } from 'rxjs/operators';
-import { applyConfig, findFirstMesh } from './utils';
+import { applyConfig, getMeshOrGroup } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Lamp } from '../primitives';
 import { LightBulbFactory } from './LighBulbFactory';
@@ -21,7 +21,7 @@ class LampFactory {
   loadLamp$() {
     if (!this.loadingLamp$) {
       this.loadingLamp$ = this.loaderService.loadGLTF$(fileName).pipe(
-        map(findFirstMesh),
+        map(getMeshOrGroup),
         map(obj => {
           obj.material.side = DoubleSide;
           obj.name = 'Lamp';

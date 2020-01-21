@@ -64,6 +64,8 @@ class SceneManager {
     this.camera.lookAt(0, 0, 0);
     this.renderer.setPixelRatio(DPR);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
+    this.renderer.gammaFactor = 2.2;
+    this.renderer.gammaOutput = true;
     this.scene.background = new Color('#010113');
 
     CameraControlsService.init(this.camera, this.renderer.domElement);
@@ -108,10 +110,15 @@ class SceneManager {
 
   initSceneSubjects() {
     this.factory.createFloor$().subscribe(mesh => {
-      mesh.receiveShadow = true;
-      this.interactionService.registerInterationScope(mesh);
-      this.scene.add(mesh);
+      const meshes = mesh.scene.children;
+
+      meshes.forEach(mesh => {
+        mesh.receiveShadow = true;
+        this.interactionService.registerInterationScope(mesh);
+        this.scene.add(mesh);
+      });
     });
+
     const textureLoader = new TextureLoader();
     textureLoader.load('assets/panorama.jpg', texture => {
       const geometry = new SphereGeometry(31, 36, 20);

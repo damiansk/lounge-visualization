@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { findFirstMesh, applyConfig } from './utils';
+import { getMeshOrGroup, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { Bookcase } from '../primitives';
 
@@ -17,7 +17,7 @@ class BookcaseFactory {
 
   createBookcase$(config) {
     return this.loaderService.loadGLTF$(fileName).pipe(
-      map(findFirstMesh),
+      map(getMeshOrGroup),
       map(obj => {
         obj.castShadow = true;
         obj.name = 'Bookcase';

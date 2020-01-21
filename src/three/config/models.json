@@ -1,6 +1,196 @@
 {
   "models": [
     {
+      "type": "big_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": 4.7
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "type": "sodas_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.8,
+            "z": 4.58
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "thin_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.7,
+            "z": -3.93
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "sodas_fridge",
+      "configs": [
+        {
+          "position": {
+            "x": 4.8,
+            "z": -5.0
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "closet_simple",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": -2.705
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": -1.85
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": -0.99
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": -0.13
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": -5.9,
+            "z": 3.27
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -2.705
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -1.85
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": -0.99
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 4.09
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "closet_with_sink",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": 2.005
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 0.25
+          },
+          "rotation": 180
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 2.79
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "closet_dishwasher",
+      "configs": [
+        {
+          "position": {
+            "x": -5.9,
+            "z": 0.725
+          },
+          "rotation": 0
+        },
+        {
+          "position": {
+            "x": 4.8,
+            "z": 1.545
+          },
+          "rotation": 180
+        }
+      ]
+    },
+    {
+      "type": "couch",
+      "configs": [
+        {
+          "position": { "x": -5.2, "z": 15 },
+          "rotation": 0
+        },
+        {
+          "position": { "x": -5.2, "z": 11.7 },
+          "rotation": 0
+        },
+        {
+          "position": { "x": -5.2, "z": 8.4 },
+          "rotation": 0
+        },
+        {
+          "position": { "x": 6.7, "z": 14.9 },
+          "rotation": 180
+        },
+        {
+          "position": { "x": 6.7, "z": 11.6 },
+          "rotation": 180
+        },
+        {
+          "position": { "x": 6.7, "z": 8.3 },
+          "rotation": 180
+        }
+      ]
+    },
+    {
       "type": "table",
       "configs": [
         {
@@ -79,59 +269,35 @@
       "type": "bar_table",
       "configs": [
         {
-          "position": {
-            "x": 0.3733096134133922,
-            "z": 8.787226571250738
-          },
+          "position": { "x": 0.38, "z": 8.78 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": 1.5856150362389074,
-            "z": 8.775896098250442
-          },
+          "position": { "x": 0.38, "z": -2.62 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": -0.6405773592505348,
-            "z": 1.4337767020570797
-          },
+          "position": { "x": -1.85, "z": 1.42 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": 2.493662367542121,
-            "z": 1.3997903650981427
-          },
+          "position": { "x": -1.85, "z": 3.93 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": -0.6361396457907089,
-            "z": 3.9442484942455036
-          },
+          "position": { "x": 1.36, "z": 3.93 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": 2.4943488850321827,
-            "z": 3.9144780582317056
-          },
+          "position": { "x": -0.8197975559262519, "z": -2.62 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": 0.3734539898687836,
-            "z": -3.204394477060951
-          },
+          "position": { "x": 1.5856150362389074, "z": 8.78 },
           "rotation": 90
         },
         {
-          "position": {
-            "x": 1.5751603317605432,
-            "z": -3.205845508868567
-          },
+          "position": { "x": 1.36, "z": 1.42 },
           "rotation": 90
         }
       ]
@@ -155,20 +321,6 @@
         },
         {
           "position": {
-            "x": 6,
-            "z": 8.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 9.2
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
             "x": 4.2,
             "z": 11.2
           },
@@ -180,20 +332,6 @@
             "z": 11.9
           },
           "rotation": 90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 11.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 12.2
-          },
-          "rotation": -90
         },
         {
           "position": {
@@ -211,20 +349,6 @@
         },
         {
           "position": {
-            "x": 6,
-            "z": 14.5
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
-            "x": 6,
-            "z": 15.2
-          },
-          "rotation": -90
-        },
-        {
-          "position": {
             "x": -2.5,
             "z": 8.5
           },
@@ -239,34 +363,6 @@
         },
         {
           "position": {
-            "x": -4.5,
-            "z": 8.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 8.9
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 11.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 11.9
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
             "x": -2.5,
             "z": 11.5
           },
@@ -278,20 +374,6 @@
             "z": 12.2
           },
           "rotation": -90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 14.2
-          },
-          "rotation": 90
-        },
-        {
-          "position": {
-            "x": -4.5,
-            "z": 14.9
-          },
-          "rotation": 90
         },
         {
           "position": {
@@ -363,59 +445,35 @@
       "type": "bar_chair",
       "configs": [
         {
-          "position": {
-            "x": 3.4631724754161253,
-            "z": 4.372909602253115
-          },
+          "position": { "x": 2.50, "z": 4.4 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": 3.4282369742866923,
-            "z": 3.2001658016048498
-          },
+          "position": { "x": 2.50, "z": 3.3 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": 3.4449168364887246,
-            "z": 1.905816041943207
-          },
+          "position": { "x": 2.50, "z": 2.1 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": 3.483082230623606,
-            "z": 0.7624218703496024
-          },
+          "position": { "x": 2.50, "z": 0.8 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": -1.7952823285217943,
-            "z": 4.52668130379837
-          },
+          "position": { "x": -3.1, "z": 4.4},
           "rotation": 0
         },
         {
-          "position": {
-            "x": -1.757369176594718,
-            "z": 3.2280539665726122
-          },
+          "position": { "x": -3.1, "z": 3.3 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": -1.8,
-            "z": 2
-          },
+          "position": { "x": -3.1, "z": 2.1 },
           "rotation": 0
         },
         {
-          "position": {
-            "x": -1.7342031207192403,
-            "z": 0.7325281597649655
-          },
+          "position": { "x": -3.1, "z": 0.8 },
           "rotation": 0
         }
       ]

@@ -1,6 +1,6 @@
 import { from } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { findFirstMesh, applyConfig } from './utils';
+import { getMeshOrGroup, applyConfig } from './utils';
 import { LoaderService } from '../services/ObjectLoaderService';
 import { BarTable } from '../primitives';
 
@@ -19,7 +19,7 @@ class BarTableFactory {
   loadBarTable$() {
     if (!this.loadingBarTable$) {
       this.loadingBarTable$ = this.loaderService.loadGLTF$(fileName).pipe(
-        map(findFirstMesh),
+        map(getMeshOrGroup),
         map(mesh => {
           mesh.castShadow = true;
           mesh.name = 'Bar table';

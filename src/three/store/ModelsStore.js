@@ -10,6 +10,7 @@ class ModelsStore {
 
     this.add = this.add.bind(this);
     this.remove = this.remove.bind(this);
+    this.createJson = this.createJson.bind(this);
     this.getUpdateEvent$ = this.getUpdateEvent$.bind(this);
     this.getAddEvent$ = this.getAddEvent$.bind(this);
     this.getRemoveEvent$ = this.getRemoveEvent$.bind(this);
