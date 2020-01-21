@@ -6,6 +6,12 @@ import {
   Vector2,
   Raycaster,
   FaceColors,
+  Geometry,
+  Vector3,
+  Face3,
+  MeshNormalMaterial,
+  DoubleSide,
+  Color,
 } from 'three';
 import { CameraControlsService } from './CameraControlsService';
 
@@ -79,6 +85,67 @@ class FloorBuilderService {
     this.buildPlane();
     this.initRaycaster();
     this.initListeners();
+    this.initSelection();
+  }
+
+  initSelection() {
+    const geometry = new Geometry();
+    // create an array of vertices by way of
+    // and array of vector3 instances
+    geometry.vertices.push(
+      new Vector3(1, 0, 1),
+      new Vector3(1, 0, -1),
+      new Vector3(-1, 0, -1),
+      new Vector3(-1, 0, 1)
+    );
+
+    // create faces by way of an array of
+    // face3 instances. (you just play connect
+    // the dots with index values from the
+    // vertices array)
+    geometry.faces.push(
+      new Face3(2, 0, 3),
+      new Face3(1, 0, 2),
+    );
+
+    // compute Normals
+    geometry.computeVertexNormals();
+
+    // normalize the geometry
+    geometry.normalize();
+    this.selectionMesh = new Mesh(
+      // geometry as first argument
+      geometry,
+      // then Material
+      new MeshBasicMaterial({
+        color: 0xffe6e6,
+        side: DoubleSide
+      }))
+
+    this.selectionMesh.position.y= 5
+    this.scene.add(this.selectionMesh);
+  }
+
+  updateSelectionMesh() {
+    const selectionColor = new Color()
+    selectionColor.setHex(CLICK_COLOR);
+    const vertIndexArr = this.plane.geometry.vertices.map(v => {
+      v.clone()
+
+      v.setY(5);
+
+      return v;
+    });
+    const selectedFaces = this.plane.geometry.faces.filter(face => {
+      const isEq = face.color.equals(selectionColor)
+      return isEq;
+    });
+    
+    this.selectionMesh.geometry.vertices = vertIndexArr;
+    this.selectionMesh.geometry.faces = selectedFaces;
+
+    this.selectionMesh.geometry.verticesNeedUpdate  = true
+    this.selectionMesh.geometry.elementsNeedUpdate = true
   }
 
   buildGrid() {
@@ -253,6 +320,8 @@ class FloorBuilderService {
     this.drawEndFaceIndex = null;
     this.geometryCache = null;
     this.drawingStarted = false;
+
+    this.updateSelectionMesh();
   }
 
   onMouseMove({ clientX, clientY, target }) {
