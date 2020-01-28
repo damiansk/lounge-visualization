@@ -67,6 +67,15 @@ const getFacesColor = faces => {
 const isTheSameFace = ({ a: a1, b: b1, c: c1 }, { a: a2, b: b2, c: c2 }) =>
   a1 === a2 && b1 === b2 && c1 === c2;
 
+const findOutlineVertices = (vertices, faces) => {
+  const outlineVertices = vertices.filter((vertex, index) => {
+    const selectedFaces = faces.filter(face =>
+      ((face.a === index) || (face.b === index) || (face.c === index)));
+    return selectedFaces.length < 6;
+  });
+  return outlineVertices;
+}
+
 class FloorBuilderService {
   constructor(canvas, scene, camera) {
     CameraControlsService.disable();
@@ -120,8 +129,8 @@ class FloorBuilderService {
   updateSelectionMesh() {
     const selectionColor = new Color()
     selectionColor.setHex(CLICK_COLOR);
-    const selectionFaces = [];
-    const verticesFaces = [];
+    let selectionFaces = [];
+    let selectionVertices = [];
 
     this.plane.geometry.faces.forEach(face => {
       const isFaceSelected = face.color.equals(selectionColor);
@@ -129,9 +138,9 @@ class FloorBuilderService {
       if(isFaceSelected) {
         const clonedFace = face.clone();
         const { a, b, c } = clonedFace;
-        const lastIndex = verticesFaces.length;
+        const lastIndex = selectionVertices.length;
 
-        verticesFaces.push(
+        selectionVertices.push(
           this.plane.geometry.vertices[a],
           this.plane.geometry.vertices[b],
           this.plane.geometry.vertices[c],
@@ -145,11 +154,18 @@ class FloorBuilderService {
       }
     });
 
-    this.selectionMesh.geometry.vertices = verticesFaces;
+    this.selectionMesh.geometry.vertices = selectionVertices;
     this.selectionMesh.geometry.faces = selectionFaces;
+    this.selectionMesh.geometry.mergeVertices();
 
-    this.selectionMesh.geometry.verticesNeedUpdate  = true
-    this.selectionMesh.geometry.elementsNeedUpdate = true
+    this.selectionMesh.geometry.verticesNeedUpdate  = true;
+    this.selectionMesh.geometry.elementsNeedUpdate = true;
+    this.selectionMesh.visible = false;
+
+    const outlineVertices = findOutlineVertices(this.selectionMesh.geometry.vertices, this.selectionMesh.geometry.faces);
+
+    console.log(outlineVertices);
+    
   }
 
   buildGrid() {
