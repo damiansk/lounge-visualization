@@ -12,6 +12,8 @@ import {
   MeshNormalMaterial,
   DoubleSide,
   Color,
+  Line3,
+  BoxGeometry,
 } from 'three';
 import { CameraControlsService } from './CameraControlsService';
 
@@ -164,6 +166,28 @@ class FloorBuilderService {
 
     const outlineVertices = findOutlineVertices(this.selectionMesh.geometry.vertices, this.selectionMesh.geometry.faces);
 
+    const tempV = this.selectionMesh.geometry.vertices;
+    const tempF = this.selectionMesh.geometry.faces;
+    for(let i = 0; i < tempF.length; i+=2) {
+      const pointB = tempV[tempF[i].b];
+      const pointC = tempV[tempF[i].c];
+      
+      if ( outlineVertices.includes(pointB) ||
+        outlineVertices.includes(pointC) ) {
+
+        const centerV3 = new Line3(pointB, pointC).getCenter()
+        centerV3.y += SQUARE_SIZE / 2;
+        const geometry = new BoxGeometry( SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE  );
+        const material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+        const cube = new Mesh( geometry, material );
+        cube.position.copy(centerV3);
+        this.scene.add( cube );
+
+      }
+    }
+
+
+
     console.log(outlineVertices);
     
   }
@@ -204,7 +228,6 @@ class FloorBuilderService {
     this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
     this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
-    this.canvas.addEventListener('click', console.log);
   }
 
   getIntersectPlane() {
