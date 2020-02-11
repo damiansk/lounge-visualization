@@ -14,6 +14,8 @@ import {
   Color,
   Line3,
   BoxGeometry,
+  Shape,
+  ExtrudeGeometry,
 } from 'three';
 import { CameraControlsService } from './CameraControlsService';
 
@@ -39,7 +41,7 @@ function getColumnAndRow(index, grid) {
 const setFacesColor = (faces, color) => {
   const temp = faces.forEach(face => face.color.setHex(color));
 
-  if(color ===undefined) {
+  if (color === undefined) {
     debugger;
   }
 
@@ -71,12 +73,13 @@ const isTheSameFace = ({ a: a1, b: b1, c: c1 }, { a: a2, b: b2, c: c2 }) =>
 
 const findOutlineVertices = (vertices, faces) => {
   const outlineVertices = vertices.filter((vertex, index) => {
-    const selectedFaces = faces.filter(face =>
-      ((face.a === index) || (face.b === index) || (face.c === index)));
+    const selectedFaces = faces.filter(
+      face => face.a === index || face.b === index || face.c === index
+    );
     return selectedFaces.length < 6;
   });
   return outlineVertices;
-}
+};
 
 class FloorBuilderService {
   constructor(canvas, scene, camera) {
@@ -109,10 +112,7 @@ class FloorBuilderService {
       new Vector3(-1, 0, 1)
     );
 
-    geometry.faces.push(
-      new Face3(2, 0, 3),
-      new Face3(1, 0, 2),
-    );
+    geometry.faces.push(new Face3(2, 0, 3), new Face3(1, 0, 2));
 
     geometry.computeVertexNormals();
 
@@ -121,15 +121,16 @@ class FloorBuilderService {
       geometry,
       new MeshBasicMaterial({
         color: 0xffe6e6,
-        side: DoubleSide
-      }))
+        side: DoubleSide,
+      })
+    );
 
-    this.selectionMesh.position.y= 5
+    this.selectionMesh.position.y = 5;
     this.scene.add(this.selectionMesh);
   }
 
   updateSelectionMesh() {
-    const selectionColor = new Color()
+    const selectionColor = new Color();
     selectionColor.setHex(CLICK_COLOR);
     let selectionFaces = [];
     let selectionVertices = [];
@@ -137,7 +138,7 @@ class FloorBuilderService {
     this.plane.geometry.faces.forEach(face => {
       const isFaceSelected = face.color.equals(selectionColor);
 
-      if(isFaceSelected) {
+      if (isFaceSelected) {
         const clonedFace = face.clone();
         const { a, b, c } = clonedFace;
         const lastIndex = selectionVertices.length;
@@ -145,13 +146,13 @@ class FloorBuilderService {
         selectionVertices.push(
           this.plane.geometry.vertices[a],
           this.plane.geometry.vertices[b],
-          this.plane.geometry.vertices[c],
+          this.plane.geometry.vertices[c]
         );
 
         clonedFace.a = lastIndex;
         clonedFace.b = lastIndex + 1;
         clonedFace.c = lastIndex + 2;
-        
+
         selectionFaces.push(clonedFace);
       }
     });
@@ -160,36 +161,102 @@ class FloorBuilderService {
     this.selectionMesh.geometry.faces = selectionFaces;
     this.selectionMesh.geometry.mergeVertices();
 
-    this.selectionMesh.geometry.verticesNeedUpdate  = true;
+    this.selectionMesh.geometry.verticesNeedUpdate = true;
     this.selectionMesh.geometry.elementsNeedUpdate = true;
     this.selectionMesh.visible = false;
 
-    const outlineVertices = findOutlineVertices(this.selectionMesh.geometry.vertices, this.selectionMesh.geometry.faces);
+    const outlineVertices = findOutlineVertices(
+      this.selectionMesh.geometry.vertices,
+      this.selectionMesh.geometry.faces
+    );
 
     const tempV = this.selectionMesh.geometry.vertices;
     const tempF = this.selectionMesh.geometry.faces;
-    for(let i = 0; i < tempF.length; i+=2) {
-      const pointB = tempV[tempF[i].b];
-      const pointC = tempV[tempF[i].c];
-      
-      if ( outlineVertices.includes(pointB) ||
-        outlineVertices.includes(pointC) ) {
+    const shapes = [];
 
-        const centerV3 = new Line3(pointB, pointC).getCenter()
-        centerV3.y += SQUARE_SIZE / 2;
-        const geometry = new BoxGeometry( SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE  );
-        const material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
-        const cube = new Mesh( geometry, material );
-        cube.position.copy(centerV3);
-        this.scene.add( cube );
+    tempF.forEach(face => {
+      const isOutlineA = outlineVertices.includes(tempV[face.a]);
+      const isOutlineB = outlineVertices.includes(tempV[face.b]);
+      const isOutlineC = outlineVertices.includes(tempV[face.c]);
 
+      const aVec3 = tempV[face.a];
+      const bVec3 = tempV[face.b];
+      const cVec3 = tempV[face.c];
+      const moveYVec = new Vector3(0, 1, 0);
+
+      if (isOutlineA && isOutlineB) {
+        const verts = [
+          aVec3,
+          bVec3,
+          bVec3.clone().add(moveYVec),
+          aVec3.clone().add(moveYVec),
+        ];
+        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
+        const geometry = new Geometry();
+        geometry.vertices.push(...verts);
+        geometry.faces.push(...faces);
+        geometry.elementsNeedUpdate = true;
+        geometry.verticesNeedUpdate = true;
+
+        const material = new MeshBasicMaterial({
+          color: 0x006600,
+          side: DoubleSide,
+        });
+        const mesh = new Mesh(geometry, material);
+
+        this.scene.add(mesh);
       }
-    }
 
+      if (isOutlineA && isOutlineC) {
 
+        const verts = [
+          aVec3,
+          cVec3,
+          cVec3.clone().add(moveYVec),
+          aVec3.clone().add(moveYVec),
+        ];
+        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
+        const geometry = new Geometry();
+        geometry.vertices.push(...verts);
+        geometry.faces.push(...faces);
+        geometry.elementsNeedUpdate = true;
+        geometry.verticesNeedUpdate = true;
 
-    console.log(outlineVertices);
-    
+        const material = new MeshBasicMaterial({
+          color: 0x006600,
+          side: DoubleSide,
+        });
+        const mesh = new Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+
+      if(isOutlineC && isOutlineB) {
+        const verts = [
+          cVec3,
+          bVec3,
+          bVec3.clone().add(moveYVec),
+          cVec3.clone().add(moveYVec),
+        ];
+        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
+        const geometry = new Geometry();
+        geometry.vertices.push(...verts);
+        geometry.faces.push(...faces);
+        geometry.elementsNeedUpdate = true;
+        geometry.verticesNeedUpdate = true;
+
+        const material = new MeshBasicMaterial({
+          color: 0x006600,
+          side: DoubleSide,
+        });
+        const mesh = new Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+    });
+
+    console.log(shapes);
+
   }
 
   buildGrid() {
@@ -254,7 +321,7 @@ class FloorBuilderService {
       case WARNING_COLOR:
         return DEFAULT_COLOR;
       default:
-          return color;
+        return color;
     }
   }
 
@@ -264,14 +331,15 @@ class FloorBuilderService {
         return DEFAULT_COLOR;
       case WARNING_COLOR:
         return CLICK_COLOR;
-        // TODO fix other cases
+      // TODO fix other cases
       default:
         return prevColor;
     }
   }
 
   handleHoverPainting(hoveredFaces) {
-    if (this.prevHoverFaces.length &&
+    if (
+      this.prevHoverFaces.length &&
       !(
         isTheSameFace(hoveredFaces[0], this.prevHoverFaces[0]) ||
         isTheSameFace(hoveredFaces[0], this.prevHoverFaces[1])
@@ -282,8 +350,11 @@ class FloorBuilderService {
       setFacesColor(hoveredFaces, this.detectHoverPaintingColor(color));
 
       const prevColor = getFacesColor(this.prevHoverFaces);
-      
-      setFacesColor(this.prevHoverFaces, this.detectPreviouslyHoveredPaintingColor(prevColor));
+
+      setFacesColor(
+        this.prevHoverFaces,
+        this.detectPreviouslyHoveredPaintingColor(prevColor)
+      );
     }
   }
 
@@ -294,7 +365,7 @@ class FloorBuilderService {
       case CLICK_COLOR:
         return WARNING_COLOR;
       default:
-          return color;
+        return color;
     }
   }
 
@@ -306,7 +377,7 @@ class FloorBuilderService {
 
       const facesInRow = GRID_SIZE * 2;
       const GRID = [facesInRow, facesInRow];
-      
+
       const drawStart = this.drawStartFaceIndex;
       const drawEnd = this.drawEndFaceIndex;
 
@@ -318,7 +389,9 @@ class FloorBuilderService {
       const minY = Math.min(y1, y2);
       const maxY = Math.max(y1, y2);
 
-      const firstFaceColor = getFacesColor([plane.object.geometry.faces[this.drawStartFaceIndex]]);
+      const firstFaceColor = getFacesColor([
+        plane.object.geometry.faces[this.drawStartFaceIndex],
+      ]);
       const targetColor = this.detectDragPaintingColor(firstFaceColor);
 
       for (let j = minY; j <= maxY; j++) {
@@ -378,15 +451,13 @@ class FloorBuilderService {
     const plane = this.getIntersectPlane();
 
     if (plane) {
-
       if (this.drawingStarted) {
         this.handleDragPainting(plane);
-      }
-      else {
+      } else {
         const hoveredFaces = getIntersectedFaces(plane);
 
         this.handleHoverPainting(hoveredFaces);
-        
+
         this.prevHoverFaces = hoveredFaces;
       }
 
