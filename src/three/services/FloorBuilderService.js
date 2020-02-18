@@ -29,6 +29,22 @@ const CLICK_COLOR = 0x00ff00;
 const HOVER_COLOR = 0xffff00;
 const WARNING_COLOR = 0xff0000;
 
+const createWallElement = (verts) => {
+  const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
+  const geometry = new Geometry();
+  geometry.vertices.push(...verts);
+  geometry.faces.push(...faces);
+  geometry.elementsNeedUpdate = true;
+  geometry.verticesNeedUpdate = true;
+
+  const material = new MeshBasicMaterial({
+    color: 0x006600,
+    side: DoubleSide,
+  });
+
+  return new Mesh(geometry, material);
+}
+
 function getTile([col, row], grid) {
   return row * grid[0] + col;
 }
@@ -100,6 +116,14 @@ class FloorBuilderService {
     this.initRaycaster();
     this.initListeners();
     this.initSelection();
+
+    this.buildWalls = this.buildWalls.bind(this);
+
+    document.addEventListener('keydown', event => {
+      if(event.code === "KeyB") {
+        this.buildWalls();
+      }
+    })
   }
 
   initSelection() {
@@ -164,7 +188,9 @@ class FloorBuilderService {
     this.selectionMesh.geometry.verticesNeedUpdate = true;
     this.selectionMesh.geometry.elementsNeedUpdate = true;
     this.selectionMesh.visible = false;
+  }
 
+  buildWalls() {
     const outlineVertices = findOutlineVertices(
       this.selectionMesh.geometry.vertices,
       this.selectionMesh.geometry.faces
@@ -173,8 +199,10 @@ class FloorBuilderService {
     const tempV = this.selectionMesh.geometry.vertices;
     const tempF = this.selectionMesh.geometry.faces;
     const shapes = [];
+    console.log(tempF);
+    
 
-    tempF.forEach(face => {
+    tempF.forEach((face, index) => {
       const isOutlineA = outlineVertices.includes(tempV[face.a]);
       const isOutlineB = outlineVertices.includes(tempV[face.b]);
       const isOutlineC = outlineVertices.includes(tempV[face.c]);
@@ -182,81 +210,78 @@ class FloorBuilderService {
       const aVec3 = tempV[face.a];
       const bVec3 = tempV[face.b];
       const cVec3 = tempV[face.c];
-      const moveYVec = new Vector3(0, 1, 0);
 
       if (isOutlineA && isOutlineB) {
-        const verts = [
-          aVec3,
-          bVec3,
-          bVec3.clone().add(moveYVec),
-          aVec3.clone().add(moveYVec),
-        ];
-        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
-        const geometry = new Geometry();
-        geometry.vertices.push(...verts);
-        geometry.faces.push(...faces);
-        geometry.elementsNeedUpdate = true;
-        geometry.verticesNeedUpdate = true;
+        shapes.push([aVec3, bVec3]);
+        // const verts = [
+        //   aVec3,
+        //   bVec3,
+        //   bVec3.clone().add(moveYVec),
+        //   aVec3.clone().add(moveYVec),
+        // ];
+        // const mesh = createWallElement(verts);
 
-        const material = new MeshBasicMaterial({
-          color: 0x006600,
-          side: DoubleSide,
-        });
-        const mesh = new Mesh(geometry, material);
-
-        this.scene.add(mesh);
+        // this.scene.add(mesh);
       }
 
-      if (isOutlineA && isOutlineC) {
+      if (isOutlineA && isOutlineC && index % 2 === 0) {
+        shapes.push([aVec3, cVec3]);
+        // const verts = [
+        //   aVec3,
+        //   cVec3,
+        //   cVec3.clone().add(moveYVec),
+        //   aVec3.clone().add(moveYVec),
+        // ];
+        // const mesh = createWallElement(verts);
 
-        const verts = [
-          aVec3,
-          cVec3,
-          cVec3.clone().add(moveYVec),
-          aVec3.clone().add(moveYVec),
-        ];
-        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
-        const geometry = new Geometry();
-        geometry.vertices.push(...verts);
-        geometry.faces.push(...faces);
-        geometry.elementsNeedUpdate = true;
-        geometry.verticesNeedUpdate = true;
-
-        const material = new MeshBasicMaterial({
-          color: 0x006600,
-          side: DoubleSide,
-        });
-        const mesh = new Mesh(geometry, material);
-
-        this.scene.add(mesh);
+        // this.scene.add(mesh);
       }
 
-      if(isOutlineC && isOutlineB) {
-        const verts = [
-          cVec3,
-          bVec3,
-          bVec3.clone().add(moveYVec),
-          cVec3.clone().add(moveYVec),
-        ];
-        const faces = [new Face3(0, 1, 2), new Face3(2, 3, 0)];
-        const geometry = new Geometry();
-        geometry.vertices.push(...verts);
-        geometry.faces.push(...faces);
-        geometry.elementsNeedUpdate = true;
-        geometry.verticesNeedUpdate = true;
+      if(isOutlineC && isOutlineB && index % 2 !== 0) {
+        shapes.push([cVec3, bVec3]);
+        // const verts = [
+        //   cVec3,
+        //   bVec3,
+        //   bVec3.clone().add(moveYVec),
+        //   cVec3.clone().add(moveYVec),
+        // ];
+        // const mesh = createWallElement(verts);
 
-        const material = new MeshBasicMaterial({
-          color: 0x006600,
-          side: DoubleSide,
-        });
-        const mesh = new Mesh(geometry, material);
-
-        this.scene.add(mesh);
+        // this.scene.add(mesh);
       }
     });
 
-    console.log(shapes);
+    console.log('before', shapes);
+    
+    const tempShape = shapes.reduce((acc, connection) => {
+      const duplicate = acc.find(conn => {
+        return (conn[0].equals(connection[0]) || conn[0].equals(connection[1])) &&
+          (conn[1].equals(connection[0]) || conn[1].equals(connection[1]))
+      });
 
+      if(duplicate) {
+        const dupIndex = acc.indexOf(duplicate);
+        acc.splice(dupIndex, 1);
+      } else {
+        acc.push(connection);
+      }
+
+      return acc;
+    }, [])
+
+    console.log('after', tempShape);
+
+    tempShape.forEach(conn => {
+        const verts = [
+          conn[0],
+          conn[1],
+          conn[1].clone().add(new Vector3(0, 1, 0)),
+          conn[0].clone().add(new Vector3(0, 1, 0)),
+        ];
+        const mesh = createWallElement(verts);
+
+        this.scene.add(mesh);
+    })
   }
 
   buildGrid() {
